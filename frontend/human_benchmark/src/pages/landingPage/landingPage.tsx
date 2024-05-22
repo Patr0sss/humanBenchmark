@@ -5,6 +5,7 @@ export default function LandingPage() {
     <div>
       <div>LandingPage</div>
       <Link to="/auth">login</Link>
+      <Link to="/tests/aim">AIM</Link>
     </div>
   );
 }
