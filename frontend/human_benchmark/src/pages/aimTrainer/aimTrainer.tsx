@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Timer from "../../assets/timer";
 import styles from "./aimTrainer.module.css";
 import { motion } from "framer-motion";
+import Duck from "../../assets/duck";
 
 export default function AimTrainer() {
   const MAX_CLICKS = 12;
@@ -101,7 +102,8 @@ export default function AimTrainer() {
               style={{ left: `${targetX}%`, top: `${targetY}%` }}
               onClick={onTargetClick}
             >
-              <Timer />
+              {/* <Timer /> */}
+              <Duck />
             </div>
             {clicksLeft === MAX_CLICKS ? (
               <div className={styles.instructionInfo}>
