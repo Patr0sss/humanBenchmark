@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Timer from "../../assets/timer";
 import styles from "./aimTrainer.module.css";
+import { motion } from "framer-motion";
 
 export default function AimTrainer() {
   const MAX_CLICKS = 12;
@@ -10,6 +11,32 @@ export default function AimTrainer() {
   const [missedClicks, setMissedClicks] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
+
+  const gameContainerVariants = {
+    hidden: {
+      y: "100vh",
+      scale: 0,
+    },
+    visible: {
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.4,
+      },
+    },
+  };
+
+  const opacityFadeVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.4,
+      },
+    },
+  };
 
   const onTargetClick = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
@@ -52,8 +79,23 @@ export default function AimTrainer() {
     <div className={styles.AimTrainer}>
       {clicksLeft > 0 ? (
         <>
-          <div className={styles.turnsLeft}>Turns Left : {clicksLeft}</div>
-          <div className={styles.gameContainer} onClick={onOutsideTargetClick}>
+          <motion.div
+            variants={opacityFadeVariants}
+            initial="hidden"
+            animate="visible"
+            className={styles.turnsLeft}
+          >
+            {clicksLeft === MAX_CLICKS
+              ? "Aim Trainer"
+              : `Remaining : ${clicksLeft}`}
+          </motion.div>
+          <motion.div
+            variants={gameContainerVariants}
+            initial="hidden"
+            animate="visible"
+            className={styles.gameContainer}
+            onClick={onOutsideTargetClick}
+          >
             <div
               className={styles.aimTarget}
               style={{ left: `${targetX}%`, top: `${targetY}%` }}
@@ -61,19 +103,29 @@ export default function AimTrainer() {
             >
               <Timer />
             </div>
-          </div>
+            {clicksLeft === MAX_CLICKS ? (
+              <div className={styles.instructionInfo}>
+                <div>Hit {MAX_CLICKS} targets as quickly as you can</div>
+                <div>Click the target above to begin</div>
+              </div>
+            ) : null}
+          </motion.div>
         </>
       ) : (
         <>
           <div className={styles.turnsLeft}>Your Final Score</div>
 
           <div className={styles.gameContainer}>
+            <Timer />
             <div className={styles.finalStat}>
               Accuracy :{" "}
               {(((MAX_CLICKS - missedClicks) / MAX_CLICKS) * 100).toFixed(2)} %
             </div>
             <div className={styles.finalStat}>
-              Time Taken: {((endTime - startTime) / 1000).toFixed(2)} seconds
+              Average time per target
+              <div className={styles.averageTime}>
+                {((endTime - startTime) / MAX_CLICKS).toFixed(2)} ms
+              </div>
             </div>
             <div className={styles.buttonSection}>
               <button className={styles.saveScoreButton}>Save score</button>
