@@ -26,6 +26,7 @@
   box-shadow: 0px 0px 12px 3px #1c1c1c;
   gap: 20px;
   background-color: #4663ac;
+  background-color: #2b87d1;
   box-shadow: 0px 0px 24px 2px rgba(255, 255, 255, 255);
 }
 
@@ -56,22 +57,19 @@
 }
 
 .buttonSection button {
-  background-color: #302c2c;
-  color: white;
   border-radius: 10px;
-  border: 3px solid #6c30bc;
+  border: 3px solid #ffe500;
   min-width: 150px;
   transition: scale 0.2s ease-in-out, background-color 0.2s ease-in-out;
-  background-color: #c1d8f0;
-  color: #6c30bc;
+  background-color: #63b0f0;
+  color: #ffe500;
   font-weight: bold;
 }
 
 .buttonSection button:hover {
   scale: 1.1;
-  border: 3px solid #6c30bc;
-  background-color: #670ddb;
-  color: white;
+  border: 3px solid #ffe500;
+  background-color: #0a82e4;
 }
 
 .averageTime {
