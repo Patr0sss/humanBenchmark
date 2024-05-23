@@ -3,6 +3,8 @@ import Timer from "../../assets/timer";
 import styles from "./aimTrainer.module.css";
 import { motion } from "framer-motion";
 import Duck from "../../assets/duck";
+import duckSound from "/duck.mp3";
+import backgroundMusic from "/backgroundMusic.wav";
 
 export default function AimTrainer() {
   const MAX_CLICKS = 12;
@@ -45,6 +47,7 @@ export default function AimTrainer() {
       if (clicksLeft === MAX_CLICKS && startTime === 0) {
         setStartTime(Date.now());
       }
+      new Audio(duckSound).play();
       setTargetX(Math.floor(Math.random() * 80) + 10);
       setTargetY(Math.floor(Math.random() * 80) + 10);
       setClicksLeft((prev) => prev - 1);
@@ -70,11 +73,21 @@ export default function AimTrainer() {
     setTargetY(50);
   };
 
+  const [bgMusic] = useState(new Audio(backgroundMusic));
   useEffect(() => {
     if (clicksLeft === 0 && startTime !== 0) {
       setEndTime(Date.now());
     }
-  }, [clicksLeft, startTime]);
+
+    if (clicksLeft === MAX_CLICKS - 1) {
+      bgMusic.play();
+    }
+
+    if (clicksLeft === 0) {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+    }
+  }, [bgMusic, clicksLeft, startTime]);
 
   return (
     <div className={styles.AimTrainer}>
@@ -102,8 +115,7 @@ export default function AimTrainer() {
               style={{ left: `${targetX}%`, top: `${targetY}%` }}
               onClick={onTargetClick}
             >
-              {/* <Timer /> */}
-              <Duck />
+              <Duck width={90 - 3 * (MAX_CLICKS - clicksLeft)} />
             </div>
             {clicksLeft === MAX_CLICKS ? (
               <div className={styles.instructionInfo}>

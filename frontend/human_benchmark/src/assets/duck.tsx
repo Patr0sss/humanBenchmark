@@ -1,6 +1,9 @@
 export default function Duck({ width = 90 }: { width?: number }) {
   return (
     <svg
+      style={{
+        transition: "left 0.1s ease-in-out, top 0.1s ease-in-out",
+      }}
       height={`${width}px`}
       width={`${width}px`}
       version="1.1"

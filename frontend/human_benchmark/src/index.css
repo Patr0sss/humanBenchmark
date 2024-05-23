@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -33,6 +32,7 @@ body {
   box-sizing: border-box;
   background-color: #302c2c;
   color: white;
+  background-color: #c1d8f0;
 }
 
 h1 {
