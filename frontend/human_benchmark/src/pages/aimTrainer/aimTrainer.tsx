@@ -5,6 +5,9 @@ import { motion } from "framer-motion";
 import Duck from "../../assets/duck";
 import duckSound from "/duck.mp3";
 import backgroundMusic from "/backgroundMusic.wav";
+import WaterLily from "../../assets/waterLily";
+// import Angry from "../../assets/angry";
+// import Ufo from "../../assets/ufo";
 
 export default function AimTrainer() {
   const MAX_CLICKS = 12;
@@ -110,12 +113,20 @@ export default function AimTrainer() {
             className={styles.gameContainer}
             onClick={onOutsideTargetClick}
           >
+            <div className={styles.waterLily}>
+              <WaterLily width={120} />
+            </div>
+            <div className={styles.waterLily} style={{ left: "85%" }}>
+              <WaterLily width={80} />
+            </div>
             <div
               className={styles.aimTarget}
               style={{ left: `${targetX}%`, top: `${targetY}%` }}
               onClick={onTargetClick}
             >
-              <Duck width={90 - 3 * (MAX_CLICKS - clicksLeft)} />
+              <Duck width={110 - 3 * (MAX_CLICKS - clicksLeft)} />
+              {/* <Angry width={100 - 3 * (MAX_CLICKS - clicksLeft)} /> */}
+              {/* <Ufo width={140 - 3 * (MAX_CLICKS - clicksLeft)} /> */}
             </div>
             {clicksLeft === MAX_CLICKS ? (
               <div className={styles.instructionInfo}>
