@@ -15,30 +15,37 @@
   height: 80%;
   border-radius: 10px;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   background-color: #201c1c;
+  background-color: #131010;
+  background-color: #0e0c0c;
+
   -webkit-box-shadow: 0px 0px 12px 3px #1c1c1c;
   -moz-box-shadow: 0px 0px 12px 3px #1c1c1c;
   box-shadow: 0px 0px 12px 3px #1c1c1c;
   gap: 20px;
+  border: 2px solid #783dcb;
   /* background-color: #4663ac; */
-  background-color: #2b87d1;
-  box-shadow: 0px 0px 24px 2px rgba(255, 255, 255, 255);
+  /* background-color: #2b87d1; */
+  /* box-shadow: 0px 0px 24px 2px rgba(255, 255, 255, 255); */
 }
 
-.waterLily {
+.musicTrigger {
   position: absolute;
-  bottom: 0%;
-  left: 5%;
+  top: 100px;
+  left: 11%;
 }
 
 .aimTarget {
   position: absolute;
   transform: translate(-50%, -50%);
+  background-color: red;
+  border-radius: 50%;
+  border: 4px solid #783dcb;
 }
 
 .aimTarget:hover {
@@ -65,11 +72,14 @@
 .buttonSection button {
   border-radius: 10px;
   border: 3px solid #783dcb;
-  border: 3px solid #ffe500;
+  color: #783dcb;
+  /* border: 3px solid #ffe500; */
   min-width: 150px;
+  background-color: #302c2c;
+
   transition: scale 0.2s ease-in-out, background-color 0.2s ease-in-out;
-  background-color: #63b0f0;
-  color: #ffe500;
+  /* background-color: #63b0f0; */
+  /* color: #ffe500; */
   /* background-color: #302c2c; */
   /* color: #783dcb; */
   font-weight: bold;
@@ -77,11 +87,11 @@
 
 .buttonSection button:hover {
   scale: 1.1;
-  border: 3px solid #ffe500;
-  /* border: 3px solid #783dcb; */
+  border: 3px solid #783dcb;
 
-  /* background-color: #7a34db; */
+  background-color: rgb(137, 83, 212);
   color: white;
+  /* rgb(137, 83, 212) */
 }
 
 .averageTime {

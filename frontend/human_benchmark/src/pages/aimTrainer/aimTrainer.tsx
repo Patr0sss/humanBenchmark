@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import Timer from "../../assets/timer";
 import styles from "./aimTrainer.module.css";
 import { motion } from "framer-motion";
-import Duck from "../../assets/duck";
-import duckSound from "/duck.mp3";
+import blaster from "/blaster.wav";
 import backgroundMusic from "/backgroundMusic.wav";
-import WaterLily from "../../assets/waterLily";
-// import Angry from "../../assets/angry";
-// import Ufo from "../../assets/ufo";
+import { useLocation } from "react-router-dom";
+import Ufo from "../../assets/ufo";
+import MusicON from "../../assets/musicON";
+import MusicOFF from "../../assets/musicOFF";
 
 export default function AimTrainer() {
   const MAX_CLICKS = 12;
@@ -17,6 +17,10 @@ export default function AimTrainer() {
   const [missedClicks, setMissedClicks] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
+  const location = useLocation();
+  const [bgMusic] = useState(new Audio(backgroundMusic));
+  const [blasterSound] = useState(new Audio(blaster));
+  const [isMusicON, setIsMusicON] = useState(true);
 
   const gameContainerVariants = {
     hidden: {
@@ -50,7 +54,11 @@ export default function AimTrainer() {
       if (clicksLeft === MAX_CLICKS && startTime === 0) {
         setStartTime(Date.now());
       }
-      new Audio(duckSound).play();
+      blasterSound.volume = 0.3;
+      if (isMusicON) {
+        blasterSound.play();
+      }
+      // new Audio(duckSound).play();
       setTargetX(Math.floor(Math.random() * 80) + 10);
       setTargetY(Math.floor(Math.random() * 80) + 10);
       setClicksLeft((prev) => prev - 1);
@@ -76,13 +84,12 @@ export default function AimTrainer() {
     setTargetY(50);
   };
 
-  const [bgMusic] = useState(new Audio(backgroundMusic));
   useEffect(() => {
     if (clicksLeft === 0 && startTime !== 0) {
       setEndTime(Date.now());
     }
 
-    if (clicksLeft === MAX_CLICKS - 1) {
+    if (clicksLeft === MAX_CLICKS - 1 && isMusicON) {
       bgMusic.play();
     }
 
@@ -91,6 +98,25 @@ export default function AimTrainer() {
       bgMusic.currentTime = 0;
     }
   }, [bgMusic, clicksLeft, startTime]);
+
+  useEffect(() => {
+    return () => {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+    };
+  }, [location, bgMusic]);
+
+  const handleMusicTrigger = () => {
+    setIsMusicON(!isMusicON);
+
+    if (clicksLeft < MAX_CLICKS) {
+      if (!isMusicON) {
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
+      }
+    }
+  };
 
   return (
     <div className={styles.AimTrainer}>
@@ -107,24 +133,35 @@ export default function AimTrainer() {
               : `Remaining : ${clicksLeft}`}
           </motion.div>
           <motion.div
+            variants={opacityFadeVariants}
+            initial="hidden"
+            animate="visible"
+            onClick={handleMusicTrigger}
+            className={styles.musicTrigger}
+          >
+            {isMusicON ? <MusicON width={70} /> : <MusicOFF width={70} />}
+          </motion.div>
+          <motion.div
             variants={gameContainerVariants}
             initial="hidden"
             animate="visible"
             className={styles.gameContainer}
             onClick={onOutsideTargetClick}
           >
-            <div className={styles.waterLily}>
+            {/* <div className={styles.waterLily}>
               <WaterLily width={120} />
             </div>
             <div className={styles.waterLily} style={{ left: "85%" }}>
               <WaterLily width={80} />
-            </div>
+            </div> */}
             <div
               className={styles.aimTarget}
               style={{ left: `${targetX}%`, top: `${targetY}%` }}
               onClick={onTargetClick}
             >
-              <Duck width={110 - 3 * (MAX_CLICKS - clicksLeft)} />
+              {/* <Duck width={110 - 3 * (MAX_CLICKS - clicksLeft)} /> */}
+              <Ufo width={120 - 4 * (MAX_CLICKS - clicksLeft)} />
+
               {/* <Angry width={100 - 3 * (MAX_CLICKS - clicksLeft)} /> */}
               {/* <Ufo width={140 - 3 * (MAX_CLICKS - clicksLeft)} /> */}
             </div>
