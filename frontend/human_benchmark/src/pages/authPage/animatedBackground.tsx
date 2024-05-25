@@ -4,7 +4,8 @@ import "./animatedBackground.css";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 import { IoLogoApple } from "react-icons/io";
-import { GiEntryDoor } from "react-icons/gi";
+import { TiArrowBack } from "react-icons/ti";
+import { Link } from "react-router-dom";
 
 const App: React.FC = () => {
     const mousePosition = useMousePosition();
@@ -24,7 +25,9 @@ const App: React.FC = () => {
             <div className='relative flex items-center justify-center min-h-screen'>
                 <div className='bg-[#201d22] rounded-xl max-w-[1200px] w-full h-[50%] my-6 px-4 flex items-center'>
                     <div className='w-full '>
-
+                        <div className='pt-2'>
+                            <Link to="/"><TiArrowBack className='hover:scale-110' size={40} fill='#783dcb'/></Link>
+                        </div>
                         <div className="py-8 text-left text-white">
                             <h1 className="py-2 text-4xl text-center md:text-5xl">Login to Your Account</h1>   
                         </div>
