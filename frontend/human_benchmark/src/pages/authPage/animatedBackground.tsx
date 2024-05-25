@@ -23,22 +23,22 @@ const App: React.FC = () => {
         <div className='content'>
             <div className='fixed top-0 bottom-0 left-0 right-0 mask'></div>
             <div className='relative flex items-center justify-center min-h-screen'>
-                <div className='bg-[#201d22] rounded-xl max-w-[1200px] w-full h-[50%] my-6 px-4 flex items-center'>
+                <div className='bg-[#201d22] rounded-xl max-w-[350px] xsm:max-w-[500px] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[1000px] xl:max-w-[1200px] w-full h-[50%] my-6 px-4 flex items-center'>
                     <div className='w-full '>
                         <div className='pt-2'>
                             <Link to="/"><TiArrowBack className='hover:scale-110' size={40} fill='#783dcb'/></Link>
                         </div>
-                        <div className="py-8 text-left text-white">
+                        <div className="text-left text-white xsm:py-8">
                             <h1 className="py-2 text-4xl text-center md:text-5xl">Login to Your Account</h1>   
                         </div>
-                        <div className="flex items-center justify-center gap-8 mx-auto my-8 text-white ">
-                            <div className="outline outline-1 outline-[#383439] w-[40%] flex rounded-2xl items-center justify-center cursor-pointer hover:scale-110 hover:ease-in-out hover:duration-300 transform transition my-4 md:my-0">
+                        <div className="grid items-center justify-center grid-rows-2 mx-auto my-8 text-white xsm:gap-8 xsm:flex">
+                            <div className="outline outline-1 outline-[#383439] sm:w-[40%] flex rounded-2xl items-center justify-center cursor-pointer hover:scale-110 hover:ease-in-out hover:duration-300 transform transition my-4 md:my-0">
                                 <FcGoogle className="flex" size={40}/>
-                                <h1 className="text-lg font-bold xs:p-4 sm:my-0 xl:text-lg md:text-sm whitespace-nowrap">Log in with Google</h1>
+                                <h1 className="my-4 text-lg font-bold xs:p-4 sm:my-0">Log in with Google</h1>
                             </div>
-                            <div className="outline outline-1 outline-[#383439] w-[40%] flex rounded-2xl items-center justify-center cursor-pointer hover:scale-110 hover:ease-in-out hover:duration-300 transform transition my-4 md:my-0">
+                            <div className="outline outline-1 outline-[#383439] sm:w-[40%] flex rounded-2xl items-center justify-center cursor-pointer hover:scale-110 hover:ease-in-out hover:duration-300 transform transition my-2 md:my-0">
                                 <IoLogoApple  className="flex " size={40}/>
-                                <h1 className="my-4 font-bold xs:p-4 stext-lg sm:my-0 xl:text-lg md:text-sm">Log in with Apple</h1>
+                                <h1 className="my-4 text-lg font-bold xs:p-4 sm:my-0">Log in with Apple</h1>
                             </div>
                         </div>
                         <div className="mx-8 mb-2 text-white">
