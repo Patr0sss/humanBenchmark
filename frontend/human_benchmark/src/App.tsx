@@ -11,7 +11,7 @@ function App() {
   const location = useLocation();
   return (
     <div>
-      {location.pathname !== "/auth" ? <NavBar /> : null}
+      {(location.pathname !== "/auth" && location.pathname !== "/login") ? <NavBar /> : null}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<AuthPage />} />
