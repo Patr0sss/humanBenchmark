@@ -1,6 +1,6 @@
 ## Authors
 - [Myiagi](https://github.com/Patr0sss) - PROJECT MANAGER / FRONTEND DEVELOPER
-- [Hebdick](https://github.com/Kamil-Hebda) - FLASK MASTER
+- [Kamil](https://github.com/Kamil-Hebda) - FLASK MASTER
 - [Jakub](https://github.com/JaSycz) - MIDEND DEVELOPER
 - [Paweł](https://github.com/pawel-rus) - BACKEND DEVELOPER
 - [Zgoda](https://github.com/michal-zgoda) - CSS ENJOYER
