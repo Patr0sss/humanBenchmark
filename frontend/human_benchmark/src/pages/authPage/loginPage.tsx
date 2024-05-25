@@ -1,10 +1,13 @@
+import ImageEditor from "./animatedBackground";
 
-export default function LoginPage(){
+const LoginPage = () => {
+  
 
+  return (
+    <div>
+      <ImageEditor/>
+    </div>
+  );
+};
 
-    return (
-        <div className="w-screen h-screen bg-red-600">
-            Twój stary
-        </div>
-    )
-}
+export default LoginPage;

@@ -1,0 +1,29 @@
+:root {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background-image: url('background.jpg');
+    background-position: center center;
+    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.1); 
+}
+
+.mask {
+  width: 100vw;
+  height: 100vh;
+  background-color: hsla(0,0%,0%, 0.8);
+  mask: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    transparent 40px,
+    black 150px
+  );
+  -webkit-mask: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    transparent 40px,
+    black 250px
+  );
+}
