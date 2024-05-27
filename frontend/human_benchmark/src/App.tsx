@@ -5,6 +5,7 @@ import AuthPage from "./pages/authPage/authPage";
 import LoginPage from "./pages/authPage/loginPage";
 import AimTrainer from "./pages/aimTrainer/aimTrainer";
 import NavBar from "./components/navbar/navBar";
+import MemoryGame from "./pages/memoryGame/memoryGame";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/tests/aim" element={<AimTrainer />} />
+        <Route path="/tests/memory" element={<MemoryGame />} />
       </Routes>
     </div>
   );
