@@ -7,7 +7,7 @@ import { IoLogoApple } from "react-icons/io";
 import { TiArrowBack } from "react-icons/ti";
 import { Link } from "react-router-dom";
 
-const App: React.FC = () => {
+export default function animatedBackground() {
     const mousePosition = useMousePosition();
 
     useEffect(() => {
@@ -70,4 +70,3 @@ const App: React.FC = () => {
   );
 };
 
-export default App;

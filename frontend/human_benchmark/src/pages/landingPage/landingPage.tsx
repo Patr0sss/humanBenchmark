@@ -8,6 +8,7 @@ export default function LandingPage() {
       <Link to="/auth">Register</Link>
       <Link to="/tests/aim">AIM</Link>
       <Link to="/tests/sequence">SEQ</Link>
+      <Link to="/tests/memory">Memory</Link>
     </div>
   );
 }
