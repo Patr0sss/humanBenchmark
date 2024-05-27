@@ -7,6 +7,7 @@ export default function LandingPage() {
       <div>LandingPage</div>
       <Link to="/auth">Register</Link>
       <Link to="/tests/aim">AIM</Link>
+      <Link to="/tests/sequence">SEQ</Link>
     </div>
   );
 }

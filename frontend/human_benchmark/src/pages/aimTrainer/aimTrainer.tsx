@@ -8,6 +8,10 @@ import { useLocation } from "react-router-dom";
 import Ufo from "../../assets/ufo";
 import MusicON from "../../assets/musicON";
 import MusicOFF from "../../assets/musicOFF";
+import {
+  gameContainerVariants,
+  opacityFadeVariants,
+} from "../../assets/animationVariants";
 
 export default function AimTrainer() {
   const MAX_CLICKS = 12;
@@ -22,31 +26,31 @@ export default function AimTrainer() {
   const [blasterSound] = useState(new Audio(blaster));
   const [isMusicON, setIsMusicON] = useState(true);
 
-  const gameContainerVariants = {
-    hidden: {
-      y: "100vh",
-      scale: 0,
-    },
-    visible: {
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.4,
-      },
-    },
-  };
+  // const gameContainerVariants = {
+  //   hidden: {
+  //     y: "100vh",
+  //     scale: 0,
+  //   },
+  //   visible: {
+  //     y: 0,
+  //     scale: 1,
+  //     transition: {
+  //       duration: 0.4,
+  //     },
+  //   },
+  // };
 
-  const opacityFadeVariants = {
-    hidden: {
-      opacity: 0,
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        delay: 0.4,
-      },
-    },
-  };
+  // const opacityFadeVariants = {
+  //   hidden: {
+  //     opacity: 0,
+  //   },
+  //   visible: {
+  //     opacity: 1,
+  //     transition: {
+  //       delay: 0.4,
+  //     },
+  //   },
+  // };
 
   const onTargetClick = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
