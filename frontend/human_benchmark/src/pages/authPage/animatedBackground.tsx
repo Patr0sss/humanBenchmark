@@ -20,14 +20,16 @@ export default function animatedBackground() {
 
   return (
     <>
-        <div className='content'>
+        <div className="content">
             <div className='fixed top-0 bottom-0 left-0 right-0 mask'></div>
             <div className='relative flex items-center justify-center min-h-screen'>
                 <div className='bg-[#201d22] rounded-xl max-w-[350px] xsm:max-w-[500px] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[1000px] xl:max-w-[1200px] w-full h-[50%] my-6 px-4 flex items-center'>
                     <div className='w-full '>
-                        <div className='pt-2'>
-                            <Link to="/"><TiArrowBack className='hover:scale-110' size={40} fill='#783dcb'/></Link>
-                        </div>
+                            <div className='flex pt-2'>
+                                <Link to="/" className='inline-block '>
+                                    <TiArrowBack className='hover:scale-110' size={40} fill='#783dcb'/>
+                                </Link>
+                            </div>
                         <div className="text-left text-white xsm:py-8">
                             <h1 className="py-2 text-4xl text-center md:text-5xl">Login to Your Account</h1>   
                         </div>

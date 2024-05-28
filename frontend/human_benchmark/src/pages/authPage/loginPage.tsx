@@ -4,7 +4,9 @@ const LoginPage = () => {
   
 
   return (
+    <div className="main">
       <ImageEditor/>
+    </div>
   );
 };
 
