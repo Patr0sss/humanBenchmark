@@ -13,17 +13,14 @@ def register():
     data= request.get_json() # get the data from the request
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
-    new_user = User(public_id=str(uuid.uuid4()), 
-                    email=data['email'], 
-                    password=hashed_password, 
-                    username=data['username'])
-    new_user.save() # save the user to the database
-
+    new_user = User(public_id=str(uuid.uuid4()), email=data['email'], password=hashed_password, username=data['username'])
+    db.session.add(new_user)
+    db.session.commit()
     return jsonify({'message': 'registered successfully'}) # return a message to the user
 
 @auth.route('/login', methods=['POST'])
 def login():
-    auth= request.authorization
+    auth= request.authorization # get the authorization from the request
     if not auth or not auth.username or not auth.password:
         return make_response('could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'}) #401 is the status code for unauthorized
     
@@ -37,10 +34,7 @@ def login():
     else:
         return jsonify({'message': 'login failed'})
     
-@auth.route('/logout')
-def logout():
 
-    return jsonify({'message': 'logout successful'})
 
 
     
