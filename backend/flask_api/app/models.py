@@ -1,19 +1,30 @@
 from . import db
-from sqlalchemy.sql import func
+from flask_mongoengine import MongoEngine, StringField, Document, DateTimeField, DoubleField, ReferenceField, EmailField, EmbeddedDocumentField, ListField
+import datetime
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    public_id = db.Column(db.String(50), unique=True) # public_id is a unique identifier for each user 
-    email = db.Column(db.String(150), unique=True)
-    password = db.Column(db.String(150))
-    ussername = db.Column(db.String(150), unque=True)
-    date_created = db.Column(db.DateTime(timezone=True), default=func.now())
-    AimTrainer = db.relationship('AimTrainer', backref='user', lazy=True) #lazy=True means that SQLAlchemy will load the data from the database in one go
+class AimTrainer(Document):
+    id = StringField(max_length=150, unique=True, required=True)
+    accuracy = DoubleField(required=True)
+    average_time = DoubleField(required=True)
+    date_created = DateTimeField(default=datetime.datetime.now)
 
+class MemoryGame(Document):
+    id = StringField(max_length=150, unique=True, required=True)
+    score = DoubleField(required=True)
+    date_created = DateTimeField(default=datetime.datetime.now)
 
-class AimTrainer(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    accuracy = db.Column(db.Integer)
-    average_time = db.Column(db.Integer)
-    date_created = db.Column(db.DateTime(timezone=True), default=func.now())
-    user_id = db.Column(db.String(50), db.ForeignKey('user.public_id')) # ForeignKey is used to link the AimTrainer table to the User table
+class SequenceMemory(Document):
+    id = StringField(max_length=150, unique=True, required=True)
+    score = DoubleField(required=True)
+    date_created = DateTimeField(default=datetime.datetime.now)
+
+class User(Document):
+    id = StringField(max_length=150, unique=True, required=True, primary_key=True)
+    public_id = StringField(max_length=50, unique=True, required=True) # public_id is a unique identifier for each user 
+    email = EmailField(max_length=150, unique=True, required=True)
+    password = StringField(max_length=150, required=True)
+    username = StringField(max_length=150, required=True)
+    date_created = DateTimeField(default=datetime.datetime.now)
+    aim_trainers = ListField(EmbeddedDocumentField(AimTrainer))  # Lista zagnieżdżonych dokumentów AimTrainer
+    memory_games = ListField(ReferenceField(MemoryGame))  # Lista referencji do dokumentów MemoryGame
+    sequence_memories = ListField(ReferenceField(SequenceMemory))  # Lista referencji do dokumentów SequenceMemory
