@@ -102,10 +102,13 @@ export default function SequenceMemory() {
       gameBoardRef.current
     ) {
       gameBoardRef.current.style.background = "red";
+      gameBoardRef.current.style.opacity = "0.4";
 
       setTimeout(() => {
         if (gameBoardRef.current) {
           gameBoardRef.current.style.background = "#0e0c0c";
+          gameBoardRef.current.style.opacity = "1";
+
           setUserLost(true);
           setRoundCount(1);
           setIsButtonVisible(true);
@@ -119,12 +122,17 @@ export default function SequenceMemory() {
       gameBoardRef.current
     ) {
       gameBoardRef.current.style.background = "green";
+      // gameBoardRef.current.style.opacity = "0.1";
+
       setDisplayRoundCount(displayRoundCount + 1);
 
       setTimeout(() => {
         if (gameBoardRef.current) {
           gameBoardRef.current.style.background = "#0e0c0c";
-          setIsButtonVisible(true);
+          gameBoardRef.current.style.opacity = "1";
+
+          // setIsButtonVisible(true);
+          animateNewSequence();
         }
       }, 100);
     }
@@ -188,10 +196,10 @@ export default function SequenceMemory() {
                 onClick={animateNewSequence}
                 className={styles.generateButton}
               >
-                Play
+                Start
               </div>
             ) : (
-              <div style={{ height: "45px" }}></div>
+              <div className={styles.disapearDiv}></div>
             )}
           </>
         )}
