@@ -26,32 +26,6 @@ export default function AimTrainer() {
   const [blasterSound] = useState(new Audio(blaster));
   const [isMusicON, setIsMusicON] = useState(true);
 
-  // const gameContainerVariants = {
-  //   hidden: {
-  //     y: "100vh",
-  //     scale: 0,
-  //   },
-  //   visible: {
-  //     y: 0,
-  //     scale: 1,
-  //     transition: {
-  //       duration: 0.4,
-  //     },
-  //   },
-  // };
-
-  // const opacityFadeVariants = {
-  //   hidden: {
-  //     opacity: 0,
-  //   },
-  //   visible: {
-  //     opacity: 1,
-  //     transition: {
-  //       delay: 0.4,
-  //     },
-  //   },
-  // };
-
   const onTargetClick = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
     if (clicksLeft > 0) {
@@ -62,7 +36,6 @@ export default function AimTrainer() {
       if (isMusicON) {
         blasterSound.play();
       }
-      // new Audio(duckSound).play();
       setTargetX(Math.floor(Math.random() * 80) + 10);
       setTargetY(Math.floor(Math.random() * 80) + 10);
       setClicksLeft((prev) => prev - 1);
@@ -101,6 +74,7 @@ export default function AimTrainer() {
       bgMusic.pause();
       bgMusic.currentTime = 0;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bgMusic, clicksLeft, startTime]);
 
   useEffect(() => {
@@ -152,22 +126,12 @@ export default function AimTrainer() {
             className={styles.gameContainer}
             onClick={onOutsideTargetClick}
           >
-            {/* <div className={styles.waterLily}>
-              <WaterLily width={120} />
-            </div>
-            <div className={styles.waterLily} style={{ left: "85%" }}>
-              <WaterLily width={80} />
-            </div> */}
             <div
               className={styles.aimTarget}
               style={{ left: `${targetX}%`, top: `${targetY}%` }}
               onClick={onTargetClick}
             >
-              {/* <Duck width={110 - 3 * (MAX_CLICKS - clicksLeft)} /> */}
               <Ufo width={120 - 4 * (MAX_CLICKS - clicksLeft)} />
-
-              {/* <Angry width={100 - 3 * (MAX_CLICKS - clicksLeft)} /> */}
-              {/* <Ufo width={140 - 3 * (MAX_CLICKS - clicksLeft)} /> */}
             </div>
             {clicksLeft === MAX_CLICKS ? (
               <div className={styles.instructionInfo}>
