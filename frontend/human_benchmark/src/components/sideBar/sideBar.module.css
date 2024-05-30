@@ -1,0 +1,28 @@
+.sideBar {
+  width: 350px;
+  height: calc(100vh - 60px);
+  background-color: #0e0c0c;
+  border-top: 2px solid white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding-top: 30px;
+}
+
+.gameBar {
+  width: 80%;
+  padding-inline: 10%;
+  height: 40px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
+}
+
+.gameBar:hover {
+  background-color: lightgray;
+  color: #783dcb;
+}

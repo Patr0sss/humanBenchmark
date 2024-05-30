@@ -1,0 +1,21 @@
+.dashboard {
+  padding-top: 60px;
+  min-height: 100vh;
+  display: flex;
+}
+
+.dashboardRightSide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - 350px);
+  min-height: calc(100vh - 60px);
+}
+
+.graphSection {
+  width: 80%;
+  max-width: 900px;
+  aspect-ratio: 16/9;
+  border: 2px solid white;
+  padding: 10px;
+}

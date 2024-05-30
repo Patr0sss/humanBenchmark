@@ -7,6 +7,7 @@ import AimTrainer from "./pages/aimTrainer/aimTrainer";
 import NavBar from "./components/navbar/navBar";
 import SequenceMemory from "./pages/sequenceMemory/sequenceMemory";
 import MemoryGame from "./pages/memoryGame/memoryGame";
+import UserDashboardPage from "./pages/userDashboardPage/userDashboardPage";
 
 function App() {
   const location = useLocation();
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/profile" element={<UserDashboardPage />} />
         <Route path="/tests/aim" element={<AimTrainer />} />
         <Route path="/tests/sequence" element={<SequenceMemory />} />
         <Route path="/tests/memory" element={<MemoryGame />} />

@@ -55,16 +55,19 @@ export default function SequenceMemory() {
     const newSequence = generateRandomArray(roundCount);
     setSequence(newSequence);
     let index = 0;
+    // setRindex(0);
     setIsAnimating(true);
 
     const interval = setInterval(() => {
       if (index === newSequence.length) {
+        // if (rIndex === newSequence.length) {
         clearInterval(interval);
         setRoundCount(roundCount + 1);
         return;
       }
 
       const currentNumber = newSequence[index];
+      // const currentNumber = newSequence[rIndex];
 
       setGridObjects((prevGridObjects) =>
         prevGridObjects.map((tile, index) =>
@@ -81,6 +84,7 @@ export default function SequenceMemory() {
       }, 400);
 
       index += 1;
+      // setRindex((prev) => prev + 1);
     }, animateIntervalTimeMS);
 
     setTimeout(() => {
