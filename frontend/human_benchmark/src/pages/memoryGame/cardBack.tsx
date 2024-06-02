@@ -13,9 +13,10 @@ interface CardBackProps {
     card: CardImage;
     picked: boolean;
     blockButton: boolean;
+    size:number;
 }
 
-export default function CardBack({ handleChoice, card, picked, blockButton }: CardBackProps) {
+export default function CardBack({ handleChoice, card, picked, blockButton,size }: CardBackProps) {
     
     function handleClick(): void {
       if(!blockButton){
@@ -25,13 +26,13 @@ export default function CardBack({ handleChoice, card, picked, blockButton }: Ca
   
     return (
       picked ? (
-        <CardFront src={card.src} />
+        <CardFront src={card.src} size={size}/>
       ) : (
-        <motion.div className="w-[128px] h-[128px] rounded-3xl flip-card-back">
+        <motion.div className={`rounded-3xl flip-card-back flex justify-center items-center`}
+        >
           <img 
-            className="border-2 white border- rounded-3xl" 
-            src={cardBackground} 
-            style={{width:'128px',height:'128px'}} 
+            className={`border-2 border-white rounded-3xl flex justify-center items-center`}
+            src={cardBackground}
             alt="Card Background" 
             onClick={handleClick}
           />

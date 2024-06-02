@@ -14,6 +14,16 @@ export default {
       '3xl' : '1768px'
     },
     extend: {},
+    keyframes: {
+      drop: {
+        '0%': { transform: 'translateY(0) rotate(0deg)', opacity: '1' },
+        '90%': { opacity: '1' },
+        '100%': { transform: 'translateY(100vh) rotate(720deg)', opacity: '0' },
+      }
+    },
+    animation: {
+      drop: 'drop 5s ease-in-out infinite',
+    }
   },
   plugins: [],
 }
