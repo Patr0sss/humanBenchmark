@@ -9,7 +9,7 @@ const GAMES = [
   { title: "Aim Trainer", icon: <Ufo />, linkURL: "tests/aim" },
   { title: "Sequence", icon: <Duck />, linkURL: "tests/sequence" },
   { title: "Memory", icon: <WaterLily />, linkURL: "tests/memory" },
-  { title: "placeholder", icon: <Monkey />, linkURL: "/" },
+  { title: "Typing", icon: <Monkey />, linkURL: "/tests/typing" },
   { title: "placeholder", icon: <Monkey />, linkURL: "/" },
   { title: "placeholder", icon: <Monkey />, linkURL: "/" },
 ];
