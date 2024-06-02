@@ -8,6 +8,7 @@ import NavBar from "./components/navbar/navBar";
 import SequenceMemory from "./pages/sequenceMemory/sequenceMemory";
 import MemoryGame from "./pages/memoryGame/memoryGame";
 import UserDashboardPage from "./pages/userDashboardPage/userDashboardPage";
+import SpeedClicker from "./pages/speedClicker/speedClicker";
 
 function App() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function App() {
         <Route path="/tests/aim" element={<AimTrainer />} />
         <Route path="/tests/sequence" element={<SequenceMemory />} />
         <Route path="/tests/memory" element={<MemoryGame />} />
+        <Route path="/tests/clicker" element={<SpeedClicker/>} />
       </Routes>
     </div>
   );
