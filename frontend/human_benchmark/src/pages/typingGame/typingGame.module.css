@@ -1,0 +1,50 @@
+.typingGame {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gameContainer {
+  background-color: #0e0c0c;
+  -webkit-box-shadow: 0px 0px 12px 3px #1c1c1c;
+  -moz-box-shadow: 0px 0px 12px 3px #1c1c1c;
+  box-shadow: 0px 0px 12px 3px #1c1c1c;
+  border: 2px solid #783dcb;
+
+  width: 80%;
+  min-height: 70vh;
+  height: fit-content;
+  border-radius: 10px;
+
+  transition: background-color 0.1s ease-in-out;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.textContainer {
+  position: absolute;
+  width: 80%;
+  min-height: 80%;
+  font-size: 2rem;
+}
+
+.textInput {
+  position: absolute;
+  width: 80%;
+  min-height: 80%;
+  font-size: 2rem;
+  /* background-color: green; */
+  background-color: transparent;
+  color: transparent;
+  resize: none;
+}
+
+.letter {
+  height: 3rem;
+  display: inline-block;
+}
