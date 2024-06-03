@@ -1,14 +1,22 @@
+
 from flask import Flask
-from flask_mongoengine import MongoEngine
+from flask_pymongo import PyMongo
+
+mongo = PyMongo()
+db = None
 
 def create_app():
-    app= Flask(__name__)
+    global db
+
+    app = Flask(__name__)
     app.config['SECRET_KEY'] = 'secretkey'
-    app.config['MONGODB_SETTINGS'] = {
-        'db': 'humanBenchmark',
-        'host': 'mongodb+srv://admin:admin@atlascluster.tx7dk4w.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster'
-    }
+    app.config['MONGO_URI'] = 'mongodb+srv://admin:admin@atlascluster.tx7dk4w.mongodb.net/humanBenchmark?retryWrites=true&w=majority'
+
+    mongo.init_app(app)
+    db = mongo.db
     
-    db = MongoEngine(app)
-    db.init_app(app)
+
+    from . import auth  # Import the "auth" blueprint module
+    app.register_blueprint(auth.auth)
+
     return app
