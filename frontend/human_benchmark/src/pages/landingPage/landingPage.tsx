@@ -10,7 +10,7 @@ const GAMES = [
   { title: "Sequence", icon: <Duck />, linkURL: "tests/sequence" },
   { title: "Memory", icon: <WaterLily />, linkURL: "tests/memory" },
   { title: "Typing", icon: <Monkey />, linkURL: "/tests/typing" },
-  { title: "placeholder", icon: <Monkey />, linkURL: "/" },
+  { title: "Clicker", icon: <Monkey />, linkURL: "/tests/clicker" },
   { title: "placeholder", icon: <Monkey />, linkURL: "/" },
 ];
 
