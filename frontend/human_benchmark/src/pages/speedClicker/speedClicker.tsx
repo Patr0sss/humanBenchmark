@@ -1,5 +1,7 @@
 import {useState} from "react";
+import { gameContainerVariants } from "../../assets/animationVariants";
 import styles from './speedClicker.module.css';
+import { motion } from "framer-motion";
 
 export default function speedClicker() {
    const [clickerValue, setClickerValue] = useState<number>(0);
@@ -14,7 +16,12 @@ export default function speedClicker() {
 
     return (
         <div className={styles.speedClicker}>
-            <div className={styles.gameContainer}>  
+            <motion.div 
+             className={styles.gameContainer}
+             variants={gameContainerVariants}
+             initial="hidden"
+             animate="visible"
+             >  
               <div className={styles.statsBlock}>
                   <div className={styles.timeBlock}>
                     <p>Time</p>
@@ -35,10 +42,11 @@ export default function speedClicker() {
                 <button>  </button>
               </>
               )}
-            </div>
+              </div>
+              
 
           
-            </div>
+            </motion.div>
         </div>
         
     );
