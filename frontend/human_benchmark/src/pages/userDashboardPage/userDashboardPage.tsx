@@ -35,7 +35,7 @@ const lineData = {
 
   datasets: [
     {
-      label: "Levels Passed in Sequence Game",
+      label: "Levels Passed",
       data: [4, 7, 6, 5, 10, 2, 3],
       borderColor: "#783dcb",
       backgroundColor: "#783dcb",
@@ -43,8 +43,13 @@ const lineData = {
   ],
 };
 
-const optionsChart = {
+const chartOptions = {
   responsive: true,
+  plugins: {
+    // legend: {
+    //   display: false,
+    // },
+  },
 };
 
 export default function UserDashboardPage() {
@@ -53,7 +58,8 @@ export default function UserDashboardPage() {
       <SideBar />
       <div className={styles.dashboardRightSide}>
         <div className={styles.graphSection}>
-          <Line options={optionsChart} data={lineData} />
+          <Line options={chartOptions} data={lineData} />
+          <div>Sequence Memory</div>
         </div>
       </div>
     </div>

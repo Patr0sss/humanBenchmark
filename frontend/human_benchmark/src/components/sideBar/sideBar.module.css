@@ -1,28 +1,52 @@
 .sideBar {
-  width: 350px;
+  /* width: 350px; */
   height: calc(100vh - 60px);
+  height: 80vh;
+  margin-top: 6vh;
+  width: 70px;
+  margin-left: 50px;
+  border-radius: 1000px;
+  background-color: #1a1717;
   background-color: #0e0c0c;
-  border-top: 2px solid white;
+  /* border-top: 2px solid white; */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   gap: 15px;
   padding-top: 30px;
+  -webkit-box-shadow: 0px 0px 24px 2px rgba(28, 28, 28, 1);
+  -moz-box-shadow: 0px 0px 24px 2px rgba(28, 28, 28, 1);
+  box-shadow: 0px 0px 24px 2px rgba(28, 28, 28, 1);
+
+  background: rgb(14, 12, 12);
+  background: linear-gradient(
+    90deg,
+    rgba(14, 12, 12, 1) 0%,
+    rgba(26, 23, 23, 1) 100%
+  );
 }
 
 .gameBar {
-  width: 80%;
-  padding-inline: 10%;
-  height: 40px;
+  width: 100%;
+  height: 50px;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
-  border-radius: 6px;
+  justify-content: left;
+  border-radius: 10px;
+  border-radius: 0px 8px 8px 0px;
   font-weight: bold;
-  transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
+  overflow-x: hidden;
+  text-wrap: nowrap;
+  padding-left: 20%;
+  color: transparent;
+  gap: 20px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+    width 0.3s ease-in-out;
 }
 
 .gameBar:hover {
   background-color: lightgray;
   color: #783dcb;
+  width: 260px;
 }

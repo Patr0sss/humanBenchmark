@@ -1,5 +1,6 @@
 .gameCard {
-  background-color: #201c1c;
+  /* background-color: #201c1c; */
+  background-color: #0e0c0c;
   width: 300px;
   height: 300px;
   border-radius: 10px;
@@ -11,12 +12,11 @@
   font-weight: bold;
   font-size: 1.2rem;
   transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out,
-    border-radius 0.3s ease-in-out;
+    scale 0.2s ease-in-out;
   border: 2px solid #783dcb;
 }
 
 .gameCard:hover {
-  color: #783dcb;
-  border-radius: 50%;
+  scale: 1.05;
   background-color: #281d38;
 }
