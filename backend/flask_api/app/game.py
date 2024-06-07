@@ -1,9 +1,11 @@
 from flask import Blueprint, request, jsonify, render_template
-from flask_login import  login_required, current_user
+from flask_login import login_required, current_user
+from flask_cors import CORS
 from . import db
 import datetime
 
 game = Blueprint('game', __name__)
+CORS(game, origins="http://localhost:5173", methods=["GET", "POST"])
 
 @game.route('/aim-trainer', methods=['POST'])
 @login_required

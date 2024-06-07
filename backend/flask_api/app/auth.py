@@ -2,11 +2,13 @@ from flask import Blueprint, request, jsonify, make_response, render_template
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
+from flask_cors import CORS
 import datetime
 # import jwt
 # import datetime
 
 auth = Blueprint('auth', __name__)
+CORS(auth, origins="http://localhost:5173", methods=["GET", "POST"])  # apply CORS to the auth blueprint
 
 @auth.route('/register')
 def register_form():
@@ -17,7 +19,7 @@ def register():
 
     data = request.get_json() # get the data from the request
     
-      # Sprawdź, czy adres e-mail jest już w użyciu
+    # Sprawdź, czy adres e-mail jest już w użyciu
     existing_user_email = db.user.find_one({"email": data['email']})
     existing_username = db.user.find_one({"username": data['username']})
 
