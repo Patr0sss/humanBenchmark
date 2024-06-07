@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import cardImages from './cardImages.tsx';
 import Card from './card.tsx';
+import Confetti from './confetti.tsx';
+import Memory from './assetsMemoryGame/memory.tsx';
 
 interface CardImage {
     src: string;
@@ -136,13 +138,18 @@ export default function MemoryGame() {
  
                 <div className="bg-[#131010] w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center">
                     {isGameWon ?
-                        <>
-                            {/* <Confetti/> */}
-                            <div className='relative '>
-                                Twoja stara wale nura to wygrała w {turns} turach
-                                <button className='block bg-red-400' onClick={handleGameMenu}>EZ</button>
+                        <div className='"absolute inset-0 flex justify-center items-center"'>
+                            <Confetti/>
+                            <div className='relative max-w-[400px]'>
+                                <div className='flex items-center justify-center'>
+                                    <Memory/>
+                                </div>
+                                <div className='mt-8 text-4xl'>
+                                    You won in <span className='text-[#783dcb] font-bold relative'>{turns}</span> turns
+                                </div>
+                                <button className='items-center justify-center block mx-auto my-4 bg-[#131010] text-[#783dcb] border-4 border-[#783dcb] rounded-full px-4 text-xl font-bold mt-8 ' onClick={handleGameMenu}>Try again</button>
                             </div>
-                        </>
+                        </div>
                     :
                         null
                     }

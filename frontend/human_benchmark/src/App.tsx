@@ -10,6 +10,7 @@ import MemoryGame from "./pages/memoryGame/memoryGame";
 import UserDashboardPage from "./pages/userDashboardPage/userDashboardPage";
 import SpeedClicker from "./pages/speedClicker/speedClicker";
 import TypingGame from "./pages/typingGame/typingGame";
+import FindGame from "./pages/findGame/findGame";
 
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
         <Route path="/tests/memory" element={<MemoryGame />} />
         <Route path="/tests/typing" element={<TypingGame />} />
         <Route path="/tests/clicker" element={<SpeedClicker/>} />
-
+        <Route path="/tests/find" element={<FindGame />} />
       </Routes>
     </div>
   );
