@@ -21,6 +21,8 @@ def create_app():
     
 
     from . import auth  # Import the "auth" blueprint module
+    from . import game  # Import the "game" blueprint module
     app.register_blueprint(auth.auth)
+    app.register_blueprint(game.game)
 
     return app
