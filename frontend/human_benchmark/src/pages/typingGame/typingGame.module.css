@@ -5,6 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .gameContainer {
@@ -29,16 +31,15 @@
 .textContainer {
   position: absolute;
   width: 80%;
-  min-height: 80%;
+  min-height: 60%;
   font-size: 2rem;
 }
 
 .textInput {
   position: absolute;
   width: 80%;
-  min-height: 80%;
+  min-height: 60%;
   font-size: 2rem;
-  /* background-color: green; */
   background-color: transparent;
   color: transparent;
   resize: none;
@@ -47,4 +48,9 @@
 .letter {
   height: 3rem;
   display: inline-block;
+}
+
+.timer {
+  font-size: 2rem;
+  font-weight: bold;
 }
