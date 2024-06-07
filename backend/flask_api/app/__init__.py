@@ -1,12 +1,26 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask_pymongo import PyMongo
+import json
 
-db = SQLAlchemy()
-DB_NAME = "database.db"
+mongo = PyMongo()
+db = None
 
 def create_app():
-    app= Flask(__name__)
-    app.config['SECRET_KEY'] = 'secretkey'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    db.init_app(app)
+    global db
+
+    app = Flask(__name__)
+    
+    with open('./config.json') as config_file:
+        config = json.load(config_file)
+        
+    app.config['SECRET_KEY'] = config['secret_key'] 
+    app.config['MONGO_URI'] = config['mongo_uri']
+
+    mongo.init_app(app)
+    db = mongo.db
+    
+
+    from . import auth  # Import the "auth" blueprint module
+    app.register_blueprint(auth.auth)
+
     return app
