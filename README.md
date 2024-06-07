@@ -3,4 +3,4 @@
 - [Kamil](https://github.com/Kamil-Hebda) - FLASK MASTER
 - [Jakub](https://github.com/JaSycz) - MIDEND DEVELOPER
 - [Paweł](https://github.com/pawel-rus) - BACKEND DEVELOPER
-- [Zgoda](https://github.com/michal-zgoda) - CSS ENJOYER
+- [Zgoda](https://github.com/poteznymichu) - CSS ENJOYER
