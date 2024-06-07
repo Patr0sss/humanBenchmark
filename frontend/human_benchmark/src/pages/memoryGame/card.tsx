@@ -14,20 +14,21 @@ interface CardProps {
     card: CardImage;
     picked: boolean;
     blockButton: boolean;
+    size: number;
 }
 
-export default function Card({ card, handleChoice, picked, blockButton }: CardProps) {
+export default function Card({ card, handleChoice, picked, blockButton,size }: CardProps) {
     return (
-      <div className="card">
+      <div className={`flex justify-center items-center`}>
         <motion.div
-          className={`flip-card-inner ${picked ? 'flip' : ''}`}
+          className={`flip-card-inner  ${picked ? 'flip' : ''} justify-center items-center flex`}
           animate={{ rotateY: picked ? 180 : 0 }}
           transition={{ duration: 0.6 }}
         >
           {card.matched ? (
-            <CardFront src={card.src} />
+            <CardFront src={card.src} size={size}/>
           ) : (
-            <CardBack card={card} handleChoice={handleChoice} picked={picked} blockButton={blockButton}/>
+            <CardBack card={card} handleChoice={handleChoice} picked={picked} blockButton={blockButton} size={size}/>
           )}
         </motion.div>
       </div>

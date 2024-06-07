@@ -15,11 +15,27 @@ export const gameContainerVariants = {
 export const opacityFadeVariants = {
   hidden: {
     opacity: 0,
+    scale: 0,
   },
   visible: {
     opacity: 1,
+    scale: 1,
     transition: {
       delay: 0.4,
+    },
+  },
+};
+
+export const opacityFadeVariants2 = {
+  hidden: {
+    opacity: 0,
+    scale: 0,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delay: 0.2,
     },
   },
 };

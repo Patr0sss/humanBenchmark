@@ -1,7 +1,11 @@
 import styles from "./sequenceMemory.module.css";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { gameContainerVariants } from "../../assets/animationVariants";
-import { useEffect, useState } from "react";
+import {
+  gameContainerVariants,
+  opacityFadeVariants,
+  opacityFadeVariants2,
+} from "../../assets/animationVariants";
 
 const initialGridObjects = [
   { value: 1, color: "#302c2c" },
@@ -19,18 +23,22 @@ export default function SequenceMemory() {
   const [roundCount, setRoundCount] = useState(1);
   const [userSequence, setUserSequence] = useState<number[]>([]);
   const [sequence, setSequence] = useState<number[]>([]);
-
   const [gridObjects, setGridObjects] = useState(initialGridObjects);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  const [message, setMessage] = useState("");
+  const [displayRoundCount, setDisplayRoundCount] = useState(1);
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+  const [userLost, setUserLost] = useState(false);
+  const gameBoardRef = useRef<HTMLDivElement>(null);
+  const animateIntervalTimeMS = 900;
 
   const generateRandomArray = (length: number) => {
     return Array.from({ length }, () => Math.floor(Math.random() * 9) + 1);
   };
 
   const userSectionAppend = (num: number) => {
-    setUserSequence(() => [...userSequence, num]);
+    if (sequence.length > 0 && !isAnimating) {
+      setUserSequence(() => [...userSequence, num]);
+    }
   };
 
   const arraysAreEqual = (arr1: number[], arr2: number[]) => {
@@ -43,95 +51,162 @@ export default function SequenceMemory() {
 
   const animateNewSequence = () => {
     setUserSequence([]);
+    setIsButtonVisible(false);
     const newSequence = generateRandomArray(roundCount);
     setSequence(newSequence);
-    let index = 0; // Indeks aktualnie kolorowanego kafelka
+    let index = 0;
+    // setRindex(0);
     setIsAnimating(true);
 
     const interval = setInterval(() => {
-      // Sprawdzamy, czy doszliśmy do końca sekwencji
       if (index === newSequence.length) {
-        clearInterval(interval); // Zatrzymujemy interval
-        setRoundCount(roundCount + 1); // Zwiększamy licznik rundy
+        // if (rIndex === newSequence.length) {
+        clearInterval(interval);
+        setRoundCount(roundCount + 1);
         return;
       }
 
-      const currentNumber = newSequence[index]; // Aktualny numer w sekwencji
+      const currentNumber = newSequence[index];
+      // const currentNumber = newSequence[rIndex];
 
-      // Znajdujemy indeks kafelka o wartości currentNumber
-      const tileIndex = gridObjects.findIndex(
-        (tile) => tile.value === currentNumber
+      setGridObjects((prevGridObjects) =>
+        prevGridObjects.map((tile, index) =>
+          index === currentNumber - 1 ? { ...tile, color: "#783dcb" } : tile
+        )
       );
 
-      if (tileIndex !== -1) {
-        // Ustawiamy kolor na czerwony dla aktualnego kafelka
+      setTimeout(() => {
         setGridObjects((prevGridObjects) =>
-          prevGridObjects.map((tile, i) =>
-            i === tileIndex ? { ...tile, color: "#783dcb" } : tile
+          prevGridObjects.map((tile, index) =>
+            index === currentNumber - 1 ? { ...tile, color: "#302c2c" } : tile
           )
         );
+      }, 400);
 
-        // Ustawiamy kolor na pierwotny po 500 ms
-        setTimeout(() => {
-          setGridObjects((prevGridObjects) =>
-            prevGridObjects.map((tile, i) =>
-              i === tileIndex ? { ...tile, color: "#302c2c" } : tile
-            )
-          );
-        }, 400);
-      }
-
-      index++; // Przechodzimy do następnego numeru w sekwencji
-    }, 900); // Interwał między kolorowaniem kolejnych kafelków
+      index += 1;
+      // setRindex((prev) => prev + 1);
+    }, animateIntervalTimeMS);
 
     setTimeout(() => {
       setIsAnimating(false);
-    }, newSequence.length * 900 + 900);
+    }, newSequence.length * animateIntervalTimeMS);
+  };
+
+  const handlePlayAgainButton = () => {
+    setUserLost(false);
+    setSequence([]);
+    setDisplayRoundCount(1);
   };
 
   useEffect(() => {
-    setMessage("");
     if (
-      userSequence.length >= sequence.length &&
-      !arraysAreEqual(userSequence, sequence)
+      sequence.length > 0 &&
+      userSequence[userSequence.length - 1] !==
+        sequence[userSequence.length - 1] &&
+      gameBoardRef.current
     ) {
-      console.log("Zjebałeś");
-      setMessage("Zjebałeś");
+      gameBoardRef.current.style.background = "red";
+      gameBoardRef.current.style.opacity = "0.4";
+
+      setTimeout(() => {
+        if (gameBoardRef.current) {
+          gameBoardRef.current.style.background = "#0e0c0c";
+          gameBoardRef.current.style.opacity = "1";
+
+          setUserLost(true);
+          setRoundCount(1);
+          setIsButtonVisible(true);
+        }
+      }, 100);
     }
 
-    if (arraysAreEqual(sequence, userSequence) && sequence.length > 0) {
-      console.log("BRAWO");
-      setMessage("BRAWO");
+    if (
+      arraysAreEqual(sequence, userSequence) &&
+      sequence.length > 0 &&
+      gameBoardRef.current
+    ) {
+      gameBoardRef.current.style.background = "green";
+      // gameBoardRef.current.style.opacity = "0.1";
+
+      setDisplayRoundCount(displayRoundCount + 1);
+
+      setTimeout(() => {
+        if (gameBoardRef.current) {
+          gameBoardRef.current.style.background = "#0e0c0c";
+          gameBoardRef.current.style.opacity = "1";
+
+          // setIsButtonVisible(true);
+          animateNewSequence();
+        }
+      }, 100);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sequence, userSequence]);
 
   return (
     <div className={styles.sequenceMemory}>
+      {userLost ? (
+        <div className={styles.displayRoundCount}></div>
+      ) : (
+        <motion.div
+          className={styles.displayRoundCount}
+          variants={opacityFadeVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          Sequence Game - Round {displayRoundCount}
+        </motion.div>
+      )}
+
       <motion.div
         variants={gameContainerVariants}
         initial="hidden"
         animate="visible"
-        className={styles.gameContainer}
+        className={userLost ? styles.gameContainerLost : styles.gameContainer}
+        ref={gameBoardRef}
       >
-        {gridObjects.map((tile, index) => (
-          <div
-            className={styles.tile}
-            key={index.toString()}
-            onClick={() => userSectionAppend(tile.value)}
-            style={{ backgroundColor: tile.color }}
-          ></div>
-        ))}
-        <div>{message}</div>
-
-        <div
-          onClick={animateNewSequence}
-          className={styles.generateButton}
-          style={{ backgroundColor: isAnimating ? "red" : "green" }}
-        >
-          Generate
-        </div>
-        <div></div>
-        <div></div>
+        {userLost ? (
+          <motion.div
+            variants={opacityFadeVariants2}
+            initial="hidden"
+            animate="visible"
+          >
+            <div className={styles.gameOver}>Game Over</div>
+            <div>Total Rounds : {displayRoundCount}</div>
+            <div className={styles.lostButtonSection}>
+              <div className={styles.lostButton}>Save Score</div>
+              <div
+                className={styles.lostButton}
+                onClick={handlePlayAgainButton}
+              >
+                Try Again
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <>
+            {gridObjects.map((tile, index) => (
+              <div
+                className={styles.tile}
+                key={index.toString()}
+                onClick={() => userSectionAppend(tile.value)}
+                style={{ backgroundColor: tile.color }}
+              ></div>
+            ))}
+            <div></div>
+            {isButtonVisible ? (
+              <div
+                onClick={animateNewSequence}
+                className={styles.generateButton}
+              >
+                Start
+              </div>
+            ) : (
+              <div className={styles.disapearDiv}></div>
+            )}
+          </>
+        )}
       </motion.div>
     </div>
   );

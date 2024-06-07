@@ -2,18 +2,19 @@ import {motion} from 'framer-motion';
 
 interface CardFrontProps {
     src: string;
+    size:number;
 }
 
-export default function CardFront({ src }: CardFrontProps) {
+export default function CardFront({ src,size }: CardFrontProps) {
     return (
-      <motion.div className="w-[128px] h-[128px] flip-card-front">
-        <div className='flex items-center justify-center w-full h-full rounded-3xl bg-[#783dcb] border-2 border-white'>
+      <motion.div 
+        className={`flip-card-front border-2 border-white rounded-3xl bg-[#783dcb] flex justify-center items-center`}
+        >
           <img 
+            className={` overflow-hidden`}
             src={src} 
-            style={{width:'128px',height:'128px'}} 
             alt="Card Front" 
           />
-        </div>
       </motion.div>
     );
   }

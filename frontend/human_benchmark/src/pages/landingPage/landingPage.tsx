@@ -1,14 +1,29 @@
+import Duck from "../../assets/duck";
+import Monkey from "../../assets/monkey";
+import Ufo from "../../assets/ufo";
+import WaterLily from "../../assets/waterLily";
+import GameCard from "../../components/gameCard/gameCard";
 import styles from "./landingPage.module.css";
-import { Link } from "react-router-dom";
+
+const GAMES = [
+  { title: "Aim Trainer", icon: <Ufo />, linkURL: "tests/aim" },
+  { title: "Sequence", icon: <Duck />, linkURL: "tests/sequence" },
+  { title: "Memory", icon: <WaterLily />, linkURL: "tests/memory" },
+  { title: "Typing", icon: <Monkey />, linkURL: "/tests/typing" },
+  { title: "Clicker", icon: <Monkey />, linkURL: "/tests/clicker" },
+  { title: "placeholder", icon: <Monkey />, linkURL: "/" },
+];
 
 export default function LandingPage() {
   return (
     <div className={styles.landingPage}>
-      <div>LandingPage</div>
-      <Link to="/auth">Register</Link>
-      <Link to="/tests/aim">AIM</Link>
-      <Link to="/tests/sequence">SEQ</Link>
-      <Link to="/tests/memory">Memory</Link>
+      {GAMES.map((game) => (
+        <GameCard
+          gameIcon={game.icon}
+          gameTitle={game.title}
+          linkURL={game.linkURL}
+        />
+      ))}
     </div>
   );
 }

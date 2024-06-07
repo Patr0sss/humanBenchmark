@@ -7,6 +7,10 @@ export default function NavBar() {
       <Link to="/">
         <div className={styles.appName}>HumanBenchmark</div>
       </Link>
+      <div>
+        <Link to="/auth">Register</Link>
+        <Link to="/profile">Profile</Link>
+      </div>
     </nav>
   );
 }
