@@ -8,7 +8,7 @@ game = Blueprint('game', __name__)
 CORS(game, origins="http://localhost:5173", methods=["GET", "POST"])
 
 @game.route('/aim-trainer', methods=['POST'])
-@login_required
+#@login_required
 def aim_trainer():
     data = request.get_json()
 
@@ -36,7 +36,8 @@ def memory_game():
         {"$push": {# Dodaj nowy dokument MemoryGame do listy memory_games użytkownika
             "memory_games": {
                 "id": str(datetime.datetime.now()),
-                "score": data['score']
+                "score": data['score'],
+                "level": data["level"]
             }
         }}
     )
@@ -118,7 +119,7 @@ def placeholder():
 def get_aim_trainer():
     user = db.user.find_one({"public_id": current_user._public_id})
 
-    aim_trainers = user['aim_trainers']
+    aim_trainers = user['aim_trainers'].find().sort({ "accuracy": -1}).limit(10)
 
     return jsonify(aim_trainers), 200
 
@@ -127,7 +128,7 @@ def get_aim_trainer():
 def get_memory_game():
     user = db.user.find_one({"public_id": current_user._public_id})
 
-    memory_games = user['memory_games']
+    memory_games = user['memory_games'].find().sort({ "score": -1}).limit(10)
 
     return jsonify(memory_games), 200
 
@@ -136,7 +137,7 @@ def get_memory_game():
 def get_sequence_memory():
     user = db.user.find_one({"public_id": current_user._public_id})
 
-    sequence_memories = user['sequence_memories']
+    sequence_memories = user['sequence_memories'].find().sort({ "score": -1}).limit(10)
 
     return jsonify(sequence_memories), 200
 
