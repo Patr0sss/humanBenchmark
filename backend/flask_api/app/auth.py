@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_cors import CORS
 import datetime
+from flask_login import login_required
 # import jwt
 # import datetime
 
@@ -66,6 +67,7 @@ def login():
         return jsonify({'message': 'Login failed'}), 401
     
 @auth.route('/logout')
+@login_required
 def logout():
 
     return jsonify({'message': 'logout successful'})

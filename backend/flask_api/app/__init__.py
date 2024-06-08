@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_pymongo import PyMongo
+from flask_login import LoginManager
 import json
 
 mongo = PyMongo()
@@ -18,9 +19,20 @@ def create_app():
 
     mongo.init_app(app)
     db = mongo.db
+
+    login_manager = LoginManager() 
+    login_manager.init_app(app) 
+
+    @login_manager.user_loader
+    def load_user(public_id):
+    # Znajdź użytkownika w bazie danych na podstawie jego publicznego identyfikatora
+        user = db.user.find_one({"public_id": public_id})
+        return user
     
 
     from . import auth  # Import the "auth" blueprint module
+    from . import game  # Import the "game" blueprint module
     app.register_blueprint(auth.auth)
+    app.register_blueprint(game.game)
 
     return app
