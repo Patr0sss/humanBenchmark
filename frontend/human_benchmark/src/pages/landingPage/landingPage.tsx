@@ -13,7 +13,6 @@ const GAMES = [
   { title: "Typing", icon: <Keyboard />, linkURL: "/tests/typing" },
   { title: "Clicker", icon: <Monkey />, linkURL: "/tests/clicker" },
   { title: "placeholder", icon: <Monkey />, linkURL: "tests/find" },
-  { title: "placeholder", icon: <Monkey />, linkURL: "/" },
 ];
 
 export default function LandingPage() {

@@ -39,3 +39,15 @@ export const opacityFadeVariants2 = {
     },
   },
 };
+
+export const opacityFadeVariants3 = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      delay: 0.2,
+    },
+  },
+};

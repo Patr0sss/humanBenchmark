@@ -1,10 +1,11 @@
+import { useState } from "react";
 import Duck from "../../assets/duck";
 import Monkey from "../../assets/monkey";
 import Ufo from "../../assets/ufo";
 import WaterLily from "../../assets/waterLily";
 import styles from "./sideBar.module.css";
-// const GAMES = ["AIM Trainer", "Memory", "Sequence"];
-// const GAMES = ["AIM", "Mem", "Seq"];
+import { motion } from "framer-motion";
+import { opacityFadeVariants2 } from "../../assets/animationVariants";
 const GAMES = [
   { title: "Aim Trainer", icon: <Ufo width={45} />, linkURL: "tests/aim" },
   {
@@ -18,7 +19,7 @@ const GAMES = [
     linkURL: "tests/memory",
   },
   {
-    title: "SpeedTyping",
+    title: "Speed Typing",
     icon: <Monkey width={45} />,
     linkURL: "/tests/typing",
   },
@@ -29,14 +30,37 @@ const GAMES = [
   },
 ];
 
-export default function SideBar() {
+export default function SideBar({
+  setGameCallback,
+}: {
+  setGameCallback: (game: string) => void;
+}) {
+  const [currentGame, setCurrentGame] = useState("Aim Trainer");
+
+  const handleGameBarClick = (game: string) => {
+    setCurrentGame(game);
+    setGameCallback(game);
+  };
   return (
     <div>
-      <div className={styles.sideBar}>
+      <motion.div
+        variants={opacityFadeVariants2}
+        initial="hidden"
+        animate="visible"
+        className={styles.sideBar}
+      >
         {GAMES.map((game) => (
-          <GameBar gameIcon={game.icon} gameTitle={game.title} />
+          <div
+            onClick={() => handleGameBarClick(game.title)}
+            style={{
+              backgroundColor: currentGame === game.title ? "lightgray" : "",
+            }}
+            className={styles.gameContainer}
+          >
+            <GameBar gameIcon={game.icon} gameTitle={game.title} />
+          </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
