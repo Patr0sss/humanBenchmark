@@ -11,6 +11,9 @@ import {
   Legend,
 } from "chart.js";
 import SideBar from "../../components/sideBar/sideBar";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { opacityFadeVariants3 } from "../../assets/animationVariants";
 
 ChartJS.register(
   CategoryScale,
@@ -38,29 +41,40 @@ const lineData = {
       label: "Levels Passed",
       data: [4, 7, 6, 5, 10, 2, 3],
       borderColor: "#783dcb",
-      backgroundColor: "#783dcb",
+      backgroundColor: "black",
     },
   ],
 };
 
 const chartOptions = {
   responsive: true,
-  plugins: {
-    // legend: {
-    //   display: false,
-    // },
-  },
 };
 
 export default function UserDashboardPage() {
+  const [currentGame, setCurrentGame] = useState("Aim Trainer");
+  const [chartData, setChartData] = useState(lineData);
+
+  const getCurrentGame = (game: string) => {
+    setCurrentGame(game);
+  };
+
+  useEffect(() => {
+    setChartData(lineData);
+  }, []);
+
   return (
     <div className={styles.dashboard}>
-      <SideBar />
+      <SideBar setGameCallback={getCurrentGame} />
       <div className={styles.dashboardRightSide}>
-        <div className={styles.graphSection}>
-          <Line options={chartOptions} data={lineData} />
-          <div>Sequence Memory</div>
-        </div>
+        <motion.div
+          className={styles.graphSection}
+          variants={opacityFadeVariants3}
+          initial="hidden"
+          animate="visible"
+        >
+          <Line options={chartOptions} data={chartData} />
+          <div>{currentGame}</div>
+        </motion.div>
       </div>
     </div>
   );

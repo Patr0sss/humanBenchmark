@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import cardImages from './cardImages.tsx';
 import Card from './card.tsx';
+import Confetti from './confetti.tsx';
+import Memory from './assetsMemoryGame/memory.tsx';
 
 interface CardImage {
     src: string;
@@ -19,6 +21,12 @@ interface LevelState {
     numberOfCards?: number;
 }
 
+interface LevelColorMap {
+    [key: number]: string;
+    numberOfCards?: number;
+}
+
+
 export default function MemoryGame() {
     const [cards, setCards] = useState<CardImage[]>([]);
     const [turns,setTurns] = useState<number>(0);
@@ -29,14 +37,14 @@ export default function MemoryGame() {
     const [numberOfColumns,setNumberOfColumns] = useState<string>('grid-cols-2');
     const [cardSize,setCardSize] = useState<number>(128);
     const [correctPicked,setCorrectPicked] = useState<number>(0);
-    const [numberOfCards,setNumberOfCards] = useState<number|null>(null);
+    const [numberOfCards,setNumberOfCards] = useState<number | null>(null);
     const [isGameWon,setIsGameWon] = useState<boolean>(false);
     const [level, setLevel] = useState<LevelState>({
         4: "Very Easy",
         6: "Easy",
         9: "Medium",
         12: "Hard",
-        16: "Extreme"
+        18: "Extreme"
       });
 
       const [gridClasses, setGridClasses] = useState<GridClass>({
@@ -46,7 +54,14 @@ export default function MemoryGame() {
         12: '3xl:w-[1400px] 3xl:h-[510px] 2xl:w-[1150px] 2xl:h-[420px] xl:w-[950px] xl:h-[340px] lg:w-[750px] lg:h-[500px] md:w-[580px] md:h-[460px] sm:w-[350px] sm:h-[550px] xsm:w-[340px] xsm:h-[540px] w-[320px] h-[510px] xl:grid-cols-8 md:grid-cols-6 grid-cols-4',
         18: '3xl:w-[1250px] 3xl:h-[540px] 2xl:w-[1150px] 2xl:h-[500px] xl:w-[1000px] xl:h-[430px] lg:w-[700px] lg:h-[600px] md:w-[580px] md:h-[580px] sm:w-[480px] sm:h-[600px] xsm:w-[350px] xsm:h-[580px] w-[340px] h-[580px] xl:grid-cols-9 sm:grid-cols-7 grid-cols-5',
     });
-    
+
+    const [levelColorMap] = useState<LevelColorMap>({
+        4: 'text-green-400',
+        6: 'text-green-600',
+        9: 'text-orange-600',
+        12: 'text-red-400',
+        18: 'text-red-600',
+    });
 
 
     const shuffleCards = (numberOfCards:number): void => {
@@ -123,26 +138,37 @@ export default function MemoryGame() {
         setIsGameWon(false);
     }
     
-    const levelName = numberOfCards ? level[numberOfCards] : '';
     const gridClass = numberOfCards ? gridClasses[numberOfCards] : '';
+    const levelName = numberOfCards ? level[numberOfCards] : '';
+    const levelClass = numberOfCards ? levelColorMap[numberOfCards] : '';
 
     return (
             <div className='h-[calc(100vh-60px)] mt-[60px] w-full min-h-[500px] flex flex-col justify-center items-center'>
                 {!isGameLoaded ? 
                     <div className='mt-[60px] text-3xl p-4'>Memory game</div>
                 :
-                <div className={`mt-[60px] text-3xl p-4 ${levelName === 'Very Easy' ? 'text-green-400' : levelName === 'Easy' ? 'text-green-600' : levelName === 'Medium' ? 'text-orange-600' : levelName === 'Hard' ? 'text-red-400' : levelName === 'Extreme' ? 'text-red-600' : ''}`}>Level: {levelName}</div>
+                <>
+                    <div className={`mt-[60px] text-3xl p-4 ${levelClass} uppercase`}>Level: {levelName}</div>
+                    <div className='left-0 right-0 flex my-[5px] absolute bottom-0'>
+                        <h1 className={`mx-auto ${!isGameLoaded ? "hidden" : "visible"} bg-[#783dcb] p-2 rounded-xl`}>TURNS: {turns}</h1>
+                    </div>
+                </>
                 }
  
                 <div className="bg-[#131010] w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center">
                     {isGameWon ?
-                        <>
-                            {/* <Confetti/> */}
-                            <div className='relative '>
-                                Twoja stara wale nura to wygrała w {turns} turach
-                                <button className='block bg-red-400' onClick={handleGameMenu}>EZ</button>
+                        <div className='absolute inset-0 z-10 flex items-center justify-center'>
+                            <Confetti/>
+                            <div className='relative max-w-[400px]'>
+                                <div className='flex items-center justify-center'>
+                                    <Memory/>
+                                </div>
+                                <div className='mt-8 text-4xl'>
+                                    You won in <span className='text-[#783dcb] font-bold relative'>{turns}</span> turns
+                                </div>
+                                <button className='items-center justify-center mx-auto my-4 bg-[#131010] text-[#783dcb] border-4 border-[#783dcb] text-xl font-bold mt-8 ' onClick={handleGameMenu}>Try again</button>
                             </div>
-                        </>
+                        </div>
                     :
                         null
                     }
@@ -163,19 +189,16 @@ export default function MemoryGame() {
                         ))}
                             </div>
                         </div>
-                        <div className='bottom-0 left-0 right-0 flex my-[5px] absolute'>
-                            <h1 className={`mx-auto ${!isGameLoaded ? "hidden" : "visible"} bg-[#783dcb] p-2 rounded-xl`}>TURNS: {turns}</h1>
-                        </div>
                     </>
                     :
                         null
                     }
-                    <div className={`grid grid-cols-5 gap-4 self-start ${isGameLoaded ? "hidden" : "visible"} mt-[5%] px-[5%]`}>
-                        <button className='p-2 bg-green-400 rounded-2xl' onClick={() => handleLevel(4)}>Level: Very Easy</button>
-                        <button className='p-2 bg-green-600 rounded-2xl' onClick={() => handleLevel(6)}>Level: Easy</button>
-                        <button className='p-2 bg-orange-600 rounded-2xl' onClick={() => handleLevel(9)}>Level: Medium</button>
-                        <button className='p-2 bg-red-500 rounded-2xl' onClick={() => handleLevel(12)}>Level: Hard</button>
-                        <button className='p-2 bg-red-700 rounded-2xl' onClick={() => handleLevel(18)}>Level: Extreme</button>
+                    <div className={`grid grid-cols-1 grid-rows-5 text-black gap-8 ${isGameLoaded ? "hidden" : "visible"} font-bold flex`}>
+                        <button className='py-4 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-emerald-600 from-5% via-emerald-300  to-emerald-600 to-95% mx-auto uppercase' onClick={() => handleLevel(4)}>Level: Very Easy</button>
+                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-green-600 from-5% via-green-300  to-green-600 to-95% mx-auto uppercase' onClick={() => handleLevel(6)}>Level: Easy</button>
+                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-orange-600 from-5% via-orange-300  to-orange-600 to-95% mx-auto uppercase' onClick={() => handleLevel(9)}>Level: Medium</button>
+                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-rose-800 from-5% via-rose-400  to-rose-800 to-95% mx-auto uppercase' onClick={() => handleLevel(12)}>Level: Hard</button>
+                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-red-700 from-5% via-red-400  to-red-700 to-95% mx-auto uppercase' onClick={() => handleLevel(18)}>Level: Extreme</button>
                     </div>
                 </div>
             </div>

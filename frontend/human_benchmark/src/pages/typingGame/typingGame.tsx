@@ -7,6 +7,8 @@ import {
 import { useEffect, useState } from "react";
 
 export default function TypingGame() {
+  const typeText =
+    "Rano budzę się w przyczepie, z kacem jak stąd do Kanady. Ricky leży obok, przebrany za kurczaka. Julian próbuje zrobić kawę, ale zamiast wody, wlewa piwo do ekspresu. Lahey już od szóstej rano drze się na całe osiedle. Tylko Bubbles jak zwykle w porządku, koty nakarmił, bo kto inny by o nie zadbał? Życie w barakach - dzień jak co dzień";
   const slicedTypeText =
     "Rano budzę się w przyczepie, z kacem jak stąd do Kanady. Ricky leży obok, przebrany za kurczaka. Julian próbuje zrobić kawę, ale zamiast wody, wlewa piwo do ekspresu. Lahey już od szóstej rano drze się na całe osiedle. Tylko Bubbles jak zwykle w porządku, koty nakarmił, bo kto inny by o nie zadbał? Życie w barakach - dzień jak co dzień".split(
       ""
@@ -15,12 +17,21 @@ export default function TypingGame() {
   const [userInputText, setUserInputText] = useState("");
   const [timerSEC, setTimerSEC] = useState(0);
   const [userStartedTyping, setUserStartedTyping] = useState(false);
+  const [isTextProperlyRewrited, setIsTextProperlyRewrited] = useState(false);
 
   useEffect(() => {
     if (userInputText.length === 1) {
       setUserStartedTyping(true);
     }
-  }, [userInputText]);
+
+    if (userInputText === typeText) {
+      setIsTextProperlyRewrited(true);
+    }
+
+    if (isTextProperlyRewrited) {
+      setUserStartedTyping(false);
+    }
+  }, [isTextProperlyRewrited, userInputText]);
 
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
@@ -30,8 +41,9 @@ export default function TypingGame() {
         setTimerSEC((prev) => prev + 1);
       }, 1000);
     }
+
     return () => clearInterval(timer);
-  }, [userStartedTyping]);
+  }, [userStartedTyping, isTextProperlyRewrited]);
 
   return (
     <div className={styles.typingGame}>
@@ -41,9 +53,13 @@ export default function TypingGame() {
         animate="visible"
         className={styles.timer}
       >
-        {userStartedTyping
-          ? "Time : " + timerSEC
-          : "Start Typing To Begin The Test"}
+        {userStartedTyping ? (
+          <div>Time : {timerSEC}s</div>
+        ) : isTextProperlyRewrited ? (
+          <div></div>
+        ) : (
+          <div>Start Typing To Begin The Test</div>
+        )}
       </motion.div>
       <motion.div
         variants={gameContainerVariants}
@@ -51,31 +67,37 @@ export default function TypingGame() {
         animate="visible"
         className={styles.gameContainer}
       >
-        <div className={styles.textContainer}>
-          {slicedTypeText.map((letter, index) => (
-            <div
-              className={styles.letter}
-              key={index}
-              style={{
-                width: letter === " " ? "10px" : "",
-                marginBottom: letter === " " ? "-11px" : "0px",
-                backgroundColor:
-                  userInputText[index] === slicedTypeText[index]
-                    ? "green"
-                    : userInputText.length - 1 >= index
-                    ? "red"
-                    : "",
-              }}
-            >
-              {letter}
+        {isTextProperlyRewrited ? (
+          <div className={styles.timer}>Final Time : {timerSEC}s</div>
+        ) : (
+          <>
+            <div className={styles.textContainer}>
+              {slicedTypeText.map((letter, index) => (
+                <div
+                  className={styles.letter}
+                  key={index}
+                  style={{
+                    width: letter === " " ? "10px" : "",
+                    marginBottom: letter === " " ? "-11px" : "0px",
+                    backgroundColor:
+                      userInputText[index] === slicedTypeText[index]
+                        ? "green"
+                        : userInputText.length - 1 >= index
+                        ? "red"
+                        : "",
+                  }}
+                >
+                  {letter}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <textarea
-          spellCheck={false}
-          className={styles.textInput}
-          onChange={(e) => setUserInputText(e.target.value)}
-        />
+            <textarea
+              spellCheck={false}
+              className={styles.textInput}
+              onChange={(e) => setUserInputText(e.target.value)}
+            />
+          </>
+        )}
       </motion.div>
     </div>
   );

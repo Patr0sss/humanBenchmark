@@ -26,3 +26,9 @@
   justify-content: space-evenly;
   font-weight: bold;
 }
+
+@media (max-width: 1200px) {
+  .dashboard {
+    flex-direction: column;
+  }
+}
