@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Duck from "../../assets/duck";
-import Monkey from "../../assets/monkey";
 import Ufo from "../../assets/ufo";
 import WaterLily from "../../assets/waterLily";
 import styles from "./sideBar.module.css";
 import { motion } from "framer-motion";
 import { opacityFadeVariants2 } from "../../assets/animationVariants";
+import Treasure from "../../assets/treasure";
+import Clicker from "../../assets/clicker";
+import Keyboard from "../../assets/keyboard";
 const GAMES = [
   { title: "Aim Trainer", icon: <Ufo width={45} />, linkURL: "tests/aim" },
   {
@@ -20,13 +22,18 @@ const GAMES = [
   },
   {
     title: "Speed Typing",
-    icon: <Monkey width={45} />,
+    icon: <Keyboard width={45} />,
     linkURL: "/tests/typing",
   },
   {
     title: "Clicker Game",
-    icon: <Monkey width={45} />,
+    icon: <Clicker width={45} />,
     linkURL: "/tests/clicker",
+  },
+  {
+    title: "TZWCTR(CH)",
+    icon: <Treasure width={45} />,
+    linkURL: "tests/find",
   },
 ];
 
