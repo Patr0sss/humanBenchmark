@@ -186,8 +186,8 @@ class Users:
         return user
     
     "get user by id"
-    def get_by_id(self, public_id: str):
-        user= db.user.find_one({"_id": bson.objectid.ObjectId(public_id)})
+    def get_by_id(self, user_id: str):
+        user= db.user.find_one({"_id": bson.objectid.ObjectId(user_id)})
         if not user:
             return
         user["_id"] = str(user["_id"])
@@ -197,6 +197,11 @@ class Users:
     "delete user"
     def delete(self, user_id: str):
         AimTrainers().delete_by_user_id(user_id)
+        MemoryGame().delete_by_user_id(user_id)
+        SequenceMemory().delete_by_user_id(user_id)
+        Typing().delete_by_user_id(user_id)
+        Clicker().delete_by_user_id(user_id)
+        ReactionTime().delete_by_user_id(user_id)
         
         db.user.delete_one({"_id": bson.objectid.ObjectId(user_id)})
         user= self.get_by_id(user_id)
@@ -212,4 +217,4 @@ class Users:
             user["_id"] = str(user["_id"])
             user.pop("password")
             return user
-        return "haslo"
+        return "password"
