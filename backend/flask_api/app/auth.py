@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify, make_response, render_template
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
-from auth_middleware import token_required
-from . import db, app
+from .auth_middleware import token_required
+from . import db
 from flask_cors import CORS
 import datetime
 from flask_login import login_required

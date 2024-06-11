@@ -4,8 +4,8 @@ from flask_cors import CORS
 from . import db
 #import jwt, os
 
-from models import AimTrainers, MemoryGame, SequenceMemory, Typing, Clicker, Placeholder
-from auth_middleware import token_required
+from .models import AimTrainers, MemoryGame, SequenceMemory, Typing, Clicker, Placeholder
+from .auth_middleware import token_required
 
 game = Blueprint('game', __name__)
 CORS(game, origins="http://localhost:5173", methods=["GET", "POST"])
