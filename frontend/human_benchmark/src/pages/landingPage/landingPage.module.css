@@ -9,6 +9,8 @@
   grid-template-rows: auto auto;
   place-content: center;
   gap: 50px;
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 @media (max-width: 1200px) {
