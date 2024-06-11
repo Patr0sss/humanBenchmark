@@ -2,68 +2,11 @@ import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { IoLogoApple } from "react-icons/io";
 import { motion } from "framer-motion";
-// import { useUserInfo } from "../../contexts/UserContext";
-// import { useState } from "react";
-
-// interface UserProps {
-//   email: string;
-//   username: string;
-//   password: string;
-// }
+import { useUserInfo } from "../../contexts/UserContext";
 
 export default function AuthPage() {
-  // const { registerUser } = useUserInfo();
-  // const [userInfo, setUserInfo] = useState<UserProps>({
-  //   email: "MIYAGIAAAAAAAAAA3",
-  //   username: "AAAAAAAAAAAAA",
-  //   password: "AAAAAAAAAA",
-  // });
+  const { registerUser, userInfo, handleUserInfoFill } = useUserInfo();
 
-  // const handleUserCreate = async () => {
-  //   try {
-  //     await registerUser({
-  //       // email: "miyagiTest3",
-  //       // username: "MIYAGI3",
-  //       // password: "123",
-  //       email: userInfo.email,
-  //       username: userInfo.username,
-  //       password: userInfo.password,
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-
-  //   console.log("KURWA");
-  // };
-
-  // const handleUserCreate = () => {
-  //   console.log("KURWA");
-  // };
-
-  const registerUser = async () => {
-    //   const registerUser = async () => {
-    try {
-      const res = await fetch("http://127.0.0.1:5000/auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: "xD@gmail.com",
-          username: "Xdd",
-          password: "spasasdasd",
-          // email,
-          // username,
-          // password,
-        }),
-      });
-      const data = await res.json();
-
-      console.log(data);
-    } catch (err) {
-      console.log("BŁĘDY KURWA");
-    }
-  };
   return (
     <div className="w-screen h-fit sm:h-screen bg-[#201d22] py-8">
       <div className="3xl:max-w-[1700px] 2xl:max-w-[1500px] xl:max-w-[1200px] lg:max-w-[960px] md:max-w-[700px] sm:max-w-[600px] xsm:max-w-[500px] max-w-[350px] bg-[#2c282e] mx-auto md:h-full h-fit rounded-lg lg:grid-cols-2 lg:grid py-2 lg:py-0">
@@ -123,6 +66,8 @@ export default function AuthPage() {
               <input
                 className="outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2"
                 placeholder="Email"
+                name="email"
+                onChange={handleUserInfoFill}
               />
             </div>
             {/* username */}
@@ -133,6 +78,8 @@ export default function AuthPage() {
               <input
                 className="outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2"
                 placeholder="Username"
+                name="username"
+                onChange={handleUserInfoFill}
               />
             </div>
             {/* Password */}
@@ -143,11 +90,13 @@ export default function AuthPage() {
               <input
                 className="outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2"
                 placeholder="Password"
+                name="password"
+                onChange={handleUserInfoFill}
               />
             </div>
             <div className="my-6">
               <motion.button
-                onClick={() => registerUser}
+                onClick={() => registerUser(userInfo)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
