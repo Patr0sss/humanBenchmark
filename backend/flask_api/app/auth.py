@@ -29,7 +29,6 @@ def register():
     hashed_password = generate_password_hash(data['password'])
 
     db.user.insert_one({
-        "public_id": str(uuid.uuid4()), 
         "email": data['email'], 
         "password": hashed_password, 
         "username": data['username'],

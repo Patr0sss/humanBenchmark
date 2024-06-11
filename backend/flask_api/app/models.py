@@ -8,11 +8,11 @@ import datetime
 
 "Aim Trainer Model"
 class AimTrainers:
-    def __init__(self, score: int, level: int):
+    def __init__(self):
         return
     
     "create aim trainer"
-    def create(self, user_id: str, accuracy: float , average_time: float):
+    def create(user_id: str, accuracy: float , average_time: float):
         new_aim_trainer= db.aim_trainer.insert_one({
             "user_id": user_id,
             "accuracy": accuracy,
@@ -22,9 +22,12 @@ class AimTrainers:
         return new_aim_trainer
     
     "get aim trainer by user id"
-    def get_by_user_id(self, user_id: str):
+    def get_by_user_id(user_id: str):
         aim_trainers= db.aim_trainer.find({"user_id": user_id})
-        aim_trainers= [aim_trainer for aim_trainer in aim_trainers]
+         # Przekonwertuj tylko pole _id na typ str
+        aim_trainers = [
+            {**aim_trainer, "_id": str(aim_trainer["_id"])} for aim_trainer in aim_trainers # **aim_trainer - rozpakowuje słownik
+    ]
         return aim_trainers
 
 "Memory Game Model"
@@ -33,7 +36,7 @@ class MemoryGame:
         return
     
     "create memory game"
-    def create(self, user_id: str, score: int, level: int):
+    def create(user_id: str, score: int, level: int):
         new_memory_game= db.memory_game.insert_one({
             "user_id": user_id,
             "score": score,
@@ -43,9 +46,9 @@ class MemoryGame:
         return new_memory_game
     
     "get memory game by user id"
-    def get_by_user_id(self, user_id: str):
+    def get_by_user_id(user_id: str):
         memory_games= db.memory_game.find({"user_id": user_id})
-        memory_games= [memory_game for memory_game in memory_games]
+        memory_games = [{**memory_game, "_id": str(memory_game["_id"])} for memory_game in memory_games]
         return memory_games
     
 "Sequence Memory Model"
@@ -54,7 +57,7 @@ class SequenceMemory:
         return
     
     "create sequence memory"
-    def create(self, user_id: str, score: int):
+    def create(user_id: str, score: int):
         new_sequence_memory= db.sequence_memory.insert_one({
             "user_id": user_id,
             "score": score,
@@ -63,9 +66,9 @@ class SequenceMemory:
         return new_sequence_memory
     
     "get sequence memory by user id"
-    def get_by_user_id(self, user_id: str):
+    def get_by_user_id(user_id: str):
         sequence_memories= db.sequence_memory.find({"user_id": user_id})
-        sequence_memories= [sequence_memory for sequence_memory in sequence_memories]
+        sequence_memories = [{**sequence_memory, "_id": str(sequence_memory["_id"])} for sequence_memory in sequence_memories]
         return sequence_memories
 
 "Typing Model"
@@ -74,7 +77,7 @@ class Typing:
         return
     
     "create typing"
-    def create(self, user_id: str, score: int):
+    def create(user_id: str, score: int):
         new_typing= db.typing.insert_one({
             "user_id": user_id,
             "score": score,
@@ -83,9 +86,9 @@ class Typing:
         return new_typing
     
     "get typing by user id"
-    def get_by_user_id(self, user_id: str):
+    def get_by_user_id(user_id: str):
         typings= db.typing.find({"user_id": user_id})
-        typings= [typing for typing in typings]
+        typings = [{**typing, "_id": str(typing["_id"])} for typing in typings]
         return typings
 
 "Clicker Model"
@@ -94,7 +97,7 @@ class Clicker:
         return
     
     "create clicker"
-    def create(self, user_id: str, clicks_per_second: int, clicks: int):
+    def create(user_id: str, clicks_per_second: int, clicks: int):
         new_clicker= db.clicker.insert_one({
             "user_id": user_id,
             "clicks_per_second": clicks_per_second,
@@ -104,9 +107,9 @@ class Clicker:
         return new_clicker
     
     "get clicker by user id"
-    def get_by_user_id(self, user_id: str):
+    def get_by_user_id(user_id: str):
         clickers= db.clicker.find({"user_id": user_id})
-        clickers= [clicker for clicker in clickers]
+        clickers = [{**clicker, "_id": str(clicker["_id"])} for clicker in clickers]
         return clickers
     
 "Reaction Time Model"
@@ -115,7 +118,7 @@ class ReactionTime:
         return
     
     "create reaction time"
-    def create(self, user_id: str, time: float):
+    def create(user_id: str, time: float):
         new_reaction_time= db.reaction_time.insert_one({
             "user_id": user_id,
             "time": time,
@@ -124,9 +127,9 @@ class ReactionTime:
         return new_reaction_time
     
     "get reaction time by user id"
-    def get_by_user_id(self, user_id: str):
+    def get_by_user_id( user_id: str):
         reaction_times= db.reaction_time.find({"user_id": user_id})
-        reaction_times= [reaction_time for reaction_time in reaction_times]
+        reaction_times = [{**reaction_time, "_id": str(reaction_time["_id"])} for reaction_time in reaction_times]
         return reaction_times
     
 "Placeholder Model"
@@ -135,7 +138,7 @@ class Placeholder:
         return
     
     "create placeholder"
-    def create(self, user_id: str, score: int):
+    def create(user_id: str, score: int):
         new_placeholder= db.placeholder.insert_one({
             "user_id": user_id,
             "score": score,
@@ -144,9 +147,9 @@ class Placeholder:
         return new_placeholder
     
     "get placeholder by user id"
-    def get_by_user_id(self, user_id: str):
+    def get_by_user_id(user_id: str):
         placeholders= db.placeholder.find({"user_id": user_id})
-        placeholders= [placeholder for placeholder in placeholders]
+        placeholders = [{**placeholder, "_id": str(placeholder["_id"])} for placeholder in placeholders]
         return placeholders
 
 "User model"

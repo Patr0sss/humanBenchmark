@@ -49,7 +49,7 @@ def get_aim_trainer(current_user):
     
 @game.route('/memory-game', methods=['POST']) #score level
 @token_required
-def memory_game():
+def memory_game(current_user):
     try:
         data = request.get_json()
 
@@ -86,13 +86,13 @@ def get_memory_game(current_user):
     
 @game.route('/sequence-memory', methods=['POST'])
 @token_required
-def sequence_memory():
+def sequence_memory(current_user):
     try:
         data = request.get_json()
 
         if not data['score']:
             return jsonify({'message': 'Invalid data provided'}), 400
-        
+
         add_data = SequenceMemory.create(current_user["_id"], data['score'])
 
         if not add_data:
@@ -123,7 +123,7 @@ def get_sequence_memory(current_user):
 
 @game.route('/typing', methods=['POST'])
 @token_required
-def typing():
+def typing(current_user):
     try:
         data = request.get_json()
 
@@ -160,7 +160,7 @@ def get_typing(current_user):
 
 @game.route('/clicker', methods=['POST'])
 @token_required
-def clicker():
+def clicker(current_user):
     try:
         data = request.get_json()
 
@@ -197,7 +197,7 @@ def get_clicker(current_user):
 
 @game.route('/placeholder', methods=['POST'])
 @token_required
-def placeholder():
+def placeholder(current_user):
     try:
         data = request.get_json()
 
