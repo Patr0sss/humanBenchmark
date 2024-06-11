@@ -1,76 +1,80 @@
 from flask import Blueprint, request, jsonify, make_response, render_template
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
+from .auth_middleware import token_required
 from . import db
 from flask_cors import CORS
 import datetime
 from flask_login import login_required
-# import jwt
-# import datetime
+from .models import Users
+import jwt
+import json
 
 auth = Blueprint('auth', __name__)
-CORS(auth, origins="http://localhost:5173", methods=["GET", "POST"])  # apply CORS to the auth blueprint
-
-@auth.route('/register')
-def register_form():
-    return render_template('index.html')
+CORS(auth, origins="http://localhost:5173", methods=["GET", "POST"])
 
 @auth.route('/auth', methods=['POST'])
 def register():
-
-    data = request.get_json() # get the data from the request
+    data = request.get_json()
     
-    # Sprawdź, czy adres e-mail jest już w użyciu
     existing_user_email = db.user.find_one({"email": data['email']})
     existing_username = db.user.find_one({"username": data['username']})
 
-    if existing_user_email :
-        return jsonify({'error': 'Email already exists'}), 400  # Zwróć błąd, jeśli adres e-mail już istnieje
+    if existing_user_email:
+        return jsonify({'error': 'Email already exists'}), 400
     
     if existing_username:
-        return jsonify({'error': 'Username already exists'}), 400  # Zwróć błąd, jeśli nazwa użytkownika już istnieje
+        return jsonify({'error': 'Username already exists'}), 400
     
     hashed_password = generate_password_hash(data['password'])
 
-    db.user.insert_one({ # insert the data into the database
-        "public_id": str(uuid.uuid4()), 
+    db.user.insert_one({
         "email": data['email'], 
         "password": hashed_password, 
         "username": data['username'],
         "date_created": datetime.datetime.now()
-    }).inserted_id
+    })
 
-    return jsonify({'message': 'registered successfully'}) # return a message to the user
-
+    return jsonify({'message': 'registered successfully'})
 
 @auth.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()  # Pobierz dane z żądania
+    try:
+        data = request.get_json()
 
-    # Sprawdź, czy dostarczono nazwę użytkownika i hasło
-    if 'username' not in data or 'password' not in data:
-        return jsonify({'message': 'Username and password are required'}), 400
+        if 'username' not in data or 'password' not in data:
+            return jsonify({'message': 'Username and password are required'}), 400
 
-    username = data['username']
-    password = data['password']
+        username = data['username']
+        password = data['password']
 
-    # Znajdź użytkownika o podanym nazwie użytkownika w bazie danych
-    user = db.user.find_one({"username": username})
+        user = Users().login(username, password)
+        if user == "user":
+            return jsonify({'message': 'User not found'}), 404
+        
+        if user == "password":
+            return jsonify({'message': 'Password incorrect'}), 401
 
-    if not user:
-        return jsonify({'message': 'User not found'}), 404
+        if user:
+            try:
+                with open('./config.json') as config_file:
+                    config = json.load(config_file)
+                token = jwt.encode({'user_id': user['_id'], 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, 
+                                    config['secret_key'], algorithm='HS256')
+                user["token"] = token
+                return jsonify({'message': 'login successful', 'user': user})
+            except Exception as e:
+                return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
 
-    # Sprawdź, czy hasło jest poprawne
-    if check_password_hash(user['password'], password):
-        return jsonify({'message': 'Login successful'})
-    else:
-        return jsonify({'message': 'Login failed'}), 401
-    
+        return jsonify({
+            "message": "Error fetching auth token!, invalid email or password",
+            "data": None,
+            "error": "Unauthorized"
+        }), 404
+    except Exception as e:
+        return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
+
 @auth.route('/logout')
-@login_required
-def logout():
-
+@token_required
+def logout(current_user):
     return jsonify({'message': 'logout successful'})
-
-    
-    
