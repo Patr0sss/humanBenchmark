@@ -8,6 +8,7 @@ import Keyboard from "../../assets/keyboard";
 import Aim from "../../assets/aim";
 import Brain from "../../assets/brain";
 import Puzzle from "../../assets/puzzle";
+import Cog from "../../assets/cog";
 const GAMES = [
   { title: "Aim Trainer", icon: <Aim width={45} />, linkURL: "tests/aim" },
   { title: "Sequence", icon: <Puzzle width={45} />, linkURL: "tests/sequence" },
@@ -36,17 +37,23 @@ export default function SideBar({
         animate="visible"
         className={styles.sideBar}
       >
-        {GAMES.map((game) => (
-          <div
-            onClick={() => handleGameBarClick(game.title)}
-            style={{
-              backgroundColor: currentGame === game.title ? "lightgray" : "",
-            }}
-            className={styles.gameContainer}
-          >
-            <GameBar gameIcon={game.icon} gameTitle={game.title} />
-          </div>
-        ))}
+        <div className={styles.gamePart}>
+          {GAMES.map((game, index) => (
+            <div
+              key={index}
+              onClick={() => handleGameBarClick(game.title)}
+              style={{
+                backgroundColor: currentGame === game.title ? "lightgray" : "",
+              }}
+              className={styles.gameContainer}
+            >
+              <GameBar gameIcon={game.icon} gameTitle={game.title} />
+            </div>
+          ))}
+        </div>
+        <div className={styles.optionsCOG}>
+          <Cog width={45} />
+        </div>
       </motion.div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 interface UserProps {
   email: string;
@@ -13,6 +14,8 @@ interface UserProvider {
   registerUser: (info: UserProps) => Promise<void>;
   handleUserInfoFill: (e: { target: { name: string; value: string } }) => void;
   loginUser: (info: UserProps) => void;
+  isUserAuthenticated: boolean;
+  checkUserStatus: () => void;
   //   logoutUser: () => void;
   //   isLoggedIn: () => boolean;
 }
@@ -29,11 +32,13 @@ export const useUserInfo = () => {
 
 export const UserContext = ({ children }: userProviderProps) => {
   const navigate = useNavigate();
+  const [cookiesAuth] = useCookies(["csrftoken"]);
   const [userInfo, setUserInfo] = useState<UserProps>({
     email: "",
     username: "",
     password: "",
   });
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   const registerUser = async (info: UserProps) => {
     try {
@@ -87,17 +92,32 @@ export const UserContext = ({ children }: userProviderProps) => {
       );
       console.log(res);
       if (res.status === 200) {
+        // setIsUserAuthenticated(true);
         navigate("/");
         console.log("zalogowano pomyślnie !");
+        console.log(res);
       }
     } catch (err) {
       console.log(err);
     }
   };
 
+  const checkUserStatus = () => {
+    if (cookiesAuth) {
+      setIsUserAuthenticated(true);
+    }
+  };
+
   return (
     <UserProvider.Provider
-      value={{ userInfo, registerUser, loginUser, handleUserInfoFill }}
+      value={{
+        userInfo,
+        registerUser,
+        loginUser,
+        handleUserInfoFill,
+        isUserAuthenticated,
+        checkUserStatus,
+      }}
     >
       {children}
     </UserProvider.Provider>
