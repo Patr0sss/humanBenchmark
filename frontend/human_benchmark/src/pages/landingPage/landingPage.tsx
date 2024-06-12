@@ -1,16 +1,16 @@
-import Duck from "../../assets/duck";
-import Ufo from "../../assets/ufo";
-import WaterLily from "../../assets/waterLily";
 import GameCard from "../../components/gameCard/gameCard";
 import styles from "./landingPage.module.css";
 import Keyboard from "../../assets/keyboard";
 import Clicker from "../../assets/clicker";
 import Treasure from "../../assets/treasure";
+import Brain from "../../assets/brain";
+import Puzzle from "../../assets/puzzle";
+import Aim from "../../assets/aim";
 
 const GAMES = [
-  { title: "Aim Trainer", icon: <Ufo />, linkURL: "tests/aim" },
-  { title: "Sequence", icon: <Duck />, linkURL: "tests/sequence" },
-  { title: "Memory", icon: <WaterLily />, linkURL: "tests/memory" },
+  { title: "Aim Trainer", icon: <Aim />, linkURL: "tests/aim" },
+  { title: "Sequence", icon: <Puzzle />, linkURL: "tests/sequence" },
+  { title: "Memory", icon: <Brain />, linkURL: "tests/memory" },
   { title: "Typing", icon: <Keyboard />, linkURL: "/tests/typing" },
   { title: "Clicker", icon: <Clicker />, linkURL: "/tests/clicker" },
   { title: "TZWCTR(CH)", icon: <Treasure />, linkURL: "tests/find" },

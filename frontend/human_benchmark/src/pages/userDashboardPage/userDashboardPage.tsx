@@ -27,6 +27,27 @@ ChartJS.register(
 
 const lineData = {
   labels: [
+    1,
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -39,7 +60,10 @@ const lineData = {
   datasets: [
     {
       label: "Levels Passed",
-      data: [4, 7, 6, 5, 10, 2, 3],
+      data: [
+        4, 7, 6, 5, 10, 2, 3, 4, 7, 6, 5, 10, 2, 3, 4, 7, 6, 5, 10, 2, 3, 4, 7,
+        6, 5, 10, 2, 3,
+      ],
       borderColor: "#783dcb",
       backgroundColor: "black",
     },

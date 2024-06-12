@@ -1,40 +1,20 @@
 import { useState } from "react";
-import Duck from "../../assets/duck";
-import Ufo from "../../assets/ufo";
-import WaterLily from "../../assets/waterLily";
 import styles from "./sideBar.module.css";
 import { motion } from "framer-motion";
 import { opacityFadeVariants2 } from "../../assets/animationVariants";
 import Treasure from "../../assets/treasure";
 import Clicker from "../../assets/clicker";
 import Keyboard from "../../assets/keyboard";
+import Aim from "../../assets/aim";
+import Brain from "../../assets/brain";
+import Puzzle from "../../assets/puzzle";
 const GAMES = [
-  { title: "Aim Trainer", icon: <Ufo width={45} />, linkURL: "tests/aim" },
-  {
-    title: "Sequence Memory",
-    icon: <Duck width={45} />,
-    linkURL: "tests/sequence",
-  },
-  {
-    title: "Card Memory",
-    icon: <WaterLily width={45} />,
-    linkURL: "tests/memory",
-  },
-  {
-    title: "Speed Typing",
-    icon: <Keyboard width={45} />,
-    linkURL: "/tests/typing",
-  },
-  {
-    title: "Clicker Game",
-    icon: <Clicker width={45} />,
-    linkURL: "/tests/clicker",
-  },
-  {
-    title: "TZWCTR(CH)",
-    icon: <Treasure width={45} />,
-    linkURL: "tests/find",
-  },
+  { title: "Aim Trainer", icon: <Aim width={45} />, linkURL: "tests/aim" },
+  { title: "Sequence", icon: <Puzzle width={45} />, linkURL: "tests/sequence" },
+  { title: "Memory", icon: <Brain width={45} />, linkURL: "tests/memory" },
+  { title: "Typing", icon: <Keyboard width={45} />, linkURL: "/tests/typing" },
+  { title: "Clicker", icon: <Clicker width={45} />, linkURL: "/tests/clicker" },
+  { title: "TZWCTR(CH)", icon: <Treasure width={45} />, linkURL: "tests/find" },
 ];
 
 export default function SideBar({
