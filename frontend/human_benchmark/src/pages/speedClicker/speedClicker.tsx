@@ -28,10 +28,18 @@ export default function speedClicker() {
     }
     
     let secondsPassed = 0;
+    const initialTime = 5;  
     if (startTime != null && now != null) {
       secondsPassed = (now - startTime) / 1000;
     }
-    const initialTime = 5;  
+    
+
+    useEffect(() => {
+      if (secondsPassed >= initialTime) {
+          clearInterval(intervalRef.current);
+          setIsGameOnValue(false); // Zatrzymaj grę
+      }
+  }, [secondsPassed, initialTime]);
 
 
 
@@ -47,22 +55,22 @@ export default function speedClicker() {
               <div className={styles.statsBlock}>
                   <div className={styles.timeBlock}>
                     <p>Time</p>
-                    {isGameOnValue ? (initialTime - secondsPassed).toFixed(3) : (<></>)}
+                    {isGameOnValue ? (initialTime - secondsPassed).toFixed(3) : (<>0</>)}
                   </div>
                   <div className={styles.clicksBlock}>
                     <p>Click/s</p>
-                    
+                    {clickerValue > 0 ? (clickerValue/secondsPassed).toFixed(3) : (<></>)}
                   </div>
                   <div className={styles.clickBlock}>
                     <p>Click</p>
-                    {clickerValue > 0 ? (<>{clickerValue}</>) : (<></>)}
+                    {clickerValue > 0 ?  clickerValue : (<></>)}
                   </div>
               </div>
-              <div className={styles.buttonBlock}>{!isGameOnValue ?( 
+              <div className={styles.buttonBlock}>{!isGameOnValue && clickerValue === 0 ?( 
               <button  onClick={onClickGameStart}> Click here to start! </button>
               ) : (
               <>
-                <button onClick={onClickGame}>  </button>
+                <button disabled={ secondsPassed >= initialTime } onClick={onClickGame}>  </button>
               </>
               )}
               </div>
