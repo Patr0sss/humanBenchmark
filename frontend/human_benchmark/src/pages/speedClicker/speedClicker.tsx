@@ -6,12 +6,14 @@ import { motion } from "framer-motion";
 export default function speedClicker() {
    const [clickerValue, setClickerValue] = useState<number>(0);
    const [isGameOnValue, setIsGameOnValue] = useState<boolean>(false);
+   const [isGameOver, setGameOver] = useState<boolean>(false);
    const intervalRef = useRef<number>();
    const [now, setNow] = useState<number>();
    const [startTime, setStartTime] = useState<number>();  
 
-    const onClickGameStart = () => {
+    const onClickInitializeGame = () => {
         setIsGameOnValue(true);
+        setGameOver(false);
         setClickerValue(1);
         setStartTime(Date.now());
         setNow(Date.now());
@@ -28,10 +30,19 @@ export default function speedClicker() {
     }
     
     let secondsPassed = 0;
+    const initialTime = 5;  
     if (startTime != null && now != null) {
       secondsPassed = (now - startTime) / 1000;
     }
-    const initialTime = 5;  
+    
+
+    useEffect(() => {
+      if (secondsPassed >= initialTime) {
+          clearInterval(intervalRef.current);
+          setIsGameOnValue(false); // Zatrzymaj grę
+          setGameOver(true);
+      }
+  }, [secondsPassed, initialTime]);
 
 
 
@@ -47,23 +58,27 @@ export default function speedClicker() {
               <div className={styles.statsBlock}>
                   <div className={styles.timeBlock}>
                     <p>Time</p>
-                    {isGameOnValue ? (initialTime - secondsPassed).toFixed(3) : (<></>)}
+                    {isGameOnValue ? (initialTime - secondsPassed).toFixed(3) : (<>0</>)}
                   </div>
                   <div className={styles.clicksBlock}>
                     <p>Click/s</p>
-                    
+                    {clickerValue > 0 ? (clickerValue/secondsPassed).toFixed(3) : (<></>)}
                   </div>
                   <div className={styles.clickBlock}>
                     <p>Click</p>
-                    {clickerValue > 0 ? (<>{clickerValue}</>) : (<></>)}
+                    {clickerValue > 0 ?  clickerValue : (<></>)}
                   </div>
               </div>
-              <div className={styles.buttonBlock}>{!isGameOnValue ?( 
-              <button  onClick={onClickGameStart}> Click here to start! </button>
-              ) : (
-              <>
-                <button onClick={onClickGame}>  </button>
-              </>
+              <div className={styles.buttonBlock}>{isGameOnValue && !isGameOver ? ( 
+                <button disabled={ secondsPassed >= initialTime } onClick={onClickGame}>  </button>
+              
+              ) : isGameOver ? (
+                <>
+                <button> Try Again </button>
+                <button> Save Score </button>
+                </>
+                ) : (
+                <button  onClick={onClickInitializeGame}> Click here to start! </button>
               )}
               </div>
               
