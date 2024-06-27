@@ -10,6 +10,8 @@ export default function speedClicker() {
    const intervalRef = useRef<number>();
    const [now, setNow] = useState<number>();
    const [startTime, setStartTime] = useState<number>();  
+   const [isGameLoaded, setIsGameLoaded] = useState<boolean>(false);
+   const [initialTime, setInitialTime] = useState<number>(0);
 
     const onClickInitializeGame = () => {
         setIsGameOnValue(true);
@@ -28,22 +30,36 @@ export default function speedClicker() {
     const onClickGame = () => {
         setClickerValue(clickerValue+1);
     }
+    const onClickReset = () => {
+      setIsGameOnValue(false);
+      setClickerValue(0);
+      setGameOver(false);
+      setIsGameLoaded(false);
+    }
+    const onClickSaveScore = () => {
+
+    }
+
     
-    let secondsPassed = 0;
-    const initialTime = 5;  
+    let secondsPassed = 0;  
     if (startTime != null && now != null) {
       secondsPassed = (now - startTime) / 1000;
     }
     
 
     useEffect(() => {
-      if (secondsPassed >= initialTime) {
+      if (isGameOnValue && secondsPassed >= initialTime) {
           clearInterval(intervalRef.current);
           setIsGameOnValue(false); // Zatrzymaj grę
           setGameOver(true);
       }
   }, [secondsPassed, initialTime]);
 
+  const handleTime = (time : number) => {
+    setInitialTime(time);
+    setIsGameLoaded(true);
+    
+}
 
 
     
@@ -55,35 +71,45 @@ export default function speedClicker() {
              initial="hidden"
              animate="visible"
              >  
-              <div className={styles.statsBlock}>
-                  <div className={styles.timeBlock}>
-                    <p>Time</p>
-                    {isGameOnValue ? (initialTime - secondsPassed).toFixed(3) : (<>0</>)}
+             {isGameLoaded ? (
+              <>
+                <div className={styles.statsBlock}>
+                    <div className={styles.timeBlock}>
+                      <p>Time</p>
+                      {isGameOnValue ? (initialTime - secondsPassed).toFixed(3) : (<>0</>)}
+                    </div>
+                    <div className={styles.clicksBlock}>
+                      <p>Click/s</p>
+                      {clickerValue > 0 ? (clickerValue/secondsPassed).toFixed(3) : (<></>)}
+                    </div>
+                    <div className={styles.clickBlock}>
+                      <p>Click</p>
+                      {clickerValue > 0 ?  clickerValue : (<></>)}
+                    </div>
+                </div>
+                <div className={styles.buttonBlock}>{isGameOnValue && !isGameOver ? ( 
+                  <button disabled={ secondsPassed >= initialTime } onClick={onClickGame}>  </button>
+                
+                ) : isGameOver ? (
+                  <>
+                  <div className={styles.setBlock}>
+                    <div className={styles.buttonBlock}> <button onClick={onClickReset}> Try Again </button></div>
+                    <div className={styles.buttonBlock}><button onClick={onClickSaveScore}> Save Score </button></div>
                   </div>
-                  <div className={styles.clicksBlock}>
-                    <p>Click/s</p>
-                    {clickerValue > 0 ? (clickerValue/secondsPassed).toFixed(3) : (<></>)}
-                  </div>
-                  <div className={styles.clickBlock}>
-                    <p>Click</p>
-                    {clickerValue > 0 ?  clickerValue : (<></>)}
-                  </div>
-              </div>
-              <div className={styles.buttonBlock}>{isGameOnValue && !isGameOver ? ( 
-                <button disabled={ secondsPassed >= initialTime } onClick={onClickGame}>  </button>
-              
-              ) : isGameOver ? (
-                <>
-                <button> Try Again </button>
-                <button> Save Score </button>
-                </>
-                ) : (
-                <button  onClick={onClickInitializeGame}> Click here to start! </button>
+                  </>
+                  ) : (
+                  <button  onClick={onClickInitializeGame}> Click here to start! </button>
+                )} 
+                </div>
+              </>) : (
+                <div className={styles.setBlock}>
+                  <div className={styles.buttonTimeBlock}><button onClick={() => handleTime(5)}>5 Seconds</button></div>
+                  <div className={styles.buttonTimeBlock}><button onClick={() => handleTime(10)}>10 Seconds</button></div>
+                  <div className={styles.buttonTimeBlock}><button onClick={() => handleTime(15)}>15 Seconds</button></div>
+                  <div className={styles.buttonTimeBlock}><button onClick={() => handleTime(20)}>20 Seconds</button></div>
+                  <div className={styles.buttonTimeBlock}><button onClick={() => handleTime(25)}>25 Seconds</button></div>
+                </div>
               )}
-              </div>
-              
-
-          
             </motion.div>
         </div>
         
