@@ -1,18 +1,25 @@
 import { useState, useEffect } from "react";
+import "./findGame.css"
 
 const FindGame = () => {
     const number = 30; 
     const finalGridSize = 20;
+    const intervalDuration = 5000;
     const [gridItems, setGridItems] = useState<JSX.Element[]>([]);
     const [finalGridItems, setFinalGridItems] = useState<number[]>([]);
     const [numberOfRounds, setNumberOfRounds] = useState<number>(1);
     const [savedNumber, setSavedNumber] = useState<number | null>(null);
     const [isBoard, setIsBoard] = useState<boolean>(true);
     const [result, setResult] = useState<number[]>([]);
-    const [arrayOfClicked,setArrayOfClicked] = useState<number[]>([]);
-    const [isGameLoaded,setIsGameLoaded] = useState<boolean>(false);
+    const [arrayOfClicked, setArrayOfClicked] = useState<number[]>([]);
+    const [isGameLoaded, setIsGameLoaded] = useState<boolean>(false);
     const [totalRounds, setTotalRounds] = useState<number>(0);
     const [isClicked, setIsClicked] = useState<boolean[]>(Array(finalGridSize - totalRounds).fill(false));
+    const [isStarted, setIsStarted] = useState<boolean>(false);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [count, setCount] = useState(0);
+    const [isGameWon,setIsGameWon] = useState<boolean>(false);
+    const [bgColor, setBgColor] = useState<string>("bg-[#131010]");
 
     const generateGridItems = () => {
         const randomNumbers = Array.from({ length: number }, () =>
@@ -38,8 +45,8 @@ const FindGame = () => {
         return newArray;
     };
 
-    const generateGridItemsToChoose = (result:number[]) => {
-        const randomNumbers = Array.from({ length: 20 - totalRounds }, () => 
+    const generateGridItemsToChoose = (result: number[]) => {
+        const randomNumbers = Array.from({ length: 20 - totalRounds }, () =>
             Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000
         );
 
@@ -47,56 +54,71 @@ const FindGame = () => {
         const shuffledArray = shuffleArray(combinedNumbers);
         setFinalGridItems(shuffledArray);
     };
-    
+
     const handleFinalClick = (idx: number) => {
-        if(arrayOfClicked.length < totalRounds || isClicked[idx] === true){
+        if (arrayOfClicked.length < totalRounds || isClicked[idx] === true) {
             setIsClicked((prevClicked) => {
                 const newClicked = [...prevClicked];
                 newClicked[idx] = !newClicked[idx];
                 return newClicked;
             });
-            // const num = numberOfClicked;
-            if(isClicked[idx] === true){
+            if (isClicked[idx] === true) {
                 setArrayOfClicked(prevArray => prevArray.filter(item => item !== finalGridItems[idx]));
-            }else{
+            } else {
                 setArrayOfClicked(prevArray => [...prevArray, finalGridItems[idx]]);
             }
 
-            console.log("lista: " + arrayOfClicked);   
+            console.log("lista: " + arrayOfClicked);
         }
         console.log("askdjuhasd: " + finalGridItems);
-        console.log("tutaj rezulta: " + result)
-        
+        console.log("tutaj rezulta: " + result);
+
     };
 
     const handleClick = (num: number) => () => {
         setSavedNumber((prevSavedNumber) => {
             const nextList = [...result, prevSavedNumber!];
-            setResult(prevList => nextList);
-            console.log("s,jahd: " + numberOfRounds);
-            console.log("s,asd;jijahd: " + totalRounds);
+            if (num === prevSavedNumber) {
+                setResult(prevList => nextList);
+                setNumberOfRounds((prevRounds) => prevRounds + 1);
+                setIsAnimating(false);
+                setBgColor("bg-[#008000]");
+                setTimeout(() => setBgColor("bg-[#131010]"), 100);
+                setCount((count) => count+1)
+            } else {
+                setIsAnimating(false);
+                setBgColor("bg-[#FF0000]");
+                setTimeout(() => setBgColor("bg-[#131010]"), 100);
+                setCount((count) => count+1)
+                generateGridItems();
+            }
             if (numberOfRounds === totalRounds) {
                 setIsBoard(false);
                 generateGridItemsToChoose(nextList);
-            } 
-            if (num === prevSavedNumber) {
-                setNumberOfRounds((prevRounds) => prevRounds + 1);
-            }else{
-                generateGridItems();
             }
             return prevSavedNumber;
-        });   
+        });
+
     };
 
-    useEffect(() => {
+    const helpFunc = () => {
+        setIsAnimating(false);
         generateGridItems();
+        setTimeout(() => setIsAnimating(true), 100);
+    }
+
+    useEffect(() => {
+        if (!isStarted) return;
+        generateGridItems();
+        setIsAnimating(true);
         const intervalId = setInterval(() => {
-            generateGridItems(); 
-        }, 35000); 
+            helpFunc();
+        }, 10000);
+
         return () => clearInterval(intervalId);
-    }, [numberOfRounds]); 
-    
-    const handleLevel = (num:number) => {
+    }, [numberOfRounds, isStarted, count]);
+
+    const handleLevel = (num: number) => {
         setTotalRounds(num);
         setIsGameLoaded(true);
         console.log("lsajdhiasughd: " + totalRounds);
@@ -113,30 +135,34 @@ const FindGame = () => {
         }
         return true;
     };
-    
+
     const handleConfirm = () => {
-        const sortedUserChocie = arrayOfClicked.sort();
-        const sortedPicked = result.sort();
-        console.log("user puick: " + sortedUserChocie);
+        const sortedUserChoice = arrayOfClicked.slice().sort();
+        const sortedPicked = result.slice().sort();
+        console.log("user pick: " + sortedUserChoice);
         console.log("picked: " + sortedPicked);
-        if(arraysEqual(sortedUserChocie,sortedPicked)){
-            console.log("dobrze")
-        }else{
+        if (arraysEqual(sortedUserChoice, sortedPicked)) {
+            setIsGameWon(true);
+        } else {
             setIsClicked(Array(finalGridSize - totalRounds).fill(false));
             setArrayOfClicked([]);
             generateGridItemsToChoose(result);
         }
     }
 
+    const handleStart = () => {
+        setIsStarted(true);
+    }
+
     return (
         <div className='h-[calc(100vh-60px)] mt-[60px] w-full min-h-[500px] flex flex-col justify-center items-center'>
-            {!isGameLoaded ? 
+            {!isGameLoaded ?
                 <div className='mt-[60px] text-3xl p-4'>FIND GAME</div>
                 :
                 null
             }
-            <div className="bg-[#131010] w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center">
-                {isGameLoaded && (isBoard ? 
+            <div className={`${bgColor} w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center`}>
+                {isGameLoaded && !isGameWon && (isBoard ?
                     <>
                         <div className="absolute top-0">
                             <h1 className="py-1">{numberOfRounds}/{totalRounds}</h1>
@@ -146,8 +172,16 @@ const FindGame = () => {
                         <div className="grid grid-cols-5 grid-rows-6 gap-6">
                             {gridItems}
                         </div>
+                        {!isStarted &&
+                            <div className="absolute top-[50%]">
+                                <h1 className="p-4 font-bold bg-[#783dcb] cursor-pointer" onClick={handleStart}>START</h1>
+                            </div>
+                        }
+                        <div className="progress-bar-container">
+                            {isAnimating && <div className="progress-bar"></div>}
+                        </div>
                     </>
-                    : 
+                    :
                     <>
                         <div className="absolute top-0 mt-[10%]">
                             <h1 className="py-4 font-bold">CHOOSE CORRECT</h1>
@@ -170,19 +204,33 @@ const FindGame = () => {
                 )}
                 {!isGameLoaded && (
                     <>
-                    <div className={`grid grid-cols-1 grid-rows-5 text-black gap-8 ${isGameLoaded ? "hidden" : "visible"} font-bold flex`}>
-                        <button className='py-4 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-emerald-600 from-5% via-emerald-300  to-emerald-600 to-95% mx-auto uppercase' onClick={() => handleLevel(2)}>2 ROUNDS</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-green-600 from-5% via-green-300  to-green-600 to-95% mx-auto uppercase' onClick={() => handleLevel(3)}>3 ROUNDS</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-orange-600 from-5% via-orange-300  to-orange-600 to-95% mx-auto uppercase' onClick={() => handleLevel(5)}>5 ROUNDS</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-rose-800 from-5% via-rose-400  to-rose-800 to-95% mx-auto uppercase' onClick={() => handleLevel(8)}>8 ROUNDS</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-red-700 from-5% via-red-400  to-red-700 to-95% mx-auto uppercase'onClick={() => handleLevel(10)}>10 ROUNDS</button>
-                    </div>
+                        <div className={`grid grid-cols-1 grid-rows-5 text-black gap-8 ${isGameLoaded ? "hidden" : "visible"} font-bold flex`}>
+                            <button className='py-4 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-emerald-600 from-5% via-emerald-300 to-emerald-600 to-95% mx-auto uppercase' onClick={() => handleLevel(2)}>2 ROUNDS</button>
+                            <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-green-600 from-5% via-green-300 to-green-600 to-95% mx-auto uppercase' onClick={() => handleLevel(3)}>3 ROUNDS</button>
+                            <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-orange-600 from-5% via-orange-300 to-orange-600 to-95% mx-auto uppercase' onClick={() => handleLevel(5)}>5 ROUNDS</button>
+                            <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-rose-800 from-5% via-rose-400 to-rose-800 to-95% mx-auto uppercase' onClick={() => handleLevel(8)}>8 ROUNDS</button>
+                            <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-red-700 from-5% via-red-400 to-red-700 to-95% mx-auto uppercase' onClick={() => handleLevel(10)}>10 ROUNDS</button>
+                        </div>
                     </>
                 )}
+                {isGameWon ? 
+                    <div className='absolute inset-0 z-10 flex items-center justify-center'>
+                    <div className='relative max-w-[400px]'>
+                        <div className='flex items-center justify-center'>
+                            Logo
+                        </div>
+                        <div className='mt-8 text-4xl'>
+                            You won in <span className='text-[#783dcb] font-bold relative'>6</span> turns
+                        </div>
+                        <button className='items-center justify-center mx-auto my-4 bg-[#131010] text-[#783dcb] border-4 border-[#783dcb] text-xl font-bold mt-8 '>Try again</button>
+                    </div>
+                </div>
+                :
+                null
+                }
             </div>
         </div>
-
-    );  
+    );
 };
 
 export default FindGame;
