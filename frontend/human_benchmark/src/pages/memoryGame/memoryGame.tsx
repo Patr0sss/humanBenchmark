@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import cardImages from './cardImages.tsx';
 import Card from './card.tsx';
 import Confetti from './confetti.tsx';
-import Memory from './assetsMemoryGame/memory.tsx';
+import Brain from "../../assets/brain";
 
 interface CardImage {
     src: string;
@@ -161,7 +161,7 @@ export default function MemoryGame() {
                             <Confetti/>
                             <div className='relative max-w-[400px]'>
                                 <div className='flex items-center justify-center'>
-                                    <Memory/>
+                                    <Brain/>
                                 </div>
                                 <div className='mt-8 text-4xl'>
                                     You won in <span className='text-[#783dcb] font-bold relative'>{turns}</span> turns
