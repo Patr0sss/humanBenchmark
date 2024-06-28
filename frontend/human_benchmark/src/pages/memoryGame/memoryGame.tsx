@@ -47,6 +47,8 @@ export default function MemoryGame() {
         18: "Extreme"
       });
 
+      const [bgColor, setBgColor] = useState<string>("bg-[#131010]");
+
       const [gridClasses, setGridClasses] = useState<GridClass>({
         4: '3xl:w-[800px] 3xl:h-[400px] lg:w-[800px] lg:h-[400px] md:w-[550px] md:h-[260px] sm:w-[260px] sm:h-[550px] xsm:w-[260px] xsm:h-[560px] w-[260px] h-[550px] md:grid-cols-4 grid-cols-2',
         6: '3xl:w-[700px] 3xl:h-[520px] 2xl:w-[700px] 2xl:h-[520px] xl:w-[700px] xl:h-[520px] lg:w-[700px] lg:h-[520px] md:w-[520px] md:h-[410px] sm:w-[380px] sm:h-[520px] xsm:w-[380px] xsm:h-[520px] w-[320px] h-[440px] md:grid-cols-4 grid-cols-3',
@@ -78,6 +80,8 @@ export default function MemoryGame() {
         if(firstCard && secondCard){            
             setBlockButton(true);
             if(firstCard?.src === secondCard?.src){
+                setBgColor("bg-[#008000]");
+                setTimeout(() => setBgColor("bg-[#131010]"), 250);
                 setCorrectPicked(correctPicked+1);
                 setCards(prevCards => {
                     return prevCards.map(card => {
@@ -90,6 +94,8 @@ export default function MemoryGame() {
                 })
                 turnHandle();
             }else{
+                setBgColor("bg-[#FF0000]");
+                setTimeout(() => setBgColor("bg-[#131010]"), 250);
                 setTimeout(() => turnHandle(),1000);
             }
         }
@@ -155,10 +161,10 @@ export default function MemoryGame() {
                 </>
                 }
  
-                <div className="bg-[#131010] w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center">
+                <div className={`${bgColor} w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center`}>
                     {isGameWon ?
                         <div className='absolute inset-0 z-10 flex items-center justify-center'>
-                            <Confetti/>
+                            {/* <Confetti/> */}
                             <div className='relative max-w-[400px]'>
                                 <div className='flex items-center justify-center'>
                                     <Brain/>
