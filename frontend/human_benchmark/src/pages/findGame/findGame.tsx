@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./findGame.css"
+import Treasure from "../../assets/treasure";
 
 const FindGame = () => {
     const number = 30; 
@@ -20,7 +21,11 @@ const FindGame = () => {
     const [count, setCount] = useState(0);
     const [isGameWon,setIsGameWon] = useState<boolean>(false);
     const [bgColor, setBgColor] = useState<string>("bg-[#131010]");
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
 
+
+    // losowanie liczb
     const generateGridItems = () => {
         const randomNumbers = Array.from({ length: number }, () =>
             Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000
@@ -35,7 +40,8 @@ const FindGame = () => {
         setGridItems(items);
         setSavedNumber(savedNum);
     };
-
+    
+    // tasowanie liczb
     const shuffleArray = (array: any[]) => {
         const newArray = [...array];
         for (let i = newArray.length - 1; i > 0; i--) {
@@ -45,6 +51,7 @@ const FindGame = () => {
         return newArray;
     };
 
+    // liczby do wyboru w finalnej wersji
     const generateGridItemsToChoose = (result: number[]) => {
         const randomNumbers = Array.from({ length: 20 - totalRounds }, () =>
             Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000
@@ -55,6 +62,7 @@ const FindGame = () => {
         setFinalGridItems(shuffledArray);
     };
 
+    // wybieranie liczb w koncowym etapie gry
     const handleFinalClick = (idx: number) => {
         if (arrayOfClicked.length < totalRounds || isClicked[idx] === true) {
             setIsClicked((prevClicked) => {
@@ -67,14 +75,11 @@ const FindGame = () => {
             } else {
                 setArrayOfClicked(prevArray => [...prevArray, finalGridItems[idx]]);
             }
-
-            console.log("lista: " + arrayOfClicked);
         }
-        console.log("askdjuhasd: " + finalGridItems);
-        console.log("tutaj rezulta: " + result);
 
     };
-
+    
+    // funkcja do klikniecia danej ramki z liczba 
     const handleClick = (num: number) => () => {
         setSavedNumber((prevSavedNumber) => {
             const nextList = [...result, prevSavedNumber!];
@@ -101,6 +106,7 @@ const FindGame = () => {
 
     };
 
+    // funkcja pomocnicza do generowania grida z liczbami
     const helpFunc = () => {
         setIsAnimating(false);
         generateGridItems();
@@ -118,12 +124,15 @@ const FindGame = () => {
         return () => clearInterval(intervalId);
     }, [numberOfRounds, isStarted, count]);
 
+
+    // ustawianie poziomu
     const handleLevel = (num: number) => {
         setTotalRounds(num);
         setIsGameLoaded(true);
-        console.log("lsajdhiasughd: " + totalRounds);
     }
 
+
+    // funkcja sprawdzajaca czy wartosci sa rowne 
     const arraysEqual = (arr1: number[], arr2: number[]): boolean => {
         if (arr1.length !== arr2.length) {
             return false;
@@ -135,14 +144,14 @@ const FindGame = () => {
         }
         return true;
     };
-
+    
+    // finalna odpowiedz funkcja do potwierdzenia, przycisk
     const handleConfirm = () => {
         const sortedUserChoice = arrayOfClicked.slice().sort();
         const sortedPicked = result.slice().sort();
-        console.log("user pick: " + sortedUserChoice);
-        console.log("picked: " + sortedPicked);
         if (arraysEqual(sortedUserChoice, sortedPicked)) {
             setIsGameWon(true);
+            setEndTime(Date.now());
         } else {
             setIsClicked(Array(finalGridSize - totalRounds).fill(false));
             setArrayOfClicked([]);
@@ -150,8 +159,28 @@ const FindGame = () => {
         }
     }
 
+    // funkcja do startu gry
     const handleStart = () => {
         setIsStarted(true);
+        setStartTime(Date.now());
+    }
+
+    const handleGameMenu = () => {
+        setIsBoard(true);
+        setIsGameLoaded(false);
+        setIsGameWon(false);
+        setGridItems([]);
+        setFinalGridItems([]);
+        setNumberOfRounds(1);
+        setSavedNumber(null);
+        setResult([]);
+        setArrayOfClicked([]);
+        setIsClicked(Array(finalGridSize - totalRounds).fill(false));
+        setIsStarted(false);
+        setIsAnimating(false);
+        setCount(0);
+        setStartTime(0);
+        setEndTime(0);
     }
 
     return (
@@ -217,12 +246,12 @@ const FindGame = () => {
                     <div className='absolute inset-0 z-10 flex items-center justify-center'>
                     <div className='relative max-w-[400px]'>
                         <div className='flex items-center justify-center'>
-                            Logo
+                            <Treasure />
                         </div>
                         <div className='mt-8 text-4xl'>
-                            You won in <span className='text-[#783dcb] font-bold relative'>6</span> turns
+                            You won in <span className='text-[#783dcb] font-bold relative'>{((endTime - startTime)).toFixed(2)} ms</span>
                         </div>
-                        <button className='items-center justify-center mx-auto my-4 bg-[#131010] text-[#783dcb] border-4 border-[#783dcb] text-xl font-bold mt-8 '>Try again</button>
+                        <button className='items-center justify-center mx-auto my-4 bg-[#131010] text-[#783dcb] border-4 border-[#783dcb] text-xl font-bold mt-8 ' onClick={handleGameMenu}>Try again</button>
                     </div>
                 </div>
                 :
