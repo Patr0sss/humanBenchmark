@@ -16,6 +16,7 @@ export default function NavBar() {
         ) : (
           <Link to="/auth">Register</Link>
         )}
+        <Link to="/login"> Login</Link>
       </div>
     </nav>
   );

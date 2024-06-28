@@ -188,7 +188,7 @@ const FindGame = () => {
             {!isGameLoaded ?
                 <div className='mt-[60px] text-3xl p-4'>FIND GAME</div>
                 :
-                null
+                <div className='mt-[60px] text-3xl p-4'>FIND GAME - {totalRounds} rounds</div>
             }
             <div className={`${bgColor} w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center`}>
                 {isGameLoaded && !isGameWon && (isBoard ?
