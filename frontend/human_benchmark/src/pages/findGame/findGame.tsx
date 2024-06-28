@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import "./findGame.css"
 import Treasure from "../../assets/treasure";
+import {
+    gameContainerVariants,
+  } from "../../assets/animationVariants";
+import { motion } from "framer-motion";
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import "./buttons.css"
 
 const FindGame = () => {
     const number = 30; 
     const finalGridSize = 20;
-    const intervalDuration = 5000;
     const [gridItems, setGridItems] = useState<JSX.Element[]>([]);
     const [finalGridItems, setFinalGridItems] = useState<number[]>([]);
     const [numberOfRounds, setNumberOfRounds] = useState<number>(1);
@@ -23,6 +28,7 @@ const FindGame = () => {
     const [bgColor, setBgColor] = useState<string>("bg-[#131010]");
     const [startTime, setStartTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
+    
 
 
     // losowanie liczb
@@ -199,8 +205,42 @@ const FindGame = () => {
         }
     }
 
+    // slider
+
+    const scrollSlideValue = () => {
+        if (window.innerWidth <= 640) {
+            return 250;
+        } else {
+            return 500;
+        }
+    };
+
+      const slideLeft = () => {
+        const slider = document.getElementById('slider');
+        if (slider) {
+            slider.scrollLeft = slider.scrollLeft - scrollSlideValue();
+        } else {
+            console.error('Slider element not found');
+        }
+    };
+    
+    const slideRight = () => {
+        const slider = document.getElementById('slider');
+        if (slider) {
+            slider.scrollLeft = slider.scrollLeft + scrollSlideValue();
+        } else {
+            console.error('Slider element not found');
+        }
+    };
+
     return (
-        <div className='h-[calc(100vh-60px)] mt-[60px] w-full min-h-[500px] flex flex-col justify-center items-center'>
+        
+        <motion.div 
+            className='h-[calc(100vh-60px)] mt-[60px] w-full min-h-[500px] flex flex-col justify-center items-center'
+            variants={gameContainerVariants}
+            initial="hidden"
+            animate="visible"
+        >
             {!isGameLoaded ?
                 <div className='mt-[60px] text-3xl p-4'>FIND GAME</div>
                 :
@@ -249,13 +289,17 @@ const FindGame = () => {
                 )}
                 {!isGameLoaded && (
                     <>
-                        <div className={`grid grid-cols-1 grid-rows-5 text-black gap-8 ${isGameLoaded ? "hidden" : "visible"} font-bold flex`}>
-                            <button className='py-4 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-emerald-600 from-5% via-emerald-300 to-emerald-600 to-95% mx-auto uppercase' onClick={() => handleLevel(2)}>2 ROUNDS</button>
-                            <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-green-600 from-5% via-green-300 to-green-600 to-95% mx-auto uppercase' onClick={() => handleLevel(3)}>3 ROUNDS</button>
-                            <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-orange-600 from-5% via-orange-300 to-orange-600 to-95% mx-auto uppercase' onClick={() => handleLevel(5)}>5 ROUNDS</button>
-                            <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-rose-800 from-5% via-rose-400 to-rose-800 to-95% mx-auto uppercase' onClick={() => handleLevel(8)}>8 ROUNDS</button>
-                            <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-red-700 from-5% via-red-400 to-red-700 to-95% mx-auto uppercase' onClick={() => handleLevel(10)}>10 ROUNDS</button>
-                        </div>
+                        <MdChevronLeft className="absolute left-0 z-10 mx-1 bg-black rounded-full cursor-pointer border-2 border-[#783dcb]" size={40} onClick={slideLeft} />
+                            <div id="slider" className="relative flex items-center h-full overflow-x-scroll whitespace-nowrap scrollbar-hide scroll-smooth">
+                                <div className="flex mx-12 space-x-8">
+                                    <button className='btn' onClick={() => handleLevel(2)}><span>2 ROUNDS</span></button>
+                                    <button className='btn' onClick={() => handleLevel(3)}><span>3 ROUNDS</span></button>
+                                    <button className='btn' onClick={() => handleLevel(5)}><span>5 ROUNDS</span></button>
+                                    <button className='btn' onClick={() => handleLevel(8)}><span>8 ROUNDS</span></button>
+                                    <button className='btn'onClick={() => handleLevel(10)}><span>10 ROUNDS</span></button>
+                                </div>
+                            </div>
+                        <MdChevronRight className="absolute right-0 z-10 items-center mx-1 bg-black rounded-full cursor-pointer border-2 border-[#783dcb]" size={40} onClick={slideRight} />  
                     </>
                 )}
                 {isGameWon ? 
@@ -274,7 +318,7 @@ const FindGame = () => {
                 null
                 }
             </div>
-        </div>
+        </motion.div>
     );
 };
 

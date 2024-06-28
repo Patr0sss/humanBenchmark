@@ -3,7 +3,13 @@ import { useEffect, useState } from 'react';
 import cardImages from './cardImages.tsx';
 import Card from './card.tsx';
 import Confetti from './confetti.tsx';
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import Brain from "../../assets/brain";
+import {
+    gameContainerVariants,
+  } from "../../assets/animationVariants";
+import { motion } from "framer-motion";
+import "./buttons.css"
 
 interface CardImage {
     src: string;
@@ -81,7 +87,7 @@ export default function MemoryGame() {
             setBlockButton(true);
             if(firstCard?.src === secondCard?.src){
                 setBgColor("bg-[#008000]");
-                setTimeout(() => setBgColor("bg-[#131010]"), 250);
+                setTimeout(() => setBgColor("bg-[#131010]"), 150);
                 setCorrectPicked(correctPicked+1);
                 setCards(prevCards => {
                     return prevCards.map(card => {
@@ -95,7 +101,7 @@ export default function MemoryGame() {
                 turnHandle();
             }else{
                 setBgColor("bg-[#FF0000]");
-                setTimeout(() => setBgColor("bg-[#131010]"), 250);
+                setTimeout(() => setBgColor("bg-[#131010]"), 150);
                 setTimeout(() => turnHandle(),1000);
             }
         }
@@ -143,13 +149,44 @@ export default function MemoryGame() {
         setIsGameLoaded(false);
         setIsGameWon(false);
     }
+
+    const scrollSlideValue = () => {
+        if (window.innerWidth <= 640) {
+            return 250;
+        } else {
+            return 500;
+        }
+    };
+
+      const slideLeft = () => {
+        const slider = document.getElementById('slider');
+        if (slider) {
+            slider.scrollLeft = slider.scrollLeft - scrollSlideValue();
+        } else {
+            console.error('Slider element not found');
+        }
+    };
+    
+    const slideRight = () => {
+        const slider = document.getElementById('slider');
+        if (slider) {
+            slider.scrollLeft = slider.scrollLeft + scrollSlideValue();
+        } else {
+            console.error('Slider element not found');
+        }
+    };
     
     const gridClass = numberOfCards ? gridClasses[numberOfCards] : '';
     const levelName = numberOfCards ? level[numberOfCards] : '';
     const levelClass = numberOfCards ? levelColorMap[numberOfCards] : '';
 
     return (
-            <div className='h-[calc(100vh-60px)] mt-[60px] w-full min-h-[500px] flex flex-col justify-center items-center'>
+            <motion.div 
+                className='h-[calc(100vh-60px)] mt-[60px] w-full min-h-[500px] flex flex-col justify-center items-center'
+                variants={gameContainerVariants}
+                initial="hidden"
+                animate="visible"
+                >
                 {!isGameLoaded ? 
                     <div className='mt-[60px] text-3xl p-4'>Memory game</div>
                 :
@@ -199,14 +236,22 @@ export default function MemoryGame() {
                     :
                         null
                     }
-                    <div className={`grid grid-cols-1 grid-rows-5 text-black gap-8 ${isGameLoaded ? "hidden" : "visible"} font-bold flex`}>
-                        <button className='py-4 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-emerald-600 from-5% via-emerald-300  to-emerald-600 to-95% mx-auto uppercase' onClick={() => handleLevel(4)}>Level: Very Easy</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-green-600 from-5% via-green-300  to-green-600 to-95% mx-auto uppercase' onClick={() => handleLevel(6)}>Level: Easy</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-orange-600 from-5% via-orange-300  to-orange-600 to-95% mx-auto uppercase' onClick={() => handleLevel(9)}>Level: Medium</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-rose-800 from-5% via-rose-400  to-rose-800 to-95% mx-auto uppercase' onClick={() => handleLevel(12)}>Level: Hard</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-red-700 from-5% via-red-400  to-red-700 to-95% mx-auto uppercase' onClick={() => handleLevel(18)}>Level: Extreme</button>
+                    {/* <div className={`grid grid-cols-1 grid-rows-5 text-black gap-8 ${isGameLoaded ? "hidden" : "visible"} font-bold flex`}> */}
+                    <div className={`relative flex w-full h-full mt-[50px] items-center justify-center ${isGameLoaded ? "hidden" : "visible"}`}>
+                        <MdChevronLeft className="absolute left-0 z-10 mx-1 bg-black rounded-full cursor-pointer border-2 border-[#783dcb]" size={40} onClick={slideLeft} />
+                        <div id="slider" className="relative flex items-center h-full overflow-x-scroll whitespace-nowrap scrollbar-hide scroll-smooth">
+                            <div className="flex mx-12 space-x-8">
+                                <button className="btn" onClick={() => handleLevel(4)}><span>Very Easy</span></button>
+                                <button className="btn" onClick={() => handleLevel(6)}><span>Easy</span></button>
+                                <button className="btn" onClick={() => handleLevel(9)}><span>Medium</span></button>
+                                <button className="btn" onClick={() => handleLevel(12)}><span>Hard</span></button>
+                                <button className="btn" onClick={() => handleLevel(18)}><span>Extreme</span></button>
+                            </div>
+                        </div>
+                        <MdChevronRight className="absolute right-0 z-10 items-center mx-1 bg-black rounded-full cursor-pointer border-2 border-[#783dcb]" size={40} onClick={slideRight} />  
                     </div>
-                </div>
-            </div>
+                    {/* </div> */}
+                    </div>
+            </motion.div>
     );
 }
