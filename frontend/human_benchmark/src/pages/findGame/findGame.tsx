@@ -90,16 +90,16 @@ const FindGame = () => {
                 setBgColor("bg-[#008000]");
                 setTimeout(() => setBgColor("bg-[#131010]"), 100);
                 setCount((count) => count+1)
+                if (numberOfRounds === totalRounds) {
+                    setIsBoard(false);
+                    generateGridItemsToChoose(nextList);
+                }
             } else {
                 setIsAnimating(false);
                 setBgColor("bg-[#FF0000]");
                 setTimeout(() => setBgColor("bg-[#131010]"), 100);
                 setCount((count) => count+1)
                 generateGridItems();
-            }
-            if (numberOfRounds === totalRounds) {
-                setIsBoard(false);
-                generateGridItemsToChoose(nextList);
             }
             return prevSavedNumber;
         });
@@ -183,6 +183,22 @@ const FindGame = () => {
         setEndTime(0);
     }
 
+    const timeConverter = () => {
+        let timeDifference = endTime - startTime;
+        if(timeDifference < 60000){
+            return `${(timeDifference/1000).toFixed(2)} s`
+        }else if(timeDifference < 60000*60){
+            let minutes = Math.floor(timeDifference/60000)
+            let seconds = Math.floor((timeDifference % 60000) / 1000);
+            return `${minutes.toFixed(0)} m ${seconds.toFixed(0)} s`
+        }else {
+            const hours = Math.floor(timeDifference / 3600000);
+            const minutes = Math.floor((timeDifference % 3600000) / 60000);
+            const seconds = ((timeDifference % 60000) / 1000);
+            return `${hours.toFixed(0)} h ${minutes.toFixed(0)} m ${seconds.toFixed(0)} s`
+        }
+    }
+
     return (
         <div className='h-[calc(100vh-60px)] mt-[60px] w-full min-h-[500px] flex flex-col justify-center items-center'>
             {!isGameLoaded ?
@@ -249,7 +265,7 @@ const FindGame = () => {
                             <Treasure />
                         </div>
                         <div className='mt-8 text-4xl'>
-                            You won in <span className='text-[#783dcb] font-bold relative'>{((endTime - startTime)).toFixed(2)} ms</span>
+                            You won in <span className='text-[#783dcb] font-bold relative'>{timeConverter()}</span>
                         </div>
                         <button className='items-center justify-center mx-auto my-4 bg-[#131010] text-[#783dcb] border-4 border-[#783dcb] text-xl font-bold mt-8 ' onClick={handleGameMenu}>Try again</button>
                     </div>
