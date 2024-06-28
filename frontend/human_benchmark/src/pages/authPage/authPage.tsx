@@ -8,8 +8,8 @@ export default function AuthPage() {
   const { registerUser, userInfo, handleUserInfoFill } = useUserInfo();
 
   return (
-    <div className="w-screen h-fit sm:h-screen bg-[#201d22] py-8">
-      <div className="3xl:max-w-[1700px] 2xl:max-w-[1500px] xl:max-w-[1200px] lg:max-w-[960px] md:max-w-[700px] sm:max-w-[600px] xsm:max-w-[500px] max-w-[350px] bg-[#2c282e] mx-auto md:h-full h-fit rounded-lg lg:grid-cols-2 lg:grid py-2 lg:py-0">
+    <div className="w-screen min-h-screen bg-[#201d22] py-[3%]">
+      <div className="3xl:max-w-[1700px] 2xl:max-w-[1500px] xl:max-w-[1200px] lg:max-w-[960px] md:max-w-[700px] sm:max-w-[600px] xsm:max-w-[500px] max-w-[350px] bg-[#2c282e] mx-auto h-fit rounded-lg lg:grid-cols-2 lg:grid py-2 lg:py-0">
         <div className="relative bg-[#783dcb] rounded-lg m-4 p-4 hidden items-end lg:flex">
           <div
             className="absolute inset-0 w-full h-full bg-center bg-cover rounded-lg brightness-125 opacity-15"
@@ -22,7 +22,7 @@ export default function AuthPage() {
             <ul className="py-2 ">
               <li>
                 <Link
-                  className="text-white cursor-pointer hover:text-black"
+                  className="font-bold text-white cursor-pointer hover:text-black"
                   to="/"
                 >
                   Home
@@ -102,7 +102,7 @@ export default function AuthPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="w-full bg-gradient-to-br from-[#4a47d7] to-[#7632cc] p-4 font-medium text-2xl text-white rounded-xl"
+                className="w-full bg-gradient-to-br from-[#4a47d7] to-[#7632cc] p-4 font-medium text-2xl text-white rounded-xl border-[#783dcb]"
               >
                 Register
               </motion.button>
