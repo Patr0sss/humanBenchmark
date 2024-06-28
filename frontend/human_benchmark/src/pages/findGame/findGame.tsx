@@ -192,16 +192,16 @@ const FindGame = () => {
     const timeConverter = () => {
         let timeDifference = endTime - startTime;
         if(timeDifference < 60000){
-            return `${(timeDifference/1000).toFixed(2)} s`
+            return `${(timeDifference/1000).toFixed(2)}s`
         }else if(timeDifference < 60000*60){
             let minutes = Math.floor(timeDifference/60000)
             let seconds = Math.floor((timeDifference % 60000) / 1000);
-            return `${minutes.toFixed(0)} m ${seconds.toFixed(0)} s`
+            return `${minutes.toFixed(0)}m ${seconds.toFixed(0)}s`
         }else {
             const hours = Math.floor(timeDifference / 3600000);
             const minutes = Math.floor((timeDifference % 3600000) / 60000);
             const seconds = ((timeDifference % 60000) / 1000);
-            return `${hours.toFixed(0)} h ${minutes.toFixed(0)} m ${seconds.toFixed(0)} s`
+            return `${hours.toFixed(0)}h ${minutes.toFixed(0)}m ${seconds.toFixed(0)}s`
         }
     }
 
@@ -258,8 +258,8 @@ const FindGame = () => {
                             {gridItems}
                         </div>
                         {!isStarted &&
-                            <div className="absolute top-[50%]">
-                                <h1 className="p-4 font-bold bg-[#783dcb] cursor-pointer" onClick={handleStart}>START</h1>
+                            <div className="absolute bottom-[35%]">
+                                <h1 className="font-bold hover:bg-[#783dcb] border-2 border-[#783dcb] rounded-xl cursor-pointer w-[400px] h-[150px] flex items-center justify-center" onClick={handleStart}>START</h1>
                             </div>
                         }
                         <div className="progress-bar-container">
