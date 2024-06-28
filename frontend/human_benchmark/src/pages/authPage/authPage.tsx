@@ -68,6 +68,7 @@ export default function AuthPage() {
                 placeholder="Email"
                 name="email"
                 onChange={handleUserInfoFill}
+                type="email"
               />
             </div>
             {/* username */}
@@ -92,6 +93,7 @@ export default function AuthPage() {
                 placeholder="Password"
                 name="password"
                 onChange={handleUserInfoFill}
+                type="password"
               />
             </div>
             <div className="my-6">

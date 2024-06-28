@@ -97,6 +97,7 @@ export default function AnimatedBackground() {
                       password: e.target.value,
                     })
                   }
+                  type="password"
                 />
               </div>
               <div className="my-6">
