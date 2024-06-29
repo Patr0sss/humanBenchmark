@@ -25,5 +25,5 @@ export default {
       drop: 'drop 5s ease-in-out infinite',
     }
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar-hide')],
 }

@@ -1,4 +1,12 @@
 import { useState, useEffect } from "react";
+import "./findGame.css"
+import Treasure from "../../assets/treasure";
+import {
+    gameContainerVariants,
+  } from "../../assets/animationVariants";
+import { motion } from "framer-motion";
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import "./buttons.css"
 
 const FindGame = () => {
     const number = 30; 
@@ -9,11 +17,21 @@ const FindGame = () => {
     const [savedNumber, setSavedNumber] = useState<number | null>(null);
     const [isBoard, setIsBoard] = useState<boolean>(true);
     const [result, setResult] = useState<number[]>([]);
-    const [arrayOfClicked,setArrayOfClicked] = useState<number[]>([]);
-    const [isGameLoaded,setIsGameLoaded] = useState<boolean>(false);
+    const [arrayOfClicked, setArrayOfClicked] = useState<number[]>([]);
+    const [isGameLoaded, setIsGameLoaded] = useState<boolean>(false);
     const [totalRounds, setTotalRounds] = useState<number>(0);
     const [isClicked, setIsClicked] = useState<boolean[]>(Array(finalGridSize - totalRounds).fill(false));
+    const [isStarted, setIsStarted] = useState<boolean>(false);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [count, setCount] = useState(0);
+    const [isGameWon,setIsGameWon] = useState<boolean>(false);
+    const [bgColor, setBgColor] = useState<string>("bg-[#131010]");
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
+    
 
+
+    // losowanie liczb
     const generateGridItems = () => {
         const randomNumbers = Array.from({ length: number }, () =>
             Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000
@@ -28,7 +46,8 @@ const FindGame = () => {
         setGridItems(items);
         setSavedNumber(savedNum);
     };
-
+    
+    // tasowanie liczb
     const shuffleArray = (array: any[]) => {
         const newArray = [...array];
         for (let i = newArray.length - 1; i > 0; i--) {
@@ -38,8 +57,9 @@ const FindGame = () => {
         return newArray;
     };
 
-    const generateGridItemsToChoose = (result:number[]) => {
-        const randomNumbers = Array.from({ length: 20 - totalRounds }, () => 
+    // liczby do wyboru w finalnej wersji
+    const generateGridItemsToChoose = (result: number[]) => {
+        const randomNumbers = Array.from({ length: 20 - totalRounds }, () =>
             Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000
         );
 
@@ -47,61 +67,78 @@ const FindGame = () => {
         const shuffledArray = shuffleArray(combinedNumbers);
         setFinalGridItems(shuffledArray);
     };
-    
+
+    // wybieranie liczb w koncowym etapie gry
     const handleFinalClick = (idx: number) => {
-        if(arrayOfClicked.length < totalRounds || isClicked[idx] === true){
+        if (arrayOfClicked.length < totalRounds || isClicked[idx] === true) {
             setIsClicked((prevClicked) => {
                 const newClicked = [...prevClicked];
                 newClicked[idx] = !newClicked[idx];
                 return newClicked;
             });
-            // const num = numberOfClicked;
-            if(isClicked[idx] === true){
+            if (isClicked[idx] === true) {
                 setArrayOfClicked(prevArray => prevArray.filter(item => item !== finalGridItems[idx]));
-            }else{
+            } else {
                 setArrayOfClicked(prevArray => [...prevArray, finalGridItems[idx]]);
             }
-
-            console.log("lista: " + arrayOfClicked);   
         }
-        console.log("askdjuhasd: " + finalGridItems);
-        console.log("tutaj rezulta: " + result)
-        
-    };
 
+    };
+    
+    // funkcja do klikniecia danej ramki z liczba 
     const handleClick = (num: number) => () => {
         setSavedNumber((prevSavedNumber) => {
             const nextList = [...result, prevSavedNumber!];
-            setResult(prevList => nextList);
-            console.log("s,jahd: " + numberOfRounds);
-            console.log("s,asd;jijahd: " + totalRounds);
-            if (numberOfRounds === totalRounds) {
-                setIsBoard(false);
-                generateGridItemsToChoose(nextList);
-            } 
             if (num === prevSavedNumber) {
+                setResult(prevList => nextList);
                 setNumberOfRounds((prevRounds) => prevRounds + 1);
-            }else{
+                setIsAnimating(false);
+                setBgColor("bg-[#008000]");
+                setTimeout(() => setBgColor("bg-[#131010]"), 100);
+                setCount((count) => count+1)
+                if (numberOfRounds === totalRounds) {
+                    setIsBoard(false);
+                    generateGridItemsToChoose(nextList);
+                }
+            } else {
+                setIsAnimating(false);
+                setBgColor("bg-[#FF0000]");
+                setTimeout(() => setBgColor("bg-[#131010]"), 100);
+                setCount((count) => count+1)
                 generateGridItems();
             }
             return prevSavedNumber;
-        });   
+        });
+
     };
 
-    useEffect(() => {
+    // funkcja pomocnicza do generowania grida z liczbami
+    const helpFunc = () => {
+        setIsAnimating(false);
         generateGridItems();
-        const intervalId = setInterval(() => {
-            generateGridItems(); 
-        }, 35000); 
-        return () => clearInterval(intervalId);
-    }, [numberOfRounds]); 
-    
-    const handleLevel = (num:number) => {
-        setTotalRounds(num);
-        setIsGameLoaded(true);
-        console.log("lsajdhiasughd: " + totalRounds);
+        setTimeout(() => setIsAnimating(true), 100);
     }
 
+    useEffect(() => {
+        if (!isStarted) return;
+        generateGridItems();
+        setIsAnimating(true);
+        const intervalId = setInterval(() => {
+            helpFunc();
+        }, 10000);
+
+        return () => clearInterval(intervalId);
+    }, [numberOfRounds, isStarted, count]);
+
+
+    // ustawianie poziomu
+    const handleLevel = (num: number) => {
+        setTotalRounds(num);
+        setIsGameLoaded(true);
+    }
+
+
+    // funkcja sprawdzajaca czy wartosci sa rowne 
     const arraysEqual = (arr1: number[], arr2: number[]): boolean => {
         if (arr1.length !== arr2.length) {
             return false;
@@ -114,29 +151,103 @@ const FindGame = () => {
         return true;
     };
     
+    // finalna odpowiedz funkcja do potwierdzenia, przycisk
     const handleConfirm = () => {
-        const sortedUserChocie = arrayOfClicked.sort();
-        const sortedPicked = result.sort();
-        console.log("user puick: " + sortedUserChocie);
-        console.log("picked: " + sortedPicked);
-        if(arraysEqual(sortedUserChocie,sortedPicked)){
-            console.log("dobrze")
-        }else{
+        const sortedUserChoice = arrayOfClicked.slice().sort();
+        const sortedPicked = result.slice().sort();
+        if (arraysEqual(sortedUserChoice, sortedPicked)) {
+            setIsGameWon(true);
+            setEndTime(Date.now());
+        } else {
             setIsClicked(Array(finalGridSize - totalRounds).fill(false));
             setArrayOfClicked([]);
             generateGridItemsToChoose(result);
         }
     }
 
+    // funkcja do startu gry
+    const handleStart = () => {
+        setIsStarted(true);
+        setStartTime(Date.now());
+    }
+
+    const handleGameMenu = () => {
+        setIsBoard(true);
+        setIsGameLoaded(false);
+        setIsGameWon(false);
+        setGridItems([]);
+        setFinalGridItems([]);
+        setNumberOfRounds(1);
+        setSavedNumber(null);
+        setResult([]);
+        setArrayOfClicked([]);
+        setIsClicked(Array(finalGridSize - totalRounds).fill(false));
+        setIsStarted(false);
+        setIsAnimating(false);
+        setCount(0);
+        setStartTime(0);
+        setEndTime(0);
+    }
+
+    const timeConverter = () => {
+        let timeDifference = endTime - startTime;
+        if(timeDifference < 60000){
+            return `${(timeDifference/1000).toFixed(2)}s`
+        }else if(timeDifference < 60000*60){
+            let minutes = Math.floor(timeDifference/60000)
+            let seconds = Math.floor((timeDifference % 60000) / 1000);
+            return `${minutes.toFixed(0)}m ${seconds.toFixed(0)}s`
+        }else {
+            const hours = Math.floor(timeDifference / 3600000);
+            const minutes = Math.floor((timeDifference % 3600000) / 60000);
+            const seconds = ((timeDifference % 60000) / 1000);
+            return `${hours.toFixed(0)}h ${minutes.toFixed(0)}m ${seconds.toFixed(0)}s`
+        }
+    }
+
+    // slider
+
+    const scrollSlideValue = () => {
+        if (window.innerWidth <= 640) {
+            return 250;
+        } else {
+            return 500;
+        }
+    };
+
+      const slideLeft = () => {
+        const slider = document.getElementById('slider');
+        if (slider) {
+            slider.scrollLeft = slider.scrollLeft - scrollSlideValue();
+        } else {
+            console.error('Slider element not found');
+        }
+    };
+    
+    const slideRight = () => {
+        const slider = document.getElementById('slider');
+        if (slider) {
+            slider.scrollLeft = slider.scrollLeft + scrollSlideValue();
+        } else {
+            console.error('Slider element not found');
+        }
+    };
+
     return (
-        <div className='h-[calc(100vh-60px)] mt-[60px] w-full min-h-[500px] flex flex-col justify-center items-center'>
-            {!isGameLoaded ? 
+        
+        <motion.div 
+            className='h-[calc(100vh-60px)] mt-[60px] w-full min-h-[500px] flex flex-col justify-center items-center'
+            variants={gameContainerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            {!isGameLoaded ?
                 <div className='mt-[60px] text-3xl p-4'>FIND GAME</div>
                 :
-                null
+                <div className='mt-[60px] text-3xl p-4'>FIND GAME - {totalRounds} rounds</div>
             }
-            <div className="bg-[#131010] w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center">
-                {isGameLoaded && (isBoard ? 
+            <div className={`${bgColor} w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center`}>
+                {isGameLoaded && !isGameWon && (isBoard ?
                     <>
                         <div className="absolute top-0">
                             <h1 className="py-1">{numberOfRounds}/{totalRounds}</h1>
@@ -146,8 +257,16 @@ const FindGame = () => {
                         <div className="grid grid-cols-5 grid-rows-6 gap-6">
                             {gridItems}
                         </div>
+                        {!isStarted &&
+                            <div className="absolute bottom-[35%]">
+                                <h1 className="font-bold hover:bg-[#783dcb] border-2 border-[#783dcb] rounded-xl cursor-pointer w-[400px] h-[150px] flex items-center justify-center" onClick={handleStart}>START</h1>
+                            </div>
+                        }
+                        <div className="progress-bar-container">
+                            {isAnimating && <div className="progress-bar"></div>}
+                        </div>
                     </>
-                    : 
+                    :
                     <>
                         <div className="absolute top-0 mt-[10%]">
                             <h1 className="py-4 font-bold">CHOOSE CORRECT</h1>
@@ -170,19 +289,37 @@ const FindGame = () => {
                 )}
                 {!isGameLoaded && (
                     <>
-                    <div className={`grid grid-cols-1 grid-rows-5 text-black gap-8 ${isGameLoaded ? "hidden" : "visible"} font-bold flex`}>
-                        <button className='py-4 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-emerald-600 from-5% via-emerald-300  to-emerald-600 to-95% mx-auto uppercase' onClick={() => handleLevel(2)}>2 ROUNDS</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-green-600 from-5% via-green-300  to-green-600 to-95% mx-auto uppercase' onClick={() => handleLevel(3)}>3 ROUNDS</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-orange-600 from-5% via-orange-300  to-orange-600 to-95% mx-auto uppercase' onClick={() => handleLevel(5)}>5 ROUNDS</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-rose-800 from-5% via-rose-400  to-rose-800 to-95% mx-auto uppercase' onClick={() => handleLevel(8)}>8 ROUNDS</button>
-                        <button className='p-2 px-24 text-lg border-0 rounded-2xl text-balance bg-gradient-to-r from-red-700 from-5% via-red-400  to-red-700 to-95% mx-auto uppercase'onClick={() => handleLevel(10)}>10 ROUNDS</button>
-                    </div>
+                        <MdChevronLeft className="absolute left-0 z-10 mx-1 bg-black rounded-full cursor-pointer border-2 border-[#783dcb]" size={40} onClick={slideLeft} />
+                            <div id="slider" className="relative flex items-center h-full overflow-x-scroll whitespace-nowrap scrollbar-hide scroll-smooth">
+                                <div className="flex mx-12 space-x-8">
+                                    <button className='btn' onClick={() => handleLevel(2)}><span>2 ROUNDS</span></button>
+                                    <button className='btn' onClick={() => handleLevel(3)}><span>3 ROUNDS</span></button>
+                                    <button className='btn' onClick={() => handleLevel(5)}><span>5 ROUNDS</span></button>
+                                    <button className='btn' onClick={() => handleLevel(8)}><span>8 ROUNDS</span></button>
+                                    <button className='btn'onClick={() => handleLevel(10)}><span>10 ROUNDS</span></button>
+                                </div>
+                            </div>
+                        <MdChevronRight className="absolute right-0 z-10 items-center mx-1 bg-black rounded-full cursor-pointer border-2 border-[#783dcb]" size={40} onClick={slideRight} />  
                     </>
                 )}
+                {isGameWon ? 
+                    <div className='absolute inset-0 z-10 flex items-center justify-center'>
+                    <div className='relative max-w-[400px]'>
+                        <div className='flex items-center justify-center'>
+                            <Treasure />
+                        </div>
+                        <div className='mt-8 text-4xl'>
+                            You won in <span className='text-[#783dcb] font-bold relative'>{timeConverter()}</span>
+                        </div>
+                        <button className='items-center justify-center mx-auto my-4 bg-[#131010] text-[#783dcb] border-4 border-[#783dcb] text-xl font-bold mt-8 ' onClick={handleGameMenu}>Try again</button>
+                    </div>
+                </div>
+                :
+                null
+                }
             </div>
-        </div>
-
-    );  
+        </motion.div>
+    );
 };
 
 export default FindGame;
