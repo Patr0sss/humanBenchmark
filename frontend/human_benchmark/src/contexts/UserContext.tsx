@@ -93,6 +93,7 @@ export const UserContext = ({ children }: userProviderProps) => {
       console.log(res);
       if (res.status === 200) {
         // setIsUserAuthenticated(true);
+        document.cookie = `csrftoken=${res.data.csrf_token}`;
         navigate("/");
         console.log("zalogowano pomyślnie !");
         console.log(res);
@@ -103,7 +104,7 @@ export const UserContext = ({ children }: userProviderProps) => {
   };
 
   const checkUserStatus = () => {
-    if (cookiesAuth) {
+    if (cookiesAuth.csrftoken) {
       setIsUserAuthenticated(true);
     }
   };

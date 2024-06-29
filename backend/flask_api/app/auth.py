@@ -27,11 +27,11 @@ def perform_login(username, password):
                 config = json.load(config_file)
             token = jwt.encode({'user_id': user['_id'], 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, 
                                 config['secret_key'], algorithm='HS256')
-            user["token"] = token
+            user["csrftoken"] = token
             #resp = make_response(jsonify({'message': 'login successful', 'user': user}))
-            #resp.set_cookie('token', token)
+            #resp.set_cookie('csrftoken', token, httponly=False, samesite='None', secure=True)
             #return resp
-            return jsonify({'message': 'login successful', 'user': user})
+            return jsonify({'message': 'login successful', 'user': user, 'csrf_token': token})
         except Exception as e:
             return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
 
