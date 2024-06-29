@@ -13,6 +13,35 @@ import json
 auth = Blueprint('auth', __name__)
 CORS(auth, origins="http://localhost:5173", methods=["GET", "POST"])
 
+def perform_login(username, password):
+    user = Users().login(username, password)
+    if user == "user":
+        return jsonify({'message': 'User not found'}), 404
+        
+    if user == "password":
+        return jsonify({'message': 'Password incorrect'}), 401
+
+    if user:
+        try:
+            with open('./config.json') as config_file:
+                config = json.load(config_file)
+            token = jwt.encode({'user_id': user['_id'], 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, 
+                                config['secret_key'], algorithm='HS256')
+            user["csrftoken"] = token
+            #resp = make_response(jsonify({'message': 'login successful', 'user': user}))
+            #resp.set_cookie('csrftoken', token, httponly=False, samesite='None', secure=True)
+            #return resp
+            return jsonify({'message': 'login successful', 'user': user, 'csrf_token': token})
+        except Exception as e:
+            return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
+
+    return jsonify({
+        "message": "Error fetching auth token!, invalid email or password",
+        "data": None,
+        "error": "Unauthorized"
+    }), 404
+
+
 @auth.route('/auth', methods=['POST'])
 def register():
     data = request.get_json()
@@ -35,7 +64,7 @@ def register():
         "date_created": datetime.datetime.now()
     })
 
-    return jsonify({'message': 'registered successfully'})
+    return perform_login(data['username'], data['password'])
 
 @auth.route('/login', methods=['POST'])
 def login():
@@ -48,29 +77,7 @@ def login():
         username = data['username']
         password = data['password']
 
-        user = Users().login(username, password)
-        if user == "user":
-            return jsonify({'message': 'User not found'}), 404
-        
-        if user == "password":
-            return jsonify({'message': 'Password incorrect'}), 401
-
-        if user:
-            try:
-                with open('./config.json') as config_file:
-                    config = json.load(config_file)
-                token = jwt.encode({'user_id': user['_id'], 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, 
-                                    config['secret_key'], algorithm='HS256')
-                user["token"] = token
-                return jsonify({'message': 'login successful', 'user': user})
-            except Exception as e:
-                return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
-
-        return jsonify({
-            "message": "Error fetching auth token!, invalid email or password",
-            "data": None,
-            "error": "Unauthorized"
-        }), 404
+        return perform_login(username, password)
     except Exception as e:
         return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
 
