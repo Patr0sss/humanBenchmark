@@ -97,11 +97,12 @@ class Clicker:
         return
     
     "create clicker"
-    def create(user_id: str, clicks_per_second: int, clicks: int):
+    def create(user_id: str, clicks_per_second: int, clicks: int, time: int):
         new_clicker= db.clicker.insert_one({
             "user_id": user_id,
             "clicks_per_second": clicks_per_second,
             "clicks": clicks,
+            "time": time,
             "timestamp": datetime.datetime.now()
         }).inserted_id
         return new_clicker
