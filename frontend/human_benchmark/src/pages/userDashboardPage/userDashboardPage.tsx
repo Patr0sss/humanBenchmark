@@ -14,6 +14,7 @@ import SideBar from "../../components/sideBar/sideBar";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { opacityFadeVariants3 } from "../../assets/animationVariants";
+import axios from "axios";
 
 ChartJS.register(
   CategoryScale,
@@ -25,34 +26,129 @@ ChartJS.register(
   Legend
 );
 
-const lineData = {
-  labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-
-  datasets: [
-    {
-      label: "Levels Passed",
-      data: [10, 8, 6, 4, 2, 3, 4, 6, 8, 10],
-      borderColor: "#783dcb",
-      backgroundColor: "black",
-    },
-  ],
-};
-
 const chartOptions = {
   responsive: true,
 };
 
+interface GameData {
+  _id: string;
+  level: string | { [key: string]: string };
+  score: number;
+  timestamp: string;
+  user_id: string;
+}
+
 export default function UserDashboardPage() {
-  const [currentGame, setCurrentGame] = useState("Aim Trainer");
+  const [currentGame, setCurrentGame] = useState("Aim-Trainer");
+
+  const createNumberArray = (length: number): number[] => {
+    return Array.from({ length }, (_, i) => i + 1);
+  };
+
+  const [ScoresForEachGame, setScoresForEachGame] = useState<{
+    [key: string]: number[];
+  }>({
+    "Aim-Trainer": [],
+    Sequence: [],
+    Memory: [],
+    Typing: [],
+    Clicker: [],
+    "TZWCTR(CH)": [],
+  });
+
+  const [numberOfScoresForEachGame, setNumberOfScoresForEachGame] = useState<{
+    [key: string]: number[];
+  }>({
+    "Aim-Trainer": [0],
+    Sequence: [0],
+    Memory: [0],
+    Typing: [0],
+    Clicker: [0],
+    "TZWCTR(CH)": [0],
+  });
+
+  const token = sessionStorage.getItem("token");
+
+  const getGraphsData = async (
+    gameNameBackend: string,
+    gameNameFrontend: string,
+    scoreName: string
+  ) => {
+    if (token) {
+      try {
+        const res = await axios.get(
+          `http://127.0.0.1:5000/${gameNameBackend}`,
+
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: JSON.parse(token),
+            },
+            withCredentials: true,
+          }
+        );
+        console.log(gameNameBackend);
+        console.log(res.data);
+        const scores: number[] = res.data.data.map(
+          (item: GameData) => item[scoreName as keyof GameData]
+        );
+
+        console.log(gameNameFrontend + " : " + scores);
+
+        setScoresForEachGame((prevScores) => ({
+          ...prevScores,
+          [gameNameFrontend]: scores,
+        }));
+
+        setNumberOfScoresForEachGame((prevNumOfScores) => ({
+          ...prevNumOfScores,
+          [gameNameFrontend]: createNumberArray(scores.length),
+        }));
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getGraphsData("memory-game", "Memory", "score");
+    getGraphsData("clicker", "Clicker", "clicks");
+    getGraphsData("tzwctr", "TZWCTR(CH)", "time");
+    getGraphsData("sequence-memory", "Sequence", "score");
+    getGraphsData("aim-trainer", "Aim-Trainer", "average_time");
+  }, []);
+
+  const lineData = {
+    labels: numberOfScoresForEachGame[currentGame],
+
+    datasets: [
+      {
+        label: "Your Scores ",
+        data: ScoresForEachGame[currentGame],
+        borderColor: "#783dcb",
+        backgroundColor: "black",
+      },
+    ],
+  };
+
   const [chartData, setChartData] = useState(lineData);
+
+  useEffect(() => {
+    const updatedLineData = {
+      ...lineData,
+      datasets: [
+        {
+          ...lineData.datasets[0],
+          data: ScoresForEachGame[currentGame],
+        },
+      ],
+    };
+    setChartData(updatedLineData);
+  }, [currentGame, ScoresForEachGame]);
 
   const getCurrentGame = (game: string) => {
     setCurrentGame(game);
   };
-
-  useEffect(() => {
-    setChartData(lineData);
-  }, []);
 
   return (
     <div className={styles.dashboard}>
@@ -65,7 +161,9 @@ export default function UserDashboardPage() {
           animate="visible"
         >
           <Line options={chartOptions} data={chartData} />
-          <div>{currentGame}</div>
+          <div>
+            {currentGame === "Aim-Trainer" ? "Aim Trainer" : currentGame}
+          </div>
         </motion.div>
       </div>
     </div>

@@ -52,12 +52,42 @@ function App() {
             )
           }
         />
-        <Route path="/tests/aim" element={<AimTrainer />} />
-        <Route path="/tests/sequence" element={<SequenceMemory />} />
-        <Route path="/tests/memory" element={<MemoryGame />} />
-        <Route path="/tests/typing" element={<TypingGame />} />
-        <Route path="/tests/clicker" element={<SpeedClicker />} />
-        <Route path="/tests/find" element={<FindGame />} />
+        <Route
+          path="/tests/aim"
+          element={
+            isUserAuthenticated ? <AimTrainer /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/tests/sequence"
+          element={
+            isUserAuthenticated ? <SequenceMemory /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/tests/memory"
+          element={
+            isUserAuthenticated ? <MemoryGame /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/tests/typing"
+          element={
+            isUserAuthenticated ? <TypingGame /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/tests/clicker"
+          element={
+            isUserAuthenticated ? <SpeedClicker /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/tests/find"
+          element={
+            isUserAuthenticated ? <FindGame /> : <Navigate to="/login" />
+          }
+        />
       </Routes>
     </div>
   );

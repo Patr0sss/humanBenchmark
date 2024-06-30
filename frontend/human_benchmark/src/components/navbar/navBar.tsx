@@ -4,7 +4,6 @@ import { useUserInfo } from "../../contexts/UserContext";
 
 export default function NavBar() {
   const { isUserAuthenticated, userInfo } = useUserInfo();
-
   return (
     <nav className={styles.navBar}>
       <Link to="/">
@@ -16,7 +15,6 @@ export default function NavBar() {
         ) : (
           <Link to="/auth">Register</Link>
         )}
-        {/* <Link to="/login"> Login</Link> */}
       </div>
     </nav>
   );

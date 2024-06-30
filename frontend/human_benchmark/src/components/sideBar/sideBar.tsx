@@ -11,7 +11,7 @@ import Puzzle from "../../assets/puzzle";
 import Cog from "../../assets/cog";
 import { useUserInfo } from "../../contexts/UserContext";
 const GAMES = [
-  { title: "Aim Trainer", icon: <Aim width={45} />, linkURL: "tests/aim" },
+  { title: "Aim-Trainer", icon: <Aim width={45} />, linkURL: "tests/aim" },
   { title: "Sequence", icon: <Puzzle width={45} />, linkURL: "tests/sequence" },
   { title: "Memory", icon: <Brain width={45} />, linkURL: "tests/memory" },
   { title: "Typing", icon: <Keyboard width={45} />, linkURL: "/tests/typing" },
@@ -24,7 +24,7 @@ export default function SideBar({
 }: {
   setGameCallback: (game: string) => void;
 }) {
-  const [currentGame, setCurrentGame] = useState("Aim Trainer");
+  const [currentGame, setCurrentGame] = useState("Aim-Trainer");
   const [showLogoutButton, setShowLogoutButton] = useState(false);
 
   const handleGameBarClick = (game: string) => {
