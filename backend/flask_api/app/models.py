@@ -97,11 +97,12 @@ class Clicker:
         return
     
     "create clicker"
-    def create(user_id: str, clicks_per_second: int, clicks: int):
+    def create(user_id: str, clicks_per_second: int, clicks: int, time: int):
         new_clicker= db.clicker.insert_one({
             "user_id": user_id,
             "clicks_per_second": clicks_per_second,
             "clicks": clicks,
+            "time": time,
             "timestamp": datetime.datetime.now()
         }).inserted_id
         return new_clicker
@@ -151,6 +152,27 @@ class Placeholder:
         placeholders= db.placeholder.find({"user_id": user_id})
         placeholders = [{**placeholder, "_id": str(placeholder["_id"])} for placeholder in placeholders]
         return placeholders
+
+"TZWCTR Model"
+class TZWCTR:
+    def __init__(self):
+        return
+    
+    "create tzwctr"
+    def create(user_id: str, time: float, level: int):
+        new_tzwctr= db.tzwctr.insert_one({
+            "user_id": user_id,
+            "time": time,
+            "level": level,
+            "timestamp": datetime.datetime.now()
+        }).inserted_id
+        return new_tzwctr
+    
+    "get tzwctr by user id"
+    def get_by_user_id(user_id: str):
+        tzwctrs= db.tzwctr.find({"user_id": user_id})
+        tzwctrs = [{**tzwctr, "_id": str(tzwctr["_id"])} for tzwctr in tzwctrs]
+        return tzwctrs
 
 "User model"
 class Users:
