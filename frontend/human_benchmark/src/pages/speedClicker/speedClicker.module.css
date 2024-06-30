@@ -82,8 +82,8 @@ button {
 
 .buttonBlock {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
 }
@@ -103,3 +103,9 @@ button {
 
 }
 
+.buttonResetBlock{
+  position: absolute;
+  top: 100px;
+  width: 90px;
+  height: 55px;
+}
