@@ -233,7 +233,7 @@ export default function MemoryGame() {
           <div className="absolute bottom-0 left-0 right-0 flex">
             <h1
               className={`mx-auto ${
-                !isGameLoaded ? "hidden" : "visible"
+                !isGameLoaded || isGameWon ? "hidden" : "visible"
               } bg-[#783dcb] p-2 rounded-xl mb-2`}
             >
               TURNS: {turns}
