@@ -1,4 +1,4 @@
-### humanBenchmark
+# HumanBenchmark
 
 Welcome to the humanBenchmark project! This repository contains a full-stack application developed with Flask for the backend and React for the frontend. This application is designed to test and benchmark human cognitive abilities through various interactive tests.
 
@@ -27,10 +27,15 @@ The humanBenchmark project provides a platform for users to engage in cognitive 
 - **Reaction Time Test**: Measure how quickly you can respond to a visual stimulus.
 - **Memory Test**: Test and improve your short-term memory with a sequence recall challenge.
 - **Typing Test**: Evaluate your typing speed and accuracy.
+- **Aim Trainer**: Practice and improve your mouse accuracy and speed.
+- **Number Memory Test**: Test your ability to remember sequences of numbers.
+- **Verbal Memory Test**: Challenge your memory with words and sequences.
+
 
 ## Tech Stack
-- **Backend**: Flask, MongoDB
+- **Backend**: Flask
 - **Frontend**: React, TypeScript, CSS
+- **Database**: MongoDB
 - **Authentication**: JWT
 
 ## Installation
@@ -45,7 +50,7 @@ The humanBenchmark project provides a platform for users to engage in cognitive 
 2. **Create and activate a virtual environment**:
    ```bash
    python3 -m venv venv
-   source venv/bin/activate
+   .\venv\Scripts\activate
    ```
 
 3. **Install the dependencies**:
@@ -76,7 +81,7 @@ The humanBenchmark project provides a platform for users to engage in cognitive 
 
 ## Usage
 1. Ensure both backend and frontend servers are running.
-2. Open your web browser and navigate to `http://localhost:3000`.
+2. Open your web browser and navigate to `http://localhost:5173`.
 3. Register a new account or log in to start taking tests.
 
 ## Project Structure
