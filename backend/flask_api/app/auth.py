@@ -9,6 +9,12 @@ from flask_login import login_required
 from .models import Users
 import jwt
 import json
+import re
+
+# Email regex pattern for validation
+email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9_.+-]+$'
+# Password regex pattern for validation (at least one digit, one uppercase, one lowercase, and one special character)
+password_regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&])[A-Za-z\d@$!%#*?&]{8,}$'
 
 auth = Blueprint('auth', __name__)
 CORS(auth, supports_credentials=True, origins="http://localhost:5173", methods=["GET", "POST"])
@@ -45,6 +51,15 @@ def perform_login(username, password):
 @auth.route('/auth', methods=['POST'])
 def register():
     data = request.get_json()
+    
+    if 'email' not in data or 'password' not in data or 'username' not in data:
+        return jsonify({'error': 'Email, password, and username are required'}), 400
+    
+    if not re.match(email_regex, data['email']):
+        return jsonify({'error': 'Invalid email format'}), 400
+
+    if not re.match(password_regex, data['password']):
+        return jsonify({'error': 'Password must contain at least one digit, one uppercase, one lowercase, and one special character'}), 400
     
     existing_user_email = db.user.find_one({"email": data['email']})
     existing_username = db.user.find_one({"username": data['username']})
