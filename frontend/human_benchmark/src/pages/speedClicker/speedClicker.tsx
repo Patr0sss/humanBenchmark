@@ -132,6 +132,7 @@ export default function speedClicker() {
                       {clickerValue > 0 ?  clickerValue : (<></>)}
                     </div>
                 </div>
+                
                 <div className={styles.buttonBlock}>{isGameOnValue && !isGameOver ? ( 
                   <button disabled={ secondsPassed >= initialTime } onClick={onClickGame} style={{
                     position: 'relative',
@@ -141,11 +142,19 @@ export default function speedClicker() {
                 
                 ) : isGameOver ? (
                   <>
-                  <div className={styles.setBlock}>
-                    <div className={styles.buttonBlock}> <button onClick={onClickReset}> Try Again </button></div>
-                    <div className={styles.buttonBlock}><button> Save Score </button></div>
+                  <div className={styles.buttonResetBlock}> <button onClick={onClickReset}> Try Again </button></div>
+                  <div className={styles.buttonBlock}> <button style={{
+                    position: 'relative',
+                    overflow: 'hidden',
+                    isolation: 'isolate',
+                    backgroundColor: '#E30022'
+                  }}> Time's up! 
+                  <Ripple></Ripple>
+                  </button>
                   </div>
+                  
                   </>
+
                   ) : (
                   <button  onClick={onClickInitializeGame}> Click here to start! </button>
                 )} 
