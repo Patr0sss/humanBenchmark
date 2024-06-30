@@ -17,7 +17,6 @@ interface UserProvider {
   isUserAuthenticated: boolean;
   checkUserStatus: () => void;
   logoutUser: () => void;
-  //   isLoggedIn: () => boolean;
 }
 
 interface userProviderProps {
@@ -57,13 +56,9 @@ export const UserContext = ({ children }: userProviderProps) => {
         }
       );
 
-      console.log(res.status);
       if (res.status === 200) {
-        // setIsUserAuthenticated(true);
-        console.log(cookies);
         navigate("/login");
       }
-      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -76,8 +71,6 @@ export const UserContext = ({ children }: userProviderProps) => {
       ...userInfo,
       [e.target.name]: e.target.value,
     });
-
-    console.log(userInfo);
   };
 
   const loginUser = async (info: UserProps) => {
@@ -102,18 +95,12 @@ export const UserContext = ({ children }: userProviderProps) => {
           email: res.data.user.email,
         };
         sessionStorage.setItem("user", JSON.stringify(userObject));
-        console.log(res.data.user);
         document.cookie = `csrftoken=${res.data.user.csrftoken}`;
 
         navigate("/");
-        console.log(res);
-        console.log("zalogowano pomyślnie !");
-        console.log("ciastko : ", cookies.csrftoken);
-        console.log("ciastkaaaa : ", document.cookie);
       }
     } catch (err) {
       console.log(err);
-      console.log(cookies);
     }
   };
 
@@ -132,7 +119,6 @@ export const UserContext = ({ children }: userProviderProps) => {
       setIsUserAuthenticated(false);
       sessionStorage.removeItem("user");
     }
-    // console.log(cookies.csrftoken);
   };
 
   const logoutUser = () => {};

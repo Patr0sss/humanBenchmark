@@ -11,20 +11,19 @@ import UserDashboardPage from "./pages/userDashboardPage/userDashboardPage";
 import SpeedClicker from "./pages/speedClicker/speedClicker";
 import TypingGame from "./pages/typingGame/typingGame";
 import FindGame from "./pages/findGame/findGame";
-import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import { useUserInfo } from "./contexts/UserContext";
 
 function App() {
   const location = useLocation();
-  const [cookies] = useCookies(["csrftoken"]);
   const { checkUserStatus, isUserAuthenticated } = useUserInfo();
   useEffect(() => {
     checkUserStatus();
-  }, [cookies]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [document.cookie]);
 
   return (
-    <div onClick={() => console.log(isUserAuthenticated)}>
+    <div>
       {location.pathname !== "/auth" && location.pathname !== "/login" ? (
         <NavBar />
       ) : null}

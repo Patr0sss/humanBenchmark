@@ -25,7 +25,6 @@ export default function SideBar({
 }) {
   const [currentGame, setCurrentGame] = useState("Aim Trainer");
   const [showLogoutButton, setShowLogoutButton] = useState(false);
-  console.log("ciastkaaaa222 : ", document.cookie);
 
   const handleGameBarClick = (game: string) => {
     setCurrentGame(game);
@@ -36,9 +35,6 @@ export default function SideBar({
     const cookieString = `${name}=; expires=${new Date(
       0
     ).toUTCString()}; path="/";`;
-    // if (domain) {
-    //     cookieString += ` domain=${domain};`;
-    // }
     document.cookie = cookieString;
     setShowLogoutButton(false);
   }

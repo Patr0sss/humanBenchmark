@@ -19,11 +19,12 @@ const GAMES = [
 export default function LandingPage() {
   return (
     <div className={styles.landingPage}>
-      {GAMES.map((game) => (
+      {GAMES.map((game, index) => (
         <GameCard
           gameIcon={game.icon}
           gameTitle={game.title}
           linkURL={game.linkURL}
+          key={index}
         />
       ))}
     </div>
