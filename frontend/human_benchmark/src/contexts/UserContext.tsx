@@ -61,7 +61,7 @@ export const UserContext = ({ children }: userProviderProps) => {
       if (res.status === 200) {
         // setIsUserAuthenticated(true);
         console.log(cookies);
-        navigate("/");
+        navigate("/login");
       }
       console.log(res);
     } catch (err) {
@@ -96,21 +96,14 @@ export const UserContext = ({ children }: userProviderProps) => {
         }
       );
       if (res.status === 200) {
-        // sessionStorage.setItem("user", res.data.user.id);
-        // sessionStorage.setItem("user", {id: res.data.user.id, username : res.data.user.username});
         const userObject = {
           id: res.data.user._id,
           username: res.data.user.username,
           email: res.data.user.email,
         };
         sessionStorage.setItem("user", JSON.stringify(userObject));
-        // console.log(res.data.user);
         document.cookie = `csrftoken=${res.data.user.token}`;
-        // setUserInfo({
-        //   email: res.data.user.email,
-        //   username: res.data.user.username,
-        //   password: "",
-        // });
+
         navigate("/");
         console.log(res);
         console.log("zalogowano pomyślnie !");

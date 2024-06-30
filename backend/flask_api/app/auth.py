@@ -11,7 +11,7 @@ import jwt
 import json
 
 auth = Blueprint('auth', __name__)
-CORS(auth, origins="http://localhost:5173", methods=["GET", "POST"])
+CORS(auth, supports_credentials=True, origins="http://localhost:5173", methods=["GET", "POST"])
 
 def perform_login(username, password):
     user = Users().login(username, password)
