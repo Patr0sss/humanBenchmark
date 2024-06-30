@@ -6,6 +6,8 @@ import {
   opacityFadeVariants,
   opacityFadeVariants2,
 } from "../../assets/animationVariants";
+import axios from "axios";
+import { useUserInfo } from "../../contexts/UserContext";
 
 const initialGridObjects = [
   { value: 1, color: "#302c2c" },
@@ -30,6 +32,42 @@ export default function SequenceMemory() {
   const [userLost, setUserLost] = useState(false);
   const gameBoardRef = useRef<HTMLDivElement>(null);
   const animateIntervalTimeMS = 900;
+
+  const { userInfo } = useUserInfo();
+
+  const token = sessionStorage.getItem("token");
+
+  const post = async () => {
+    if (token) {
+      try {
+        const res = await axios.post(
+          "http://127.0.0.1:5000/sequence-memory",
+          {
+            id: JSON.stringify(userInfo._id),
+            score: displayRoundCount,
+            timestamp: new Date().toISOString(),
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `${token + "" + token}`,
+              Authorization: JSON.parse(token),
+            },
+            withCredentials: true,
+          }
+        );
+        console.log("Response received");
+        if (res.status === 200) {
+          console.log("Success");
+          console.log(res.data);
+        } else {
+          console.log(`Unexpected status code: ${res.status}`);
+        }
+      } catch (error) {
+        console.error("Error occurred while posting turns:", error);
+      }
+    }
+  };
 
   const generateRandomArray = (length: number) => {
     return Array.from({ length }, () => Math.floor(Math.random() * 9) + 1);
@@ -97,6 +135,12 @@ export default function SequenceMemory() {
     setSequence([]);
     setDisplayRoundCount(1);
   };
+
+  useEffect(() => {
+    if(userLost){
+      post();
+    }
+}, [userLost]);
 
   useEffect(() => {
     if (

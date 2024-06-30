@@ -12,6 +12,8 @@ import {
   gameContainerVariants,
   opacityFadeVariants,
 } from "../../assets/animationVariants";
+import axios from "axios";
+import { useUserInfo } from "../../contexts/UserContext";
 
 export default function AimTrainer() {
   const MAX_CLICKS = 12;
@@ -25,6 +27,43 @@ export default function AimTrainer() {
   const [bgMusic] = useState(new Audio(backgroundMusic));
   const [blasterSound] = useState(new Audio(blaster));
   const [isMusicON, setIsMusicON] = useState(true);
+
+  const { userInfo } = useUserInfo();
+
+  const token = sessionStorage.getItem("token");
+
+  const post = async () => {
+    if (token) {
+      try {
+        const res = await axios.post(
+          "http://127.0.0.1:5000/aim-trainer",
+          {
+            id: JSON.stringify(userInfo._id),
+            accuracy: (((MAX_CLICKS - missedClicks) / MAX_CLICKS) * 100).toFixed(2),
+            average_time: ((endTime - startTime) / MAX_CLICKS).toFixed(2),
+            timestamp: new Date().toISOString(),
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `${token + "" + token}`,
+              Authorization: JSON.parse(token),
+            },
+            withCredentials: true,
+          }
+        );
+        console.log("Response received");
+        if (res.status === 200) {
+          console.log("Success");
+          console.log(res.data);
+        } else {
+          console.log(`Unexpected status code: ${res.status}`);
+        }
+      } catch (error) {
+        console.error("Error occurred while posting turns:", error);
+      }
+    }
+  };
 
   const onTargetClick = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
@@ -76,6 +115,12 @@ export default function AimTrainer() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bgMusic, clicksLeft, startTime]);
+
+  useEffect(() => {
+    if(endTime > 0){
+      post();
+    }
+  }, [endTime]);
 
   useEffect(() => {
     return () => {

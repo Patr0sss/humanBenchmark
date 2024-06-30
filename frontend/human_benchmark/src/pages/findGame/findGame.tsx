@@ -7,6 +7,8 @@ import {
 import { motion } from "framer-motion";
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import "./buttons.css"
+import { useUserInfo } from "../../contexts/UserContext";
+import axios from "axios";
 
 const FindGame = () => {
     const number = 30; 
@@ -28,6 +30,50 @@ const FindGame = () => {
     const [bgColor, setBgColor] = useState<string>("bg-[#131010]");
     const [startTime, setStartTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
+
+    const { userInfo } = useUserInfo();
+
+   const token = sessionStorage.getItem("token");
+ 
+   const post = async () => {
+     if (token) {
+       try {
+         const res = await axios.post(
+           "http://127.0.0.1:5000/tzwctr",
+           {
+             id: JSON.stringify(userInfo._id),
+             time: endTime-startTime,
+             level: totalRounds,
+             timestamp: new Date().toISOString(),
+           },
+           {
+             headers: {
+               "Content-Type": "application/json",
+               // Authorization: `${token + "" + token}`,
+               Authorization: JSON.parse(token),
+             },
+             withCredentials: true,
+           }
+         );
+         console.log("Response received");
+         if (res.status === 200) {
+           console.log("Success");
+           console.log(res.data);
+         } else {
+           console.log(`Unexpected status code: ${res.status}`);
+         }
+       } catch (error) {
+         console.error("Error occurred while posting turns:", error);
+       }
+     }
+   };
+ 
+   
+   useEffect(() => {
+     if(isGameWon){
+       post();
+     }
+ }, [isGameWon]);
     
 
 
