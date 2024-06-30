@@ -40,7 +40,7 @@ export default function AnimatedBackground() {
           <div className="bg-[#201d22] rounded-xl max-w-[350px] xsm:max-w-[500px] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[1000px] xl:max-w-[1200px] w-full h-[50%] my-6 px-4 flex items-center">
             <div className="w-full ">
               <div className="flex pt-2">
-                <Link to="/" className="inline-block ">
+                <Link to="/auth" className="inline-block ">
                   <TiArrowBack
                     className="hover:scale-110"
                     size={40}
@@ -107,6 +107,7 @@ export default function AnimatedBackground() {
                       email: "",
                       username: userLoginCredentials.username,
                       password: userLoginCredentials.password,
+                      _id: "",
                     })
                   }
                   whileHover={{ scale: 1.02 }}

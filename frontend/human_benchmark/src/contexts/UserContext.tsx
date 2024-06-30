@@ -97,8 +97,13 @@ export const UserContext = ({ children }: userProviderProps) => {
           email: res.data.user.email,
         };
         sessionStorage.setItem("user", JSON.stringify(userObject));
-        document.cookie = `csrftoken=${res.data.user.csrftoken}`;
+        sessionStorage.setItem(
+          "token",
+          JSON.stringify(res.data.user.csrftoken)
+        );
 
+        document.cookie = `csrftoken=${res.data.user.csrftoken}`;
+        console.log(res.data);
         navigate("/");
       }
     } catch (err) {
@@ -121,6 +126,7 @@ export const UserContext = ({ children }: userProviderProps) => {
     } else {
       setIsUserAuthenticated(false);
       sessionStorage.removeItem("user");
+      sessionStorage.removeItem("token");
     }
   };
 

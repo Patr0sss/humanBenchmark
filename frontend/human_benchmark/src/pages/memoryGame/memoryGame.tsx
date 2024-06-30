@@ -41,14 +41,15 @@ export default function MemoryGame() {
   const [correctPicked, setCorrectPicked] = useState<number>(0);
   const [numberOfCards, setNumberOfCards] = useState<number | null>(null);
   const [isGameWon, setIsGameWon] = useState<boolean>(false);
-  const [level, setLevel] = useState<LevelState>({
+
+  const levelOptions: LevelState = {
     4: "Very Easy",
     6: "Easy",
     9: "Medium",
     12: "Hard",
     18: "Extreme",
-  });
-
+  };
+  const [levelChosen, setLevelChosen] = useState(levelOptions[4]);
   const [bgColor, setBgColor] = useState<string>("bg-[#131010]");
 
   const [gridClasses, setGridClasses] = useState<GridClass>({
@@ -77,33 +78,38 @@ export default function MemoryGame() {
 
   const { userInfo } = useUserInfo();
 
+  const token = sessionStorage.getItem("token");
+
   const postTurns = async () => {
-    try {
-      const res = await axios.post(
-        "http://127.0.0.1:5000/memory-game",
-        {
-          id: JSON.stringify(userInfo._id),
-          score: turns,
-          level: level,
-          timestamp: new Date().toISOString(),
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: document.cookie,
+    if (token) {
+      try {
+        const res = await axios.post(
+          "http://127.0.0.1:5000/memory-game",
+          {
+            id: JSON.stringify(userInfo._id),
+            score: turns,
+            level: levelChosen,
+            timestamp: new Date().toISOString(),
           },
-          withCredentials: true,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `${token + "" + token}`,
+              Authorization: JSON.parse(token),
+            },
+            withCredentials: true,
+          }
+        );
+        console.log("Response received");
+        if (res.status === 200) {
+          console.log("Success");
+          console.log(res.data);
+        } else {
+          console.log(`Unexpected status code: ${res.status}`);
         }
-      );
-      console.log("Response received");
-      if (res.status === 200) {
-        console.log("Success");
-        console.log(res.data);
-      } else {
-        console.log(`Unexpected status code: ${res.status}`);
+      } catch (error) {
+        console.error("Error occurred while posting turns:", error);
       }
-    } catch (error) {
-      console.error("Error occurred while posting turns:", error);
     }
   };
 
@@ -171,6 +177,7 @@ export default function MemoryGame() {
     setIsGameLoaded(true);
     setTurns(0);
     setCorrectPicked(0);
+    setLevelChosen(levelOptions[numberOfCards]);
     console.log("asd: " + numberOfCards);
   };
 
@@ -206,7 +213,7 @@ export default function MemoryGame() {
   };
 
   const gridClass = numberOfCards ? gridClasses[numberOfCards] : "";
-  const levelName = numberOfCards ? level[numberOfCards] : "";
+  const levelName = numberOfCards ? levelOptions[numberOfCards] : "";
   const levelClass = numberOfCards ? levelColorMap[numberOfCards] : "";
 
   return (

@@ -9,6 +9,7 @@ import Aim from "../../assets/aim";
 import Brain from "../../assets/brain";
 import Puzzle from "../../assets/puzzle";
 import Cog from "../../assets/cog";
+import { useUserInfo } from "../../contexts/UserContext";
 const GAMES = [
   { title: "Aim Trainer", icon: <Aim width={45} />, linkURL: "tests/aim" },
   { title: "Sequence", icon: <Puzzle width={45} />, linkURL: "tests/sequence" },
@@ -31,12 +32,16 @@ export default function SideBar({
     setGameCallback(game);
   };
 
+  const { checkUserStatus } = useUserInfo();
+
   function deleteCookie(name: string) {
     const cookieString = `${name}=; expires=${new Date(
       0
     ).toUTCString()}; path="/";`;
     document.cookie = cookieString;
     setShowLogoutButton(false);
+    sessionStorage.removeItem("user");
+    checkUserStatus();
   }
   return (
     <div>
