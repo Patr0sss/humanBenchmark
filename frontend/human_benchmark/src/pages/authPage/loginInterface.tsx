@@ -56,15 +56,15 @@ export default function LoginInterface() {
               <div className="grid items-center justify-center grid-rows-2 mx-auto my-8 text-white xsm:gap-8 xsm:flex">
                 <div className="outline outline-1 outline-[#383439] sm:w-[40%] flex rounded-2xl items-center justify-center cursor-pointer hover:scale-110 hover:ease-in-out hover:duration-300 transform transition my-4 md:my-0">
                   <FcGoogle className="flex" size={40} />
-                  <h1 className="my-4 text-lg font-bold xs:p-4 sm:my-0">
-                    Log in with Google
+                  <h1 className="py-3 my-4 text-lg font-bold xs:p-4 sm:my-0">
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Log in with Google</a>
                   </h1>
                 </div>
                 <div className="outline outline-1 outline-[#383439] sm:w-[40%] flex rounded-2xl items-center justify-center cursor-pointer hover:scale-110 hover:ease-in-out hover:duration-300 transform transition my-2 md:my-0">
-                  <IoLogoApple className="flex " size={40} />
-                  <h1 className="my-4 text-lg font-bold xs:p-4 sm:my-0">
-                    Log in with Apple
-                  </h1>
+                    <IoLogoApple className="flex " size={40} />
+                    <h1 className="py-3 my-4 text-lg font-bold xs:p-4 sm:my-0">
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Log in with Apple</a>
+                    </h1>
                 </div>
               </div>
               <div className="mx-8 mb-2 text-white">
@@ -100,6 +100,16 @@ export default function LoginInterface() {
                   type="password"
                 />
               </div>
+              <div className="flex justify-center">
+                <span className="flex text-2xl text-white">
+                Don't have an account? &#8203;
+                  <Link to="/auth">
+                    <h1 className=" text-[#7632cc] text-2xl font-bold cursor-pointer hover:border-b-2 hover:border-[#7632cc] hover:font-bold">
+                      Sign Up
+                    </h1>
+                  </Link>
+                </span>
+              </div>
               <div className="my-6">
                 <motion.button
                   onClick={() =>
@@ -113,7 +123,7 @@ export default function LoginInterface() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.9 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className="bg-gradient-to-br input from-[#4a47d7] to-[#7632cc] p-4 font-medium text-2xl text-white rounded-xl w-[60%]"
+                  className="bg-gradient-to-br input from-[#4a47d7] to-[#7632cc] p-4 font-medium text-2xl text-white rounded-xl w-[60%] border-[#783dcb]"
                 >
                   Login
                 </motion.button>
