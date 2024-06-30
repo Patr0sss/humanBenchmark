@@ -2,6 +2,8 @@ import {useState, useEffect, useRef} from "react";
 import { gameContainerVariants } from "../../assets/animationVariants";
 import styles from './speedClicker.module.css';
 import { motion } from "framer-motion";
+import axios from "axios";
+import Ripple from './Ripple.tsx'
 
 export default function speedClicker() {
    const [clickerValue, setClickerValue] = useState<number>(0);
@@ -36,8 +38,30 @@ export default function speedClicker() {
       setGameOver(false);
       setIsGameLoaded(false);
     }
-    const onClickSaveScore = () => {
-
+    const onClickSaveScore = async () => {
+      try {
+        const res = await axios.post(
+          "http://127.0.0.1:5000/clicker",
+          {
+            id: "chuj",
+            clicks_per_second: clicksPerSecond ,
+            clicks: clickerValue,
+            time: initialTime,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(res);
+        if (res.status === 200) {
+          console.log("Działa");
+          console.log(res)
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     
@@ -45,7 +69,7 @@ export default function speedClicker() {
     if (startTime != null && now != null) {
       secondsPassed = (now - startTime) / 1000;
     }
-    
+    let clicksPerSecond = (clickerValue/secondsPassed).toFixed(3);
 
     useEffect(() => {
       if (isGameOnValue && secondsPassed >= initialTime) {
@@ -80,7 +104,7 @@ export default function speedClicker() {
                     </div>
                     <div className={styles.clicksBlock}>
                       <p>Click/s</p>
-                      {clickerValue > 0 ? (clickerValue/secondsPassed).toFixed(3) : (<></>)}
+                      {clickerValue > 0 ? clicksPerSecond : (<></>)}
                     </div>
                     <div className={styles.clickBlock}>
                       <p>Click</p>
@@ -88,7 +112,11 @@ export default function speedClicker() {
                     </div>
                 </div>
                 <div className={styles.buttonBlock}>{isGameOnValue && !isGameOver ? ( 
-                  <button disabled={ secondsPassed >= initialTime } onClick={onClickGame}>  </button>
+                  <button disabled={ secondsPassed >= initialTime } onClick={onClickGame} style={{
+                    position: 'relative',
+                    overflow: 'hidden',
+                    isolation: 'isolate',
+                  }}> <Ripple></Ripple> </button>
                 
                 ) : isGameOver ? (
                   <>
