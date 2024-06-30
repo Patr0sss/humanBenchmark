@@ -8,7 +8,7 @@ import { TiArrowBack } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { useUserInfo } from "../../contexts/UserContext";
 
-export default function AnimatedBackground() {
+export default function LoginInterface() {
   const mousePosition = useMousePosition();
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function AnimatedBackground() {
                   Username
                 </span>
                 <input
-                  className="outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2"
+                  className="outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 hover:cursor-[url('\background.jpg')]"
                   placeholder="Username"
                   name="username"
                   onChange={(e) =>
@@ -113,7 +113,7 @@ export default function AnimatedBackground() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.9 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className="bg-gradient-to-br from-[#4a47d7] to-[#7632cc] p-4 font-medium text-2xl text-white rounded-xl w-[60%]"
+                  className="bg-gradient-to-br input from-[#4a47d7] to-[#7632cc] p-4 font-medium text-2xl text-white rounded-xl w-[60%]"
                 >
                   Login
                 </motion.button>

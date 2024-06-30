@@ -1,4 +1,4 @@
-import ImageEditor from "./animatedBackground";
+import ImageEditor from "./loginInterface";
 
 const LoginPage = () => {
   
