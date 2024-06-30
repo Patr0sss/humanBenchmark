@@ -116,6 +116,7 @@ export default function UserDashboardPage() {
     getGraphsData("tzwctr", "TZWCTR(CH)", "time");
     getGraphsData("sequence-memory", "Sequence", "score");
     getGraphsData("aim-trainer", "Aim-Trainer", "average_time");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const lineData = {
@@ -144,6 +145,7 @@ export default function UserDashboardPage() {
       ],
     };
     setChartData(updatedLineData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGame, ScoresForEachGame]);
 
   const getCurrentGame = (game: string) => {
