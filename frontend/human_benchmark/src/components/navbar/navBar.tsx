@@ -3,7 +3,7 @@ import styles from "./navBar.module.css";
 import { useUserInfo } from "../../contexts/UserContext";
 
 export default function NavBar() {
-  const { isUserAuthenticated } = useUserInfo();
+  const { isUserAuthenticated, userInfo } = useUserInfo();
 
   return (
     <nav className={styles.navBar}>
@@ -12,11 +12,11 @@ export default function NavBar() {
       </Link>
       <div>
         {isUserAuthenticated ? (
-          <Link to="/profile">Profile</Link>
+          <Link to="/profile">{userInfo.username}</Link>
         ) : (
           <Link to="/auth">Register</Link>
         )}
-        <Link to="/login"> Login</Link>
+        {/* <Link to="/login"> Login</Link> */}
       </div>
     </nav>
   );

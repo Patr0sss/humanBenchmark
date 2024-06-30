@@ -14,9 +14,6 @@ export default function Treasure({ width = 90 }: { width?: number }) {
         stroke-linejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
-        {" "}
-        <title>011-Treasure</title> <desc>Created with Sketch.</desc>{" "}
-        <defs> </defs>{" "}
         <g
           id="Page-1"
           stroke="none"

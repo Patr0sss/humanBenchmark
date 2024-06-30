@@ -16,7 +16,7 @@ interface UserProvider {
   loginUser: (info: UserProps) => void;
   isUserAuthenticated: boolean;
   checkUserStatus: () => void;
-  //   logoutUser: () => void;
+  logoutUser: () => void;
   //   isLoggedIn: () => boolean;
 }
 
@@ -32,7 +32,7 @@ export const useUserInfo = () => {
 
 export const UserContext = ({ children }: userProviderProps) => {
   const navigate = useNavigate();
-  const [cookiesAuth] = useCookies(["csrftoken"]);
+  const [cookies] = useCookies(["csrftoken"]);
   const [userInfo, setUserInfo] = useState<UserProps>({
     email: "",
     username: "",
@@ -53,10 +53,14 @@ export const UserContext = ({ children }: userProviderProps) => {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true,
         }
       );
 
+      console.log(res.status);
       if (res.status === 200) {
+        // setIsUserAuthenticated(true);
+        console.log(cookies);
         navigate("/");
       }
       console.log(res);
@@ -88,25 +92,56 @@ export const UserContext = ({ children }: userProviderProps) => {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true,
         }
       );
-      console.log(res);
       if (res.status === 200) {
-        // setIsUserAuthenticated(true);
+        // sessionStorage.setItem("user", res.data.user.id);
+        // sessionStorage.setItem("user", {id: res.data.user.id, username : res.data.user.username});
+        const userObject = {
+          id: res.data.user._id,
+          username: res.data.user.username,
+          email: res.data.user.email,
+        };
+        sessionStorage.setItem("user", JSON.stringify(userObject));
+        // console.log(res.data.user);
+        document.cookie = `csrftoken=${res.data.user.token}`;
+        // setUserInfo({
+        //   email: res.data.user.email,
+        //   username: res.data.user.username,
+        //   password: "",
+        // });
         navigate("/");
-        console.log("zalogowano pomyślnie !");
         console.log(res);
+        console.log("zalogowano pomyślnie !");
+        console.log("ciastko : ", cookies.csrftoken);
+        console.log("ciastkaaaa : ", document.cookie);
       }
     } catch (err) {
       console.log(err);
+      console.log(cookies);
     }
   };
 
   const checkUserStatus = () => {
-    if (cookiesAuth) {
+    const userStringified = sessionStorage.getItem("user");
+
+    if (cookies.csrftoken && userStringified) {
       setIsUserAuthenticated(true);
+      const user = JSON.parse(userStringified);
+      setUserInfo({
+        email: user.email,
+        username: user.username,
+        password: "",
+      });
+    } else {
+      setIsUserAuthenticated(false);
+      sessionStorage.removeItem("user");
     }
+    // console.log(cookies.csrftoken);
   };
+
+  const logoutUser = () => {};
 
   return (
     <UserProvider.Provider
@@ -117,6 +152,7 @@ export const UserContext = ({ children }: userProviderProps) => {
         handleUserInfoFill,
         isUserAuthenticated,
         checkUserStatus,
+        logoutUser,
       }}
     >
       {children}

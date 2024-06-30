@@ -24,11 +24,24 @@ export default function SideBar({
   setGameCallback: (game: string) => void;
 }) {
   const [currentGame, setCurrentGame] = useState("Aim Trainer");
+  const [showLogoutButton, setShowLogoutButton] = useState(false);
+  console.log("ciastkaaaa222 : ", document.cookie);
 
   const handleGameBarClick = (game: string) => {
     setCurrentGame(game);
     setGameCallback(game);
   };
+
+  function deleteCookie(name: string) {
+    const cookieString = `${name}=; expires=${new Date(
+      0
+    ).toUTCString()}; path="/";`;
+    // if (domain) {
+    //     cookieString += ` domain=${domain};`;
+    // }
+    document.cookie = cookieString;
+    setShowLogoutButton(false);
+  }
   return (
     <div>
       <motion.div
@@ -51,8 +64,23 @@ export default function SideBar({
             </div>
           ))}
         </div>
-        <div className={styles.optionsCOG}>
-          <Cog width={45} />
+        <div className={styles.cogBox}>
+          <div
+            className={styles.optionsCOG}
+            onClick={() => setShowLogoutButton((prev) => !prev)}
+          >
+            <Cog width={45} />
+          </div>
+          {showLogoutButton ? (
+            <div className={styles.logoutButtonBox}>
+              <div
+                className={styles.logout}
+                onClick={() => deleteCookie("csrftoken")}
+              >
+                LOGOUT
+              </div>
+            </div>
+          ) : null}
         </div>
       </motion.div>
     </div>

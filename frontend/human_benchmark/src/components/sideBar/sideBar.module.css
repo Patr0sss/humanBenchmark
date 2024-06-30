@@ -72,6 +72,30 @@
 .optionsCOG:hover {
   scale: 1.2;
 }
+
+.cogBox {
+  position: relative;
+}
+
+.logoutButtonBox {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
+  width: 150px;
+  color: red;
+  background: rgb(14, 12, 12);
+  border-radius: 0px 10px 10px 0px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logout:hover {
+  /* color: rgb(238, 78, 78); */
+  scale: 1.1;
+}
+
 @media (max-width: 1200px) {
   .sideBar {
     height: 60px;

@@ -22,8 +22,9 @@ function App() {
   useEffect(() => {
     checkUserStatus();
   }, [cookies]);
+
   return (
-    <div>
+    <div onClick={() => console.log(isUserAuthenticated)}>
       {location.pathname !== "/auth" && location.pathname !== "/login" ? (
         <NavBar />
       ) : null}
@@ -42,7 +43,16 @@ function App() {
           path="/login"
           element={isUserAuthenticated ? <Navigate to="/" /> : <LoginPage />}
         />
-        <Route path="/profile" element={<UserDashboardPage />} />
+        <Route
+          path="/profile"
+          element={
+            isUserAuthenticated ? (
+              <UserDashboardPage />
+            ) : (
+              <Navigate to="/auth" />
+            )
+          }
+        />
         <Route path="/tests/aim" element={<AimTrainer />} />
         <Route path="/tests/sequence" element={<SequenceMemory />} />
         <Route path="/tests/memory" element={<MemoryGame />} />
