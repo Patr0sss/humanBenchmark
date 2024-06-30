@@ -159,7 +159,7 @@ class TZWCTR:
         return
     
     "create tzwctr"
-    def create(user_id: str, time: int, level: int):
+    def create(user_id: str, time: float, level: int):
         new_tzwctr= db.tzwctr.insert_one({
             "user_id": user_id,
             "time": time,
