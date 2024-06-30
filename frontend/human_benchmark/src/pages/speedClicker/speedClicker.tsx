@@ -4,6 +4,7 @@ import styles from './speedClicker.module.css';
 import { motion } from "framer-motion";
 import axios from "axios";
 import Ripple from './Ripple.tsx'
+import { useUserInfo } from "../../contexts/UserContext.tsx";
 
 export default function speedClicker() {
    const [clickerValue, setClickerValue] = useState<number>(0);
@@ -14,6 +15,51 @@ export default function speedClicker() {
    const [startTime, setStartTime] = useState<number>();  
    const [isGameLoaded, setIsGameLoaded] = useState<boolean>(false);
    const [initialTime, setInitialTime] = useState<number>(0);
+
+   const { userInfo } = useUserInfo();
+
+   const token = sessionStorage.getItem("token");
+ 
+   const post = async () => {
+     if (token) {
+       try {
+         const res = await axios.post(
+           "http://127.0.0.1:5000/clicker",
+           {
+             id: JSON.stringify(userInfo._id),
+             clicks_per_second: (clickerValue/initialTime).toFixed(3),
+             clicks: clickerValue,
+             time: initialTime, 
+             timestamp: new Date().toISOString(),
+           },
+           {
+             headers: {
+               "Content-Type": "application/json",
+               // Authorization: `${token + "" + token}`,
+               Authorization: JSON.parse(token),
+             },
+             withCredentials: true,
+           }
+         );
+         console.log("Response received");
+         if (res.status === 200) {
+           console.log("Success");
+           console.log(res.data);
+         } else {
+           console.log(`Unexpected status code: ${res.status}`);
+         }
+       } catch (error) {
+         console.error("Error occurred while posting turns:", error);
+       }
+     }
+   };
+ 
+   
+   useEffect(() => {
+     if(isGameOver){
+       post();
+     }
+ }, [isGameOver]);
 
     const onClickInitializeGame = () => {
         setIsGameOnValue(true);
@@ -37,31 +83,6 @@ export default function speedClicker() {
       setClickerValue(0);
       setGameOver(false);
       setIsGameLoaded(false);
-    }
-    const onClickSaveScore = async () => {
-      try {
-        const res = await axios.post(
-          "http://127.0.0.1:5000/clicker",
-          {
-            id: "chuj",
-            clicks_per_second: clicksPerSecond ,
-            clicks: clickerValue,
-            time: initialTime,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log(res);
-        if (res.status === 200) {
-          console.log("Działa");
-          console.log(res)
-        }
-      } catch (err) {
-        console.log(err);
-      }
     }
 
     
@@ -122,7 +143,7 @@ export default function speedClicker() {
                   <>
                   <div className={styles.setBlock}>
                     <div className={styles.buttonBlock}> <button onClick={onClickReset}> Try Again </button></div>
-                    <div className={styles.buttonBlock}><button onClick={onClickSaveScore}> Save Score </button></div>
+                    <div className={styles.buttonBlock}><button> Save Score </button></div>
                   </div>
                   </>
                   ) : (
