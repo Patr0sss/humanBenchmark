@@ -5,6 +5,9 @@ import {
   opacityFadeVariants,
 } from "../../assets/animationVariants";
 import { useEffect, useState } from "react";
+import axios from "axios";
+
+
 
 export default function TypingGame() {
   const typeText =
@@ -18,6 +21,34 @@ export default function TypingGame() {
   const [timerSEC, setTimerSEC] = useState(0);
   const [userStartedTyping, setUserStartedTyping] = useState(false);
   const [isTextProperlyRewrited, setIsTextProperlyRewrited] = useState(false);
+
+  const [data, setData] = useState(null);
+
+
+
+  // data from api
+  useEffect(() => {
+      const fetchData = async () => {
+          const options = {
+              method: 'GET',
+              url: 'https://fake-data3.p.rapidapi.com/fk/texts',
+              params: { _characters: '500' },
+              headers: {
+                  'x-rapidapi-key': `${process.env.X_RAPIDAPI_KEY}`,
+                  'x-rapidapi-host': `${process.env.X_RAPIDAPI_HOST}`
+              }
+          };
+
+          try {
+              const response = await axios.request(options);
+              setData(response.data);
+          } catch (error) {
+              console.error(error);
+          }
+      };
+
+      fetchData();
+  }, []);
 
   useEffect(() => {
     if (userInputText.length === 1) {

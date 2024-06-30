@@ -10,6 +10,7 @@ import {
   } from "../../assets/animationVariants";
 import { motion } from "framer-motion";
 import "./buttons.css"
+import axios from 'axios';
 
 interface CardImage {
     src: string;
@@ -79,6 +80,34 @@ export default function MemoryGame() {
             .sort(() => Math.random() - 0.5) 
             .map((card) => ({ ...card, id: Math.random(),matched:false })); 
         setCards(twoShuffledCards);
+    };
+
+    const postTurns = async () => {
+        try {
+            const res = await axios.post(
+                'http://127.0.0.1:5000/memory-game', 
+                {
+                    id: user_id,
+                    score: score,
+                    level: level,
+                    timestamp: new Date().toISOString() 
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }
+            ); 
+            console.log("Response received");
+            if(res.status === 200){
+                console.log("Success");
+                console.log(res.data);  
+            } else {
+                console.log(`Unexpected status code: ${res.status}`);
+            }
+        } catch (error) {
+            console.error("Error occurred while posting turns:", error);
+        }
     };
 
 
