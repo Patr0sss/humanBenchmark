@@ -7,6 +7,7 @@ interface UserProps {
   email: string;
   username: string;
   password: string;
+  _id: string;
 }
 
 interface UserProvider {
@@ -36,6 +37,7 @@ export const UserContext = ({ children }: userProviderProps) => {
     email: "",
     username: "",
     password: "",
+    _id: "",
   });
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
@@ -114,6 +116,7 @@ export const UserContext = ({ children }: userProviderProps) => {
         email: user.email,
         username: user.username,
         password: "",
+        _id: user._id,
       });
     } else {
       setIsUserAuthenticated(false);

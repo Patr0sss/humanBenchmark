@@ -8,7 +8,7 @@ from .models import AimTrainers, MemoryGame, SequenceMemory, Typing, Clicker, Pl
 from .auth_middleware import token_required
 
 game = Blueprint('game', __name__)
-CORS(game, origins="http://localhost:5173", methods=["GET", "POST"])
+CORS(game, supports_credentials=True,origins="http://localhost:5173", methods=["GET", "POST"])
 
 @game.route('/aim-trainer', methods=['POST'])
 @token_required
