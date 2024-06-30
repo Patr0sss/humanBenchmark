@@ -4,7 +4,7 @@ from flask_cors import CORS
 from . import db
 #import jwt, os
 
-from .models import AimTrainers, MemoryGame, SequenceMemory, Typing, Clicker, Placeholder
+from .models import AimTrainers, MemoryGame, SequenceMemory, Typing, Clicker, Placeholder, TZWCTR
 from .auth_middleware import token_required
 
 game = Blueprint('game', __name__)
@@ -191,6 +191,43 @@ def get_clicker(current_user):
     except Exception as e:
         return jsonify({
             "message": "Failed to retrieve clicker data",
+            "error": str(e),
+            "data": None
+        }), 500
+
+@game.route('/tzwctr', methods=['POST'])
+@token_required
+def tzwctr(current_user):
+    try:
+        data = request.get_json()
+
+        if not data['time'] or not data['level']:
+            return jsonify({'message': 'Invalid data provided'}), 400
+        
+        add_data = TZWCTR.create(current_user["_id"], data['time'], data['level'])
+
+        if not add_data:
+            return jsonify({'message': 'Failed to add tzwctr data'}), 500
+        
+        return jsonify({'message': 'Tzwctr data added successfully'}), 200
+    except Exception as e:
+        return jsonify({
+            "message": "Failed to add tzwctr data",
+            "error": str(e)
+        }), 500
+
+@game.route('/tzwctr', methods=['GET'])
+@token_required
+def get_tzwctr(current_user):
+    try:
+        tzwctrs = TZWCTR.get_by_user_id(current_user["_id"])
+        return jsonify({
+            'message': 'TZWCTR data retrieved successfully',
+            'data': tzwctrs
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "message": "Failed to retrieve tzwctr data",
             "error": str(e),
             "data": None
         }), 500
