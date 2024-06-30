@@ -102,7 +102,8 @@ export const UserContext = ({ children }: userProviderProps) => {
           email: res.data.user.email,
         };
         sessionStorage.setItem("user", JSON.stringify(userObject));
-        document.cookie = `csrftoken=${res.data.user.token}`;
+        console.log(res.data.user);
+        document.cookie = `csrftoken=${res.data.user.csrftoken}`;
 
         navigate("/");
         console.log(res);
