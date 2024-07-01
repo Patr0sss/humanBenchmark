@@ -1,14 +1,16 @@
 .sideBar {
-  /* width: 350px; */
+  position: fixed;
+  left: 50px;
+  top: 6vh;
   height: calc(100vh - 60px);
+  min-height: 600px;
   height: 80vh;
   margin-top: 6vh;
   width: 70px;
-  margin-left: 50px;
+  /* margin-left: 50px; */
   border-radius: 1000px;
   background-color: #1a1717;
   background-color: #0e0c0c;
-  /* border-top: 2px solid white; */
   gap: 15px;
   display: flex;
   flex-direction: column;
@@ -92,21 +94,28 @@
   justify-content: center;
 }
 .logout:hover {
-  /* color: rgb(238, 78, 78); */
   scale: 1.1;
 }
 
 @media (max-width: 1200px) {
   .sideBar {
     height: 60px;
+    min-height: 60px;
     width: 80vw;
+    left: 10vw;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color: red;
+    /* background-color: red; */
     padding: 0px;
     /* overflow: auto; */
     /* margin: 0px; */
+  }
+
+  .gamePart {
+    flex-direction: row;
+    width: 85%;
+    padding-left: 5%;
   }
 
   .gameBar {
@@ -115,5 +124,13 @@
     padding: 0px;
     padding-left: 8px;
     overflow: visible;
+  }
+  .gameBar:hover {
+    width: 200px;
+  }
+  .logoutButtonBox {
+    left: -160px;
+    border-radius: 10px;
+    background-color: white;
   }
 }

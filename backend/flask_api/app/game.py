@@ -4,7 +4,9 @@ from flask_cors import CORS
 from . import db
 #import jwt, os
 
-from .models import AimTrainers, MemoryGame, SequenceMemory, Typing, Clicker, Placeholder, TZWCTR
+# from .models import AimTrainers, MemoryGame, SequenceMemory, Typing, Clicker, Placeholder, TZWCTR
+from .models import AimTrainers, MemoryGame, SequenceMemory, Typing, Clicker,  TZWCTR
+
 from .auth_middleware import token_required
 
 game = Blueprint('game', __name__)
@@ -233,42 +235,42 @@ def get_tzwctr(current_user):
             "data": None
         }), 500
 
-@game.route('/placeholder', methods=['POST'])
-@token_required
-def placeholder(current_user):
-    try:
-        data = request.get_json()
+# @game.route('/placeholder', methods=['POST'])
+# @token_required
+# def placeholder(current_user):
+#     try:
+#         data = request.get_json()
 
-        if not data['score']:
-            return jsonify({'message': 'Invalid data provided'}), 400
+#         if not data['score']:
+#             return jsonify({'message': 'Invalid data provided'}), 400
         
-        add_data = Placeholder.create(current_user["_id"], data['score'])
+#         add_data = Placeholder.create(current_user["_id"], data['score'])
 
-        if not add_data:
-            return jsonify({'message': 'Failed to add placeholder data'}), 500
+#         if not add_data:
+#             return jsonify({'message': 'Failed to add placeholder data'}), 500
         
-        return jsonify({'message': 'Placeholder data added successfully'}), 200
-    except Exception as e:
-        return jsonify({
-            "message": "Failed to add placeholder data",
-            "error": str(e)
-        }), 500
+#         return jsonify({'message': 'Placeholder data added successfully'}), 200
+#     except Exception as e:
+#         return jsonify({
+#             "message": "Failed to add placeholder data",
+#             "error": str(e)
+#         }), 500
     
-@game.route('/placeholder', methods=['GET', 'POST'])
-@token_required
-def get_placeholder(current_user):
-    try:
-        placeholders = Placeholder.get_by_user_id(current_user["_id"])
-        return jsonify({
-            'message': 'Placeholder data retrieved successfully',
-            'data': placeholders
-        }), 200
-    except Exception as e:
-        return jsonify({
-            "message": "Failed to retrieve placeholder data",
-            "error": str(e),
-            "data": None
-        }), 500
+# @game.route('/placeholder', methods=['GET', 'POST'])
+# @token_required
+# def get_placeholder(current_user):
+#     try:
+#         placeholders = Placeholder.get_by_user_id(current_user["_id"])
+#         return jsonify({
+#             'message': 'Placeholder data retrieved successfully',
+#             'data': placeholders
+#         }), 200
+#     except Exception as e:
+#         return jsonify({
+#             "message": "Failed to retrieve placeholder data",
+#             "error": str(e),
+#             "data": None
+#         }), 500
 
 @game.errorhandler(404)
 def endpoint_not_found(e):
@@ -302,8 +304,8 @@ def get_top_ten(current_user):
             top_ten = Typing.get_top_ten_typing(current_user["_id"])
         elif name_of_game == "clicker":
             top_ten = Clicker.get_top_ten_clicker(current_user["_id"])
-        elif name_of_game == "placeholder":
-            top_ten = Placeholder.get_top_ten_placeholder(current_user["_id"])
+        # elif name_of_game == "placeholder":
+        #     top_ten = Placeholder.get_top_ten_placeholder(current_user["_id"])
         elif name_of_game == "tzwctr":
             top_ten = TZWCTR.get_top_ten_tzwctr(current_user["_id"])
         return jsonify({

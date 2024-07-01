@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { opacityFadeVariants3 } from "../../assets/animationVariants";
 import axios from "axios";
+import TopTenRanking from "../../components/topTenRanking/topTenRanking";
 
 ChartJS.register(
   CategoryScale,
@@ -87,13 +88,13 @@ export default function UserDashboardPage() {
             withCredentials: true,
           }
         );
-        console.log(gameNameBackend);
-        console.log(res.data);
+        // console.log(gameNameBackend);
+        // console.log(res.data);
         const scores: number[] = res.data.data.map(
           (item: GameData) => item[scoreName as keyof GameData]
         );
 
-        console.log(gameNameFrontend + " : " + scores);
+        // console.log(gameNameFrontend + " : " + scores);
 
         setScoresForEachGame((prevScores) => ({
           ...prevScores,
@@ -164,9 +165,11 @@ export default function UserDashboardPage() {
         >
           <Line options={chartOptions} data={chartData} />
           <div>
+            Your Results In{" "}
             {currentGame === "Aim-Trainer" ? "Aim Trainer" : currentGame}
           </div>
         </motion.div>
+        <TopTenRanking currentGame={currentGame} />
       </div>
     </div>
   );
