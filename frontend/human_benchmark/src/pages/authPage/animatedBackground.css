@@ -29,3 +29,7 @@
     black 150px
   );
 }
+
+.input:hover{
+  cursor: url("rocket_input.png"),auto;
+}

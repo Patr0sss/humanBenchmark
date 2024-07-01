@@ -61,11 +61,11 @@ export default function MemoryGame() {
   });
 
   const [levelColorMap] = useState<LevelColorMap>({
-    4: "text-green-400",
-    6: "text-green-600",
-    9: "text-orange-600",
-    12: "text-red-400",
-    18: "text-red-600",
+    4: "text-[#7fff00]",
+    6: "text-[#00ff02]",
+    9: "text-[#ffff00]",
+    12: "text-[#ff7e04]",
+    18: "text-[#fe0000]",
   });
 
   const shuffleCards = (numberOfCards: number): void => {
@@ -228,13 +228,13 @@ export default function MemoryGame() {
       ) : (
         <>
           <div className={`mt-[60px] text-3xl p-4 ${levelClass} uppercase`}>
-            Level: {levelName}
+            {levelName}
           </div>
-          <div className="left-0 right-0 flex my-[5px] absolute bottom-0">
+          <div className="absolute bottom-0 left-0 right-0 flex">
             <h1
               className={`mx-auto ${
-                !isGameLoaded ? "hidden" : "visible"
-              } bg-[#783dcb] p-2 rounded-xl`}
+                !isGameLoaded || isGameWon ? "hidden" : "visible"
+              } bg-[#783dcb] p-2 rounded-xl mb-2`}
             >
               TURNS: {turns}
             </h1>
@@ -243,7 +243,7 @@ export default function MemoryGame() {
       )}
 
       <div
-        className={`${bgColor} w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center`}
+        className={`${bgColor} w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center shadow-[#1c1c1c] shadow-[0_0_12px_3px]`}
       >
         {isGameWon ? (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
@@ -260,7 +260,7 @@ export default function MemoryGame() {
                 turns
               </div>
               <button
-                className="items-center justify-center mx-auto my-4 bg-[#131010] text-[#783dcb] border-4 border-[#783dcb] text-xl font-bold mt-8 "
+                className="items-center justify-center mx-auto bg-[#131010] text-white border-[#783dcb] border-2 mt-8 max-w-[250px] text-[2rem] rounded-[10px] p-[6px] font-bold hover:bg-[#9d67e7] hover:border-[#783dcb] hover:scale-110 hover:ease-in-out hover:duration-300 ease-in-out duration-300"
                 onClick={handleGameMenu}
               >
                 Try again

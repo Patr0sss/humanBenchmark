@@ -50,7 +50,6 @@ export default function SequenceMemory() {
           {
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `${token + "" + token}`,
               Authorization: JSON.parse(token),
             },
             withCredentials: true,
@@ -74,8 +73,10 @@ export default function SequenceMemory() {
   };
 
   const userSectionAppend = (num: number) => {
-    if (sequence.length > 0 && !isAnimating) {
-      setUserSequence(() => [...userSequence, num]);
+    if (!isAnimating) {
+      if (sequence.length > 0 && !isAnimating) {
+        setUserSequence(() => [...userSequence, num]);
+      }
     }
   };
 
@@ -88,24 +89,22 @@ export default function SequenceMemory() {
   };
 
   const animateNewSequence = () => {
+    setIsAnimating(true);
+
     setUserSequence([]);
     setIsButtonVisible(false);
     const newSequence = generateRandomArray(roundCount);
     setSequence(newSequence);
     let index = 0;
-    // setRindex(0);
-    setIsAnimating(true);
 
     const interval = setInterval(() => {
       if (index === newSequence.length) {
-        // if (rIndex === newSequence.length) {
         clearInterval(interval);
         setRoundCount(roundCount + 1);
         return;
       }
 
       const currentNumber = newSequence[index];
-      // const currentNumber = newSequence[rIndex];
 
       setGridObjects((prevGridObjects) =>
         prevGridObjects.map((tile, index) =>
@@ -127,7 +126,7 @@ export default function SequenceMemory() {
 
     setTimeout(() => {
       setIsAnimating(false);
-    }, newSequence.length * animateIntervalTimeMS);
+    }, (newSequence.length + 1) * animateIntervalTimeMS);
   };
 
   const handlePlayAgainButton = () => {
@@ -137,10 +136,10 @@ export default function SequenceMemory() {
   };
 
   useEffect(() => {
-    if(userLost){
+    if (userLost) {
       post();
     }
-}, [userLost]);
+  }, [userLost]);
 
   useEffect(() => {
     if (
@@ -210,6 +209,9 @@ export default function SequenceMemory() {
         className={userLost ? styles.gameContainerLost : styles.gameContainer}
         ref={gameBoardRef}
       >
+        {isAnimating || sequence.length === 0 ? (
+          <div className={styles.blockStupidUserFromBreakingMyGame}></div>
+        ) : null}
         {userLost ? (
           <motion.div
             variants={opacityFadeVariants2}
@@ -236,6 +238,7 @@ export default function SequenceMemory() {
                 key={index.toString()}
                 onClick={() => userSectionAppend(tile.value)}
                 style={{ backgroundColor: tile.color }}
+                // style={{ backgroundColor: isAnimating ? "red" : "green" }}
               ></div>
             ))}
             <div></div>

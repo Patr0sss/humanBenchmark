@@ -83,7 +83,7 @@ const FindGame = () => {
             Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000
         );
         const items = randomNumbers.map((num, idx) => (
-            <div key={idx} className="p-2 text-lg text-white bg-black hover:bg-[#783dcb] cursor-pointer" onClick={handleClick(num)}>
+            <div key={idx} className="p-3 text-lg text-white bg-black hover:bg-[#783dcb] cursor-pointer" onClick={handleClick(num)}>
                 {num}
             </div>
         ));
@@ -292,20 +292,20 @@ const FindGame = () => {
                 :
                 <div className='mt-[60px] text-3xl p-4'>FIND GAME - {totalRounds} rounds</div>
             }
-            <div className={`${bgColor} w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center`}>
+            <div className={`${bgColor} w-[80%] h-[80%] mx-auto rounded-[10px] relative mb-[5%] border-2 border-[#783dcb] flex justify-center items-center shadow-[#1c1c1c] shadow-[0_0_12px_3px]`}>
                 {isGameLoaded && !isGameWon && (isBoard ?
                     <>
-                        <div className="absolute top-0">
-                            <h1 className="py-1">{numberOfRounds}/{totalRounds}</h1>
-                            <h1 className="py-2">FIND AND REMEMBER NUMBERS</h1>
-                            <h1 className="text-2xl font-bold ">{savedNumber}</h1>
+                        <div className="absolute top-0 mt-[10px]">
+                            <h1 className="py-1 text-2xl">{numberOfRounds}/{totalRounds}</h1>
+                            <h1 className="py-2 text-2xl">FIND AND REMEMBER NUMBERS</h1>
+                            <h1 className="text-2xl font-bold">{savedNumber}</h1>
                         </div>
-                        <div className="grid grid-cols-5 grid-rows-6 gap-6">
+                        <div className="grid grid-cols-5 grid-rows-6 gap-6 mt-[10%]">
                             {gridItems}
                         </div>
                         {!isStarted &&
                             <div className="absolute bottom-[35%]">
-                                <h1 className="font-bold hover:bg-[#783dcb] border-2 border-[#783dcb] rounded-xl cursor-pointer w-[400px] h-[150px] flex items-center justify-center" onClick={handleStart}>START</h1>
+                                <h1 className="font-bold hover:bg-[#783dcb] border-2 border-[#783dcb] rounded-xl cursor-pointer w-[400px] h-[150px] flex items-center justify-center ease-in-out duration-300 hover:ease-in-out hover:duration-300 hover:scale-110" onClick={handleStart}>START</h1>
                             </div>
                         }
                         <div className="progress-bar-container">
@@ -357,7 +357,7 @@ const FindGame = () => {
                         <div className='mt-8 text-4xl'>
                             You won in <span className='text-[#783dcb] font-bold relative'>{timeConverter()}</span>
                         </div>
-                        <button className='items-center justify-center mx-auto my-4 bg-[#131010] text-[#783dcb] border-4 border-[#783dcb] text-xl font-bold mt-8 ' onClick={handleGameMenu}>Try again</button>
+                        <button className="items-center justify-center mx-auto bg-[#131010] text-white border-[#783dcb] border-2 mt-8 max-w-[250px] text-[2rem] rounded-[10px] p-[6px] font-bold hover:bg-[#9d67e7] hover:border-[#783dcb] hover:scale-110 hover:ease-in-out hover:duration-300 ease-in-out duration-300" onClick={handleGameMenu}>Try again</button>
                     </div>
                 </div>
                 :

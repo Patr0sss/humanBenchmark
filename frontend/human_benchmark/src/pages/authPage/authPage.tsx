@@ -3,9 +3,56 @@ import { FcGoogle } from "react-icons/fc";
 import { IoLogoApple } from "react-icons/io";
 import { motion } from "framer-motion";
 import { useUserInfo } from "../../contexts/UserContext";
+import { useState } from "react";
 
 export default function AuthPage() {
   const { registerUser, userInfo, handleUserInfoFill } = useUserInfo();
+  const [isEmailCorrect, setIsEmailCorrect] = useState(false);
+  const [isUsernameCorrect, setIsUsernameCorrect] = useState(false);
+  const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
+  const [isRegisterClicked, setIsRegisterClicked] = useState(false);
+
+  interface UserProps {
+    email: string;
+    username: string;
+    password: string;
+    _id: string;
+  }
+
+  const validateEmail = (email: string): boolean => {
+    const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return pattern.test(email) && email.length >= 6;
+  };
+
+  const validateUsername = (username: string): boolean => {
+    const pattern = /^[a-zA-Z0-9_]{3,32}$/;
+    return pattern.test(username);
+  };
+
+  const validatePassword = (password: string): boolean => {
+    const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return pattern.test(password);
+  };
+
+  const handleRegister = (info: UserProps) => {
+    setIsRegisterClicked(true);
+    const { email, username, password } = info;
+
+    const isEmailValid = validateEmail(email);
+    const isUsernameValid = validateUsername(username);
+    const isPasswordValid = validatePassword(password);
+
+    setIsEmailCorrect(isEmailValid);
+    setIsUsernameCorrect(isUsernameValid);
+    setIsPasswordCorrect(isPasswordValid);
+    console.log(isEmailValid)
+    console.log(isUsernameValid)
+    console.log(isPasswordValid)
+
+    if (isEmailValid && isUsernameValid && isPasswordValid) {
+      registerUser(info); 
+    }
+  };
 
   return (
     <div className="w-screen min-h-screen bg-[#201d22] py-[3%]">
@@ -18,18 +65,6 @@ export default function AuthPage() {
                 "url('https://images.unsplash.com/photo-1573511860302-28c524319d2a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
             }}
           ></div>
-          <div className="z-10 w-full ">
-            <ul className="py-2 ">
-              <li>
-                <Link
-                  className="font-bold text-white cursor-pointer hover:text-black"
-                  to="/"
-                >
-                  Home
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
 
         <div className="relative p-4 m-4 rounded-lg md:grid-rows-5 md:grid">
@@ -64,12 +99,24 @@ export default function AuthPage() {
                 Email address
               </span>
               <input
-                className="outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2"
+                className={`outline outline-1 rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 ${isRegisterClicked ? (isEmailCorrect ? "outline-[#00ff00]" : "outline-[#ff0000]") : "outline-[#383439]"}`}
                 placeholder="Email"
                 name="email"
                 onChange={handleUserInfoFill}
                 type="email"
+                
               />
+              {isRegisterClicked ? (!isEmailCorrect ?
+                <div className="text-left text-red-600">
+                  6+ characters<br />
+                  Alphanumeric, dots (.), underscores (_), hyphens (-)<br />
+                  Must have "@" followed by a valid domain<br />
+                </div>
+                :
+                null)
+              :
+                null
+              }
             </div>
             {/* username */}
             <div className="w-full mb-2 text-white">
@@ -77,11 +124,21 @@ export default function AuthPage() {
                 Username
               </span>
               <input
-                className="outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2"
+                className={`outline outline-1 rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 ${isRegisterClicked ? (isUsernameCorrect ? "outline-[#00ff00]" : "outline-[#ff0000]") : "outline-[#383439]"}`}
                 placeholder="Username"
                 name="username"
                 onChange={handleUserInfoFill}
               />
+              {isRegisterClicked ? (!isUsernameCorrect ?
+                <div className="text-left text-red-600">
+                  Alphanumeric characters and underscores (_)<br/>
+                  3-20 characters<br/>
+                </div>
+                :
+                null)
+              :
+                null
+              }
             </div>
             {/* Password */}
             <div className="w-full mb-2 text-white">
@@ -89,20 +146,32 @@ export default function AuthPage() {
                 Password
               </span>
               <input
-                className="outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2"
+                className={`outline outline-1 rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 ${isRegisterClicked ? (isPasswordCorrect ? "outline-[#00ff00]" : "outline-[#ff0000]") : "outline-[#383439]"}`}
                 placeholder="Password"
                 name="password"
                 onChange={handleUserInfoFill}
                 type="password"
               />
+              {isRegisterClicked ? (!isPasswordCorrect ?
+                <div className="text-left text-red-600">
+                  At least 8 characters<br />
+                  Contains at least one alphabetic character<br />
+                  Contains at least one digit<br />
+                  Consists of alphanumeric characters<br />
+                </div>
+                :
+                null)
+              :
+                null
+              }
             </div>
             <div className="my-6">
               <motion.button
-                onClick={() => registerUser(userInfo)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 className="w-full bg-gradient-to-br from-[#4a47d7] to-[#7632cc] p-4 font-medium text-2xl text-white rounded-xl border-[#783dcb]"
+                onClick={() => handleRegister(userInfo)}
               >
                 Register
               </motion.button>
@@ -123,3 +192,5 @@ export default function AuthPage() {
     </div>
   );
 }
+
+
