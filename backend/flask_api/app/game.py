@@ -87,6 +87,7 @@ def get_memory_game(current_user):
 @game.route('/sequence-memory', methods=['POST'])
 @token_required
 def sequence_memory(current_user):
+
     try:
         data = request.get_json()
 
@@ -253,7 +254,7 @@ def placeholder(current_user):
             "error": str(e)
         }), 500
     
-@game.route('/placeholder', methods=['GET'])
+@game.route('/placeholder', methods=['GET', 'POST'])
 @token_required
 def get_placeholder(current_user):
     try:
@@ -276,3 +277,42 @@ def endpoint_not_found(e):
         "error": str(e),
         "data": None
     }), 404
+
+@game.route('/top-ten', methods=['GET'])
+def get_top_ten(current_user):
+    
+    try:
+        name_of_game = request.args.get('name_of_game')
+    except Exception as e:
+        return jsonify({
+            "message": "Failed to retrieve top ten data",
+            "error": str(e),
+            "data": None
+        }), 500
+
+
+    try:
+        if name_of_game == "aim-trainer":
+            top_ten = AimTrainers.get_top_ten_aim(current_user["_id"])
+        elif name_of_game == "memory-game":
+            top_ten = MemoryGame.get_top_ten_memory(current_user["_id"])
+        elif name_of_game == "sequence-memory":
+            top_ten = SequenceMemory.get_top_ten_sequence(current_user["_id"])
+        elif name_of_game == "typing":
+            top_ten = Typing.get_top_ten_typing(current_user["_id"])
+        elif name_of_game == "clicker":
+            top_ten = Clicker.get_top_ten_clicker(current_user["_id"])
+        elif name_of_game == "placeholder":
+            top_ten = Placeholder.get_top_ten_placeholder(current_user["_id"])
+        elif name_of_game == "tzwctr":
+            top_ten = TZWCTR.get_top_ten_tzwctr(current_user["_id"])
+        return jsonify({
+            'message': 'Top ten data retrieved successfully',
+            'data': top_ten
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "message": "Failed to retrieve top ten data",
+            "error": str(e),
+            "data": None
+        }), 500
