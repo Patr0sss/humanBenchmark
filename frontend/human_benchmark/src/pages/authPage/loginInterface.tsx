@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useMousePosition from "./useMousePosition";
 import "./animatedBackground.css";
 import { motion } from "framer-motion";
@@ -6,7 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { IoLogoApple } from "react-icons/io";
 import { TiArrowBack } from "react-icons/ti";
 import { Link } from "react-router-dom";
-import { useUserInfo } from "../../contexts/UserContext";
+import { UserContext, useUserInfo } from "../../contexts/UserContext";
 
 export default function LoginInterface() {
   const mousePosition = useMousePosition();
@@ -25,12 +25,26 @@ export default function LoginInterface() {
     }
   }, [mousePosition]);
 
-  const { loginUser } = useUserInfo();
+  const { loginUser, isAuthenticationCorrect } = useUserInfo();
+
+
 
   const [userLoginCredentials, setUserLoginCredentials] = useState({
     username: "",
     password: "",
   });
+
+  const handleLogin = () =>{
+    loginUser({
+      email: "",
+      username: userLoginCredentials.username,
+      password: userLoginCredentials.password,
+      _id: "",
+    })
+    setIsLoginClicked(true);
+  }
+
+  const [isLoginClicked, setIsLoginClicked] = useState(false);
 
   return (
     <>
@@ -67,6 +81,16 @@ export default function LoginInterface() {
                     </h1>
                 </div>
               </div>
+              {isLoginClicked ? (!isAuthenticationCorrect ? 
+                  <div className="relative">
+                    <h1 className="text-xl font-bold text-red-600 duration-300 ease-in-out">Please provide a valid email address and password</h1>
+                  </div> 
+                  :
+                  null
+                  )
+                :
+                null
+              }
               <div className="mx-8 mb-2 text-white">
                 <span className="flex py-2 text-xl tracking-wider ">
                   Username
@@ -112,14 +136,7 @@ export default function LoginInterface() {
               </div>
               <div className="my-6">
                 <motion.button
-                  onClick={() =>
-                    loginUser({
-                      email: "",
-                      username: userLoginCredentials.username,
-                      password: userLoginCredentials.password,
-                      _id: "",
-                    })
-                  }
+                  onClick={handleLogin}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.9 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}

@@ -45,6 +45,9 @@ export default function AuthPage() {
     setIsEmailCorrect(isEmailValid);
     setIsUsernameCorrect(isUsernameValid);
     setIsPasswordCorrect(isPasswordValid);
+    console.log(isEmailValid)
+    console.log(isUsernameValid)
+    console.log(isPasswordValid)
 
     if (isEmailValid && isUsernameValid && isPasswordValid) {
       registerUser(info); 
@@ -96,7 +99,7 @@ export default function AuthPage() {
                 Email address
               </span>
               <input
-                className={`outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 ${isRegisterClicked ? (isEmailCorrect ? "outline-[#00ff00]" : "outline-[#ff0000]") : null}`}
+                className={`outline outline-1 rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 ${isRegisterClicked ? (isEmailCorrect ? "outline-[#00ff00]" : "outline-[#ff0000]") : "outline-[#383439]"}`}
                 placeholder="Email"
                 name="email"
                 onChange={handleUserInfoFill}
@@ -105,10 +108,9 @@ export default function AuthPage() {
               />
               {isRegisterClicked ? (!isEmailCorrect ?
                 <div className="text-left text-red-600">
-                  At least 6 characters long<br />
-                  Contains only letters, numbers, dots (.), underscores (_), and hyphens (-)<br />
-                  Must include "@" followed by a valid domain<br />
-                  Domain must have at least two letters after a dot<br />
+                  6+ characters<br />
+                  Alphanumeric, dots (.), underscores (_), hyphens (-)<br />
+                  Must have "@" followed by a valid domain<br />
                 </div>
                 :
                 null)
@@ -122,15 +124,15 @@ export default function AuthPage() {
                 Username
               </span>
               <input
-                className={`outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 ${isRegisterClicked ? (isUsernameCorrect ? "outline-[#00ff00]" : "outline-[#ff0000]") : null}`}
+                className={`outline outline-1 rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 ${isRegisterClicked ? (isUsernameCorrect ? "outline-[#00ff00]" : "outline-[#ff0000]") : "outline-[#383439]"}`}
                 placeholder="Username"
                 name="username"
                 onChange={handleUserInfoFill}
               />
               {isRegisterClicked ? (!isUsernameCorrect ?
                 <div className="text-left text-red-600">
-                  A valid username must consist of alphanumeric characters (letters and numbers) and underscores (_)<br/>
-                  It should be between 3 to 20 characters in length<br/>
+                  Alphanumeric characters and underscores (_)<br/>
+                  3-20 characters<br/>
                 </div>
                 :
                 null)
@@ -144,7 +146,7 @@ export default function AuthPage() {
                 Password
               </span>
               <input
-                className={`outline outline-1 outline-[#383439] rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 ${isRegisterClicked ? (isPasswordCorrect ? "outline-[#00ff00]" : "outline-[#ff0000]") : null}`}
+                className={`outline outline-1 rounded-xl w-full py-4 px-2 bg-[#2c282e] text-white focus:outline-[#783dcb] focus:outline-2 ${isRegisterClicked ? (isPasswordCorrect ? "outline-[#00ff00]" : "outline-[#ff0000]") : "outline-[#383439]"}`}
                 placeholder="Password"
                 name="password"
                 onChange={handleUserInfoFill}
@@ -152,10 +154,10 @@ export default function AuthPage() {
               />
               {isRegisterClicked ? (!isPasswordCorrect ?
                 <div className="text-left text-red-600">
-                  Contain at least one alphabetic character<br />
-                  Contain at least one digit<br />
-                  Consist of alphanumeric characters (letters and numbers) only<br />
-                  Be at least 8 characters in length<br />
+                  At least 8 characters<br />
+                  Contains at least one alphabetic character<br />
+                  Contains at least one digit<br />
+                  Consists of alphanumeric characters<br />
                 </div>
                 :
                 null)
@@ -190,7 +192,5 @@ export default function AuthPage() {
     </div>
   );
 }
-function useUserContext(): { useInfo: any; } {
-  throw new Error("Function not implemented.");
-}
+
 

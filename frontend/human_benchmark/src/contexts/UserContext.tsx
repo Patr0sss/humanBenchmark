@@ -16,6 +16,7 @@ interface UserProvider {
   handleUserInfoFill: (e: { target: { name: string; value: string } }) => void;
   loginUser: (info: UserProps) => void;
   isUserAuthenticated: boolean;
+  isAuthenticationCorrect: boolean;
   checkUserStatus: () => void;
   logoutUser: () => void;
 }
@@ -32,6 +33,8 @@ export const useUserInfo = () => {
 
 export const UserContext = ({ children }: userProviderProps) => {
   const navigate = useNavigate();
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [isAuthenticationCorrect, setIsAuthenticationCorrect] = useState(false);
   const [cookies] = useCookies(["csrftoken"]);
   const [userInfo, setUserInfo] = useState<UserProps>({
     email: "",
@@ -39,7 +42,6 @@ export const UserContext = ({ children }: userProviderProps) => {
     password: "",
     _id: "",
   });
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   const registerUser = async (info: UserProps) => {
     try {
@@ -105,9 +107,11 @@ export const UserContext = ({ children }: userProviderProps) => {
         document.cookie = `csrftoken=${res.data.user.csrftoken}`;
         console.log(res.data);
         navigate("/");
+        setIsAuthenticationCorrect(true);
       }
     } catch (err) {
       console.log(err);
+      setIsAuthenticationCorrect(false);
     }
   };
 
@@ -140,6 +144,7 @@ export const UserContext = ({ children }: userProviderProps) => {
         loginUser,
         handleUserInfoFill,
         isUserAuthenticated,
+        isAuthenticationCorrect,
         checkUserStatus,
         logoutUser,
       }}
