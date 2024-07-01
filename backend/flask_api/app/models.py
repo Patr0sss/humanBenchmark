@@ -13,11 +13,13 @@ class AimTrainers:
     
     "create aim trainer"
     def create(user_id: str, accuracy: float , average_time: float):
+        calculated_score = (100 - accuracy) / 10 + average_time
         new_aim_trainer= db.aim_trainer.insert_one({
             "user_id": user_id,
             "accuracy": accuracy,
             "average_time": average_time,
-            "timestamp": datetime.datetime.now()
+            "timestamp": datetime.datetime.now(),
+            "calculated_score": calculated_score
         }).inserted_id
         return new_aim_trainer
     
@@ -49,12 +51,25 @@ class MemoryGame:
         return
     
     "create memory game"
-    def create(user_id: str, score: int, level: int):
+    def create(user_id: str, score: int, level: str):
+        if level == "Very Easy":
+            level_n = 1
+        elif level == "Easy":
+            level_n = 2
+        elif level == "Medium":
+            level_n = 3
+        elif level == "Hard":
+            level_n = 4
+        else:
+            level_n = 5
+
+        calculated_score = 2*score/(level_n^2)
         new_memory_game= db.memory_game.insert_one({
             "user_id": user_id,
             "score": score,
             "level": level,
-            "timestamp": datetime.datetime.now()
+            "timestamp": datetime.datetime.now(),
+            "calculated_score": calculated_score
         }).inserted_id
         return new_memory_game
     
@@ -87,7 +102,8 @@ class SequenceMemory:
         new_sequence_memory= db.sequence_memory.insert_one({
             "user_id": user_id,
             "score": score,
-            "timestamp": datetime.datetime.now()
+            "timestamp": datetime.datetime.now(),
+            "calculated_score" : score
         }).inserted_id
         return new_sequence_memory
     
@@ -120,7 +136,8 @@ class Typing:
         new_typing= db.typing.insert_one({
             "user_id": user_id,
             "score": score,
-            "timestamp": datetime.datetime.now()
+            "timestamp": datetime.datetime.now(),
+            "calculated_score": score
         }).inserted_id
         return new_typing
     
@@ -150,12 +167,24 @@ class Clicker:
     
     "create clicker"
     def create(user_id: str, clicks_per_second: int, clicks: int, time: int):
+        if time == 5:
+            level_n = 1
+        elif time == 10:
+            level_n = 1.1
+        elif time == 15:
+            level_n = 1.2
+        elif time == 20:
+            level_n = 1.3
+        else:
+            level_n = 1.4
+        calculated_score = clicks_per_second * level_n
         new_clicker= db.clicker.insert_one({
             "user_id": user_id,
             "clicks_per_second": clicks_per_second,
             "clicks": clicks,
             "time": time,
-            "timestamp": datetime.datetime.now()
+            "timestamp": datetime.datetime.now(),
+            "calculated_score": calculated_score
         }).inserted_id
         return new_clicker
     
@@ -177,7 +206,8 @@ class Clicker:
             clickers.append(score_of_user)
 
         return clickers
-    
+
+'''  
 "Reaction Time Model"
 class ReactionTime:
     def __init__(self):
@@ -243,6 +273,7 @@ class Placeholder:
             placeholders.append(score_of_user)
 
         return placeholders
+'''
 
 "TZWCTR Model"
 class TZWCTR:
@@ -251,11 +282,15 @@ class TZWCTR:
     
     "create tzwctr"
     def create(user_id: str, time: float, level: int):
+
+        calculated_score = time / level
+
         new_tzwctr= db.tzwctr.insert_one({
             "user_id": user_id,
             "time": time,
             "level": level,
-            "timestamp": datetime.datetime.now()
+            "timestamp": datetime.datetime.now(),
+            "calculated_score": calculated_score
         }).inserted_id
         return new_tzwctr
     
@@ -330,7 +365,7 @@ class Users:
         SequenceMemory().delete_by_user_id(user_id)
         Typing().delete_by_user_id(user_id)
         Clicker().delete_by_user_id(user_id)
-        ReactionTime().delete_by_user_id(user_id)
+        #ReactionTime().delete_by_user_id(user_id)
         
         db.user.delete_one({"_id": bson.objectid.ObjectId(user_id)})
         user= self.get_by_id(user_id)
