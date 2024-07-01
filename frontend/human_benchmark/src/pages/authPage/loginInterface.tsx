@@ -35,13 +35,13 @@ export default function LoginInterface() {
   });
 
   const handleLogin = () =>{
+    setIsLoginClicked(true);
     loginUser({
       email: "",
       username: userLoginCredentials.username,
       password: userLoginCredentials.password,
       _id: "",
     })
-    setIsLoginClicked(true);
   }
 
   const [isLoginClicked, setIsLoginClicked] = useState(false);
@@ -83,7 +83,7 @@ export default function LoginInterface() {
               </div>
               {isLoginClicked ? (!isAuthenticationCorrect ? 
                   <div className="relative">
-                    <h1 className="text-xl font-bold text-red-600 duration-300 ease-in-out">Please provide a valid email address and password</h1>
+                    <h1 className="text-xl font-bold text-red-600 duration-300 ease-in-out">Please provide a valid username and password</h1>
                   </div> 
                   :
                   null
