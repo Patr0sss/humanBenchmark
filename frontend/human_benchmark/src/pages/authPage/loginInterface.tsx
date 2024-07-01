@@ -26,7 +26,7 @@ export default function LoginInterface() {
   }, [mousePosition]);
 
   const { loginUser, isAuthenticationCorrect } = useUserInfo();
-
+  const [isLoginClicked, setIsLoginClicked] = useState(false);
 
 
   const [userLoginCredentials, setUserLoginCredentials] = useState({
@@ -34,17 +34,16 @@ export default function LoginInterface() {
     password: "",
   });
 
-  const handleLogin = () =>{
-    setIsLoginClicked(true);
-    loginUser({
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    await loginUser({
       email: "",
       username: userLoginCredentials.username,
       password: userLoginCredentials.password,
       _id: "",
-    })
-  }
-
-  const [isLoginClicked, setIsLoginClicked] = useState(false);
+    });
+    setIsLoginClicked(true);
+  };
 
   return (
     <>
