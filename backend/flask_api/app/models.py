@@ -29,6 +29,19 @@ class AimTrainers:
             {**aim_trainer, "_id": str(aim_trainer["_id"])} for aim_trainer in aim_trainers # **aim_trainer - rozpakowuje słownik
     ]
         return aim_trainers
+    
+    def get_top_ten_aim(user_id: str):
+        aim_trainers = list(db.aim_trainer.find().sort("average_time", -1).limit(10))
+        user_in_top = any(aim_trainer["user_id"] == user_id for aim_trainer in aim_trainers)
+        
+        if not user_in_top:
+            score_of_user = db.aim_trainer.find({"user_id": user_id}).sort("average_time", -1).limit(1)[0]
+            place_of_user = db.aim_trainer.count_documents({"average_time": {"$gt": score_of_user["average_time"]}}) + 1 # $gt - greater than
+            score_of_user["place"] = place_of_user
+            aim_trainers.append(score_of_user)
+
+        return aim_trainers
+
 
 "Memory Game Model"
 class MemoryGame:
@@ -51,6 +64,19 @@ class MemoryGame:
         memory_games = [{**memory_game, "_id": str(memory_game["_id"])} for memory_game in memory_games]
         return memory_games
     
+    "get top ten memory games"
+    def get_top_ten_memory(user_id: str):
+        memory_games = list(db.memory_game.find().sort("score", -1).limit(10))
+        user_in_top = any(memory_game["user_id"] == user_id for memory_game in memory_games)
+        
+        if not user_in_top:
+            score_of_user = db.memory_game.find({"user_id": user_id}).sort("score", -1).limit(1)[0]
+            place_of_user = db.memory_game.count_documents({"score": {"$gt": score_of_user["score"]}}) + 1
+            score_of_user["place"] = place_of_user
+            memory_games.append(score_of_user)
+
+        return memory_games
+    
 "Sequence Memory Model"
 class SequenceMemory:
     def __init__(self):
@@ -69,6 +95,19 @@ class SequenceMemory:
     def get_by_user_id(user_id: str):
         sequence_memories= db.sequence_memory.find({"user_id": user_id})
         sequence_memories = [{**sequence_memory, "_id": str(sequence_memory["_id"])} for sequence_memory in sequence_memories]
+        return sequence_memories
+    
+    "get top ten sequence memories"
+    def get_top_ten_sequence(user_id: str):
+        sequence_memories = list(db.sequence_memory.find().sort("score", -1).limit(10))
+        user_in_top = any(sequence_memory["user_id"] == user_id for sequence_memory in sequence_memories)
+        
+        if not user_in_top:
+            score_of_user = db.sequence_memory.find({"user_id": user_id}).sort("score", -1).limit(1)[0]
+            place_of_user = db.sequence_memory.count_documents({"score": {"$gt": score_of_user["score"]}}) + 1
+            score_of_user["place"] = place_of_user
+            sequence_memories.append(score_of_user)
+
         return sequence_memories
 
 "Typing Model"
@@ -89,6 +128,19 @@ class Typing:
     def get_by_user_id(user_id: str):
         typings= db.typing.find({"user_id": user_id})
         typings = [{**typing, "_id": str(typing["_id"])} for typing in typings]
+        return typings
+    
+    "get top ten typings"
+    def get_top_ten_typing(user_id: str):
+        typings = list(db.typing.find().sort("score", -1).limit(10))
+        user_in_top = any(typing["user_id"] == user_id for typing in typings)
+        
+        if not user_in_top:
+            score_of_user = db.typing.find({"user_id": user_id}).sort("score", -1).limit(1)[0]
+            place_of_user = db.typing.count_documents({"score": {"$gt": score_of_user["score"]}}) + 1
+            score_of_user["place"] = place_of_user
+            typings.append(score_of_user)
+
         return typings
 
 "Clicker Model"
@@ -113,6 +165,19 @@ class Clicker:
         clickers = [{**clicker, "_id": str(clicker["_id"])} for clicker in clickers]
         return clickers
     
+    "get top ten clickers"
+    def get_top_ten_clicker(user_id: str):
+        clickers = list(db.clicker.find().sort("clicks", -1).limit(10))
+        user_in_top = any(clicker["user_id"] == user_id for clicker in clickers)
+
+        if not user_in_top:
+            score_of_user = db.clicker.find({"user_id": user_id}).sort("clicks", -1).limit(1)[0]
+            place_of_user = db.clicker.count_documents({"clicks": {"$gt": score_of_user["clicks"]}}) + 1
+            score_of_user["place"] = place_of_user
+            clickers.append(score_of_user)
+
+        return clickers
+    
 "Reaction Time Model"
 class ReactionTime:
     def __init__(self):
@@ -131,6 +196,19 @@ class ReactionTime:
     def get_by_user_id( user_id: str):
         reaction_times= db.reaction_time.find({"user_id": user_id})
         reaction_times = [{**reaction_time, "_id": str(reaction_time["_id"])} for reaction_time in reaction_times]
+        return reaction_times
+    
+    "get top ten reaction times"
+    def get_top_ten_reaction(user_id: str):
+        reaction_times = list(db.reaction_time.find().sort("time", 1).limit(10))
+        user_in_top = any(reaction_time["user_id"] == user_id for reaction_time in reaction_times)
+        
+        if not user_in_top:
+            score_of_user = db.reaction_time.find({"user_id": user_id}).sort("time", 1).limit(1)[0]
+            place_of_user = db.reaction_time.count_documents({"time": {"$lt": score_of_user["time"]}}) + 1
+            score_of_user["place"] = place_of_user
+            reaction_times.append(score_of_user)
+
         return reaction_times
     
 "Placeholder Model"
@@ -152,6 +230,19 @@ class Placeholder:
         placeholders= db.placeholder.find({"user_id": user_id})
         placeholders = [{**placeholder, "_id": str(placeholder["_id"])} for placeholder in placeholders]
         return placeholders
+    
+    "get top ten placeholders"
+    def get_top_ten_placeholder(user_id: str):
+        placeholders = list(db.placeholder.find().sort("score", -1).limit(10))
+        user_in_top = any(placeholder["user_id"] == user_id for placeholder in placeholders)
+        
+        if not user_in_top:
+            score_of_user = db.placeholder.find({"user_id": user_id}).sort("score", -1).limit(1)[0]
+            place_of_user = db.placeholder.count_documents({"score": {"$gt": score_of_user["score"]}}) + 1
+            score_of_user["place"] = place_of_user
+            placeholders.append(score_of_user)
+
+        return placeholders
 
 "TZWCTR Model"
 class TZWCTR:
@@ -172,6 +263,19 @@ class TZWCTR:
     def get_by_user_id(user_id: str):
         tzwctrs= db.tzwctr.find({"user_id": user_id})
         tzwctrs = [{**tzwctr, "_id": str(tzwctr["_id"])} for tzwctr in tzwctrs]
+        return tzwctrs
+    
+    "get top ten tzwctrs"
+    def get_top_ten_tzwctr(user_id: str):
+        tzwctrs = list(db.tzwctr.find().sort("time", 1).limit(10))
+        user_in_top = any(tzwctr["user_id"] == user_id for tzwctr in tzwctrs)
+        
+        if not user_in_top:
+            score_of_user = db.tzwctr.find({"user_id": user_id}).sort("time", 1).limit(1)[0]
+            place_of_user = db.tzwctr.count_documents({"time": {"$lt": score_of_user["time"]}}) + 1
+            score_of_user["place"] = place_of_user
+            tzwctrs.append(score_of_user)
+
         return tzwctrs
 
 "User model"
