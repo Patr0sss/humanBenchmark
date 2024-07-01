@@ -282,7 +282,7 @@ def endpoint_not_found(e):
 def get_top_ten(current_user):
     
     try:
-        name_of_game = request.args.get('game')
+        name_of_game = request.args.get('name_of_game')
     except Exception as e:
         return jsonify({
             "message": "Failed to retrieve top ten data",
