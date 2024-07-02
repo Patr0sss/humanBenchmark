@@ -67,7 +67,7 @@ class MemoryGame:
         else:
             level_n = 5
 
-        calculated_score = 2*score/(level_n^2)
+        calculated_score = 2*score/(level_n**2)
         new_memory_game= db.memory_game.insert_one({
             "user_id": user_id,
             "score": score,
