@@ -9,10 +9,12 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
-        print(request.headers)
+        # print(request.headers)
         if "Authorization" in request.headers:
             #  token = request.headers["Authorization"].split(" ")[1]
+            # print(request.data)
             token = request.headers["Authorization"].split(" ")[0]
+
 
         if not token:
             return jsonify({

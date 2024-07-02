@@ -280,38 +280,24 @@ def endpoint_not_found(e):
         "data": None
     }), 404
 
-
-@game.route('/top-ten', methods=['GET', 'POST'])
+@game.route('/top-ten/<game_name>', methods=['GET', 'POST'])
 @token_required
-def get_top_ten(current_user):
+def get_top_ten(current_user, game_name):
     
-    name_of_game = None
     try:
-        data = request.get_json()
-        name_of_game = data['name_of_game']
-    except Exception as e:
-        return jsonify({
-            "message": "Failed to retrieve top ten data",
-            "error": str(e),
-            "data": None
-        }), 500
-
-
-    try:
-        if name_of_game == "aim-trainer":
+        if game_name == "aim-trainer":
             top_ten = AimTrainers.get_top_ten_aim(str(current_user["_id"]))
-        elif name_of_game == "memory-game":
+        elif game_name == "memory-game":
             top_ten = MemoryGame.get_top_ten_memory(str(current_user["_id"]))
-        elif name_of_game == "sequence-memory":
+        elif game_name == "sequence-memory":
             top_ten = SequenceMemory.get_top_ten_sequence(str(current_user["_id"]))
-        elif name_of_game == "typing":
+        elif game_name == "typing":
             top_ten = Typing.get_top_ten_typing(str(current_user["_id"]))
-        elif name_of_game == "clicker":
+        elif game_name == "clicker":
             top_ten = Clicker.get_top_ten_clicker(str(current_user["_id"]))
-        elif name_of_game == "placeholder":
-            top_ten = Placeholder.get_top_ten_placeholder(str(current_user["_id"]))
-
-        elif name_of_game == "tzwctr":
+        # elif name_of_game == "placeholder":
+        #     top_ten = Placeholder.get_top_ten_placeholder(str(current_user["_id"]))
+        elif game_name == "tzwctr":
             top_ten = TZWCTR.get_top_ten_tzwctr(str(current_user["_id"]))
         return jsonify({
             'message': 'Top ten data retrieved successfully',
