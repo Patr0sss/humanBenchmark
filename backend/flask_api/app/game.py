@@ -21,6 +21,12 @@ def aim_trainer(current_user):
         if not data['accuracy'] or not data['average_time']:
             return jsonify({'message': 'Invalid data provided'}), 400
 
+        try:
+            data['accuracy'] = float(data['accuracy'])
+            data['average_time'] = float(data['average_time'])
+        except Exception as e:
+            return jsonify({'message': 'Invalid data types for accuracy or average_time'}), 400
+
         add_data = AimTrainers.create(current_user["_id"], data['accuracy'], data['average_time'],current_user["username"])
 
         if not add_data:
@@ -283,18 +289,27 @@ def endpoint_not_found(e):
 @game.route('/top-ten/<game_name>', methods=['GET', 'POST'])
 @token_required
 def get_top_ten(current_user, game_name):
+def get_top_ten(current_user, game_name):
     
     try:
         if game_name == "aim-trainer":
+        if game_name == "aim-trainer":
             top_ten = AimTrainers.get_top_ten_aim(str(current_user["_id"]))
+        elif game_name == "memory-game":
         elif game_name == "memory-game":
             top_ten = MemoryGame.get_top_ten_memory(str(current_user["_id"]))
         elif game_name == "sequence-memory":
+        elif game_name == "sequence-memory":
             top_ten = SequenceMemory.get_top_ten_sequence(str(current_user["_id"]))
+        elif game_name == "typing":
         elif game_name == "typing":
             top_ten = Typing.get_top_ten_typing(str(current_user["_id"]))
         elif game_name == "clicker":
+        elif game_name == "clicker":
             top_ten = Clicker.get_top_ten_clicker(str(current_user["_id"]))
+        # elif name_of_game == "placeholder":
+        #     top_ten = Placeholder.get_top_ten_placeholder(str(current_user["_id"]))
+        elif game_name == "tzwctr":
         # elif name_of_game == "placeholder":
         #     top_ten = Placeholder.get_top_ten_placeholder(str(current_user["_id"]))
         elif game_name == "tzwctr":
