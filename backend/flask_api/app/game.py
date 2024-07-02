@@ -21,7 +21,7 @@ def aim_trainer(current_user):
         if not data['accuracy'] or not data['average_time']:
             return jsonify({'message': 'Invalid data provided'}), 400
 
-        add_data = AimTrainers.create(current_user["_id"], data['accuracy'], data['average_time'])
+        add_data = AimTrainers.create(current_user["_id"], data['accuracy'], data['average_time'],current_user["username"])
 
         if not add_data:
             return jsonify({'message': 'Failed to add aim-trainer data'}), 500 #500 server error
@@ -58,7 +58,7 @@ def memory_game(current_user):
         if not data['score'] or not data['level']:
             return jsonify({'message': 'Invalid data provided'}), 400
         
-        add_data = MemoryGame.create(current_user["_id"], data['score'], data['level'])
+        add_data = MemoryGame.create(current_user["_id"], data['score'], data['level'], current_user["username"])
 
         if not add_data:
             return jsonify({'message': 'Failed to add memory-game data'}), 500
@@ -96,7 +96,7 @@ def sequence_memory(current_user):
         if not data['score']:
             return jsonify({'message': 'Invalid data provided'}), 400
 
-        add_data = SequenceMemory.create(current_user["_id"], data['score'])
+        add_data = SequenceMemory.create(current_user["_id"], data['score'], current_user["username"])
 
         if not add_data:
             return jsonify({'message': 'Failed to add sequence-memory data'}), 500
@@ -133,7 +133,7 @@ def typing(current_user):
         if not data['score']:
             return jsonify({'message': 'Invalid data provided'}), 400
         
-        add_data = Typing.create(current_user["_id"], data['score'])
+        add_data = Typing.create(current_user["_id"], data['score'], current_user["username"])
 
         if not add_data:
             return jsonify({'message': 'Failed to add typing data'}), 500
@@ -170,7 +170,7 @@ def clicker(current_user):
         if not data['clicks_per_second'] or not data['clicks'] or not data['time']:
             return jsonify({'message': 'Invalid data provided'}), 400
         
-        add_data = Clicker.create(current_user["_id"], data['clicks_per_second'], data['clicks'], data['time'])
+        add_data = Clicker.create(current_user["_id"], data['clicks_per_second'], data['clicks'], data['time'], current_user["username"])
 
         if not add_data:
             return jsonify({'message': 'Failed to add clicker data'}), 500
@@ -207,7 +207,7 @@ def tzwctr(current_user):
         if not data['time'] or not data['level']:
             return jsonify({'message': 'Invalid data provided'}), 400
         
-        add_data = TZWCTR.create(current_user["_id"], data['time'], data['level'])
+        add_data = TZWCTR.create(current_user["_id"], data['time'], data['level'], current_user["username"])
 
         if not add_data:
             return jsonify({'message': 'Failed to add tzwctr data'}), 500
@@ -244,7 +244,7 @@ def get_tzwctr(current_user):
 #         if not data['score']:
 #             return jsonify({'message': 'Invalid data provided'}), 400
         
-#         add_data = Placeholder.create(current_user["_id"], data['score'])
+#        add_data = Placeholder.create(current_user["_id"], data['score'], current_user["username"])
 
 #         if not add_data:
 #             return jsonify({'message': 'Failed to add placeholder data'}), 500
@@ -280,11 +280,15 @@ def endpoint_not_found(e):
         "data": None
     }), 404
 
-@game.route('/top-ten', methods=['GET'])
+
+@game.route('/top-ten', methods=['GET', 'POST'])
+@token_required
 def get_top_ten(current_user):
     
+    name_of_game = None
     try:
-        name_of_game = request.args.get('name_of_game')
+        data = request.get_json()
+        name_of_game = data['name_of_game']
     except Exception as e:
         return jsonify({
             "message": "Failed to retrieve top ten data",
@@ -295,19 +299,20 @@ def get_top_ten(current_user):
 
     try:
         if name_of_game == "aim-trainer":
-            top_ten = AimTrainers.get_top_ten_aim(current_user["_id"])
+            top_ten = AimTrainers.get_top_ten_aim(str(current_user["_id"]))
         elif name_of_game == "memory-game":
-            top_ten = MemoryGame.get_top_ten_memory(current_user["_id"])
+            top_ten = MemoryGame.get_top_ten_memory(str(current_user["_id"]))
         elif name_of_game == "sequence-memory":
-            top_ten = SequenceMemory.get_top_ten_sequence(current_user["_id"])
+            top_ten = SequenceMemory.get_top_ten_sequence(str(current_user["_id"]))
         elif name_of_game == "typing":
-            top_ten = Typing.get_top_ten_typing(current_user["_id"])
+            top_ten = Typing.get_top_ten_typing(str(current_user["_id"]))
         elif name_of_game == "clicker":
-            top_ten = Clicker.get_top_ten_clicker(current_user["_id"])
-        # elif name_of_game == "placeholder":
-        #     top_ten = Placeholder.get_top_ten_placeholder(current_user["_id"])
+            top_ten = Clicker.get_top_ten_clicker(str(current_user["_id"]))
+        elif name_of_game == "placeholder":
+            top_ten = Placeholder.get_top_ten_placeholder(str(current_user["_id"]))
+
         elif name_of_game == "tzwctr":
-            top_ten = TZWCTR.get_top_ten_tzwctr(current_user["_id"])
+            top_ten = TZWCTR.get_top_ten_tzwctr(str(current_user["_id"]))
         return jsonify({
             'message': 'Top ten data retrieved successfully',
             'data': top_ten
