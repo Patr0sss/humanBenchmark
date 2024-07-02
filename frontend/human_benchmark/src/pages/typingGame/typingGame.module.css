@@ -55,3 +55,20 @@
   height: 3rem;
   font-weight: bold;
 }
+
+.lostButton {
+  border-radius: 10px;
+  border: 2px solid #783dcb;
+  padding: 6px;
+  padding-inline: 20px;
+  margin-top: 50px;
+  width: 30vw;
+  max-width: 250px;
+  font-size: 2rem;
+  transition: background-color 0.2s ease-in-out, scale 0.2s ease-in-out;
+}
+
+.lostButton:hover {
+  background-color: #9d67e7;
+  scale: 1.1;
+}

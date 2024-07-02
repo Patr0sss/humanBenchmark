@@ -221,7 +221,7 @@ export default function SequenceMemory() {
             <div className={styles.gameOver}>Game Over</div>
             <div>Total Rounds : {displayRoundCount}</div>
             <div className={styles.lostButtonSection}>
-              <div className={styles.lostButton}>Save Score</div>
+              {/* <div className={styles.lostButton}>Save Score</div> */}
               <div
                 className={styles.lostButton}
                 onClick={handlePlayAgainButton}

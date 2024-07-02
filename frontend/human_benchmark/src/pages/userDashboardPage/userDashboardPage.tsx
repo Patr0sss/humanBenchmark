@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { opacityFadeVariants3 } from "../../assets/animationVariants";
 import axios from "axios";
-import TopTenRanking from "../../components/topTenRanking/topTenRanking";
+// import TopTenRanking from "../../components/topTenRanking/topTenRanking";
 
 ChartJS.register(
   CategoryScale,
@@ -67,6 +67,25 @@ export default function UserDashboardPage() {
     Clicker: [0],
     "TZWCTR(CH)": [0],
   });
+
+  // const [colorForEachGame, setColorForEachGame] = useState<{
+  //   [key: string]: string;
+  // }>({
+  //   "Aim-Trainer": "#783dcb",
+  //   Sequence: "#783dcb",
+  //   Memory: "#783dcb",
+  //   Typing: "#783dcb",
+  //   Clicker: "#783dcb",
+  //   "TZWCTR(CH)": "red",
+  // });
+  const colorForEachGame = {
+    "Aim-Trainer": "#783dcb",
+    Sequence: "green",
+    Memory: "blue",
+    Typing: "yellow",
+    Clicker: "pink",
+    "TZWCTR(CH)": "red",
+  } as { [key: string]: string };
 
   const token = sessionStorage.getItem("token");
 
@@ -127,7 +146,8 @@ export default function UserDashboardPage() {
       {
         label: "Your Scores ",
         data: ScoresForEachGame[currentGame],
-        borderColor: "#783dcb",
+        // borderColor: "#783dcb",
+        borderColor: colorForEachGame[currentGame],
         backgroundColor: "black",
       },
     ],
@@ -169,7 +189,7 @@ export default function UserDashboardPage() {
             {currentGame === "Aim-Trainer" ? "Aim Trainer" : currentGame}
           </div>
         </motion.div>
-        <TopTenRanking currentGame={currentGame} />
+        {/* <TopTenRanking currentGame={currentGame} /> */}
       </div>
     </div>
   );
