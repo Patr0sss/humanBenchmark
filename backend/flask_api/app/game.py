@@ -176,7 +176,7 @@ def clicker(current_user):
         if not data['clicks_per_second'] or not data['clicks'] or not data['time']:
             return jsonify({'message': 'Invalid data provided'}), 400
         
-        add_data = Clicker.create(current_user["_id"], data['clicks_per_second'], data['clicks'], data['time'], current_user["username"])
+        add_data = Clicker.create(current_user["_id"], float(data['clicks_per_second']), data['clicks'], data['time'], current_user["username"])
 
         if not add_data:
             return jsonify({'message': 'Failed to add clicker data'}), 500

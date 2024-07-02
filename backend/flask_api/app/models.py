@@ -59,13 +59,13 @@ class MemoryGame:
         if level == "Very Easy":
             level_n = 1
         elif level == "Easy":
-            level_n = 2
+            level_n = 1.5
         elif level == "Medium":
-            level_n = 3
+            level_n = 2
         elif level == "Hard":
-            level_n = 4
+            level_n = 3
         else:
-            level_n = 5
+            level_n = 3.5
 
         calculated_score = 2*score/(level_n**2)
         new_memory_game= db.memory_game.insert_one({
@@ -180,7 +180,7 @@ class Clicker:
         return
     
     "create clicker"
-    def create(user_id: str, clicks_per_second: int, clicks: int, time: int, username: str):
+    def create(user_id: str, clicks_per_second: float, clicks: int, time: int, username: str):
         if time == 5:
             level_n = 1
         elif time == 10:
