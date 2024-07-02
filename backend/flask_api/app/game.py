@@ -21,6 +21,12 @@ def aim_trainer(current_user):
         if not data['accuracy'] or not data['average_time']:
             return jsonify({'message': 'Invalid data provided'}), 400
 
+        try:
+            data['accuracy'] = float(data['accuracy'])
+            data['average_time'] = float(data['average_time'])
+        except Exception as e:
+            return jsonify({'message': 'Invalid data types for accuracy or average_time'}), 400
+
         add_data = AimTrainers.create(current_user["_id"], data['accuracy'], data['average_time'],current_user["username"])
 
         if not add_data:
