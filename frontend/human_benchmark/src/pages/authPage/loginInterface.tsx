@@ -26,7 +26,7 @@ export default function LoginInterface() {
   }, [mousePosition]);
 
   const { loginUser, isAuthenticationCorrect } = useUserInfo();
-
+  const [isLoginClicked, setIsLoginClicked] = useState(false);
 
 
   const [userLoginCredentials, setUserLoginCredentials] = useState({
@@ -34,17 +34,16 @@ export default function LoginInterface() {
     password: "",
   });
 
-  const handleLogin = () =>{
-    loginUser({
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    await loginUser({
       email: "",
       username: userLoginCredentials.username,
       password: userLoginCredentials.password,
       _id: "",
-    })
+    });
     setIsLoginClicked(true);
-  }
-
-  const [isLoginClicked, setIsLoginClicked] = useState(false);
+  };
 
   return (
     <>
@@ -83,7 +82,7 @@ export default function LoginInterface() {
               </div>
               {isLoginClicked ? (!isAuthenticationCorrect ? 
                   <div className="relative">
-                    <h1 className="text-xl font-bold text-red-600 duration-300 ease-in-out">Please provide a valid email address and password</h1>
+                    <h1 className="text-xl font-bold text-red-600 duration-300 ease-in-out">Please provide a valid username and password</h1>
                   </div> 
                   :
                   null

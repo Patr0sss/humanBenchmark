@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { opacityFadeVariants3 } from "../../assets/animationVariants";
 import axios from "axios";
+// import TopTenRanking from "../../components/topTenRanking/topTenRanking";
 
 ChartJS.register(
   CategoryScale,
@@ -67,6 +68,25 @@ export default function UserDashboardPage() {
     "TZWCTR(CH)": [0],
   });
 
+  // const [colorForEachGame, setColorForEachGame] = useState<{
+  //   [key: string]: string;
+  // }>({
+  //   "Aim-Trainer": "#783dcb",
+  //   Sequence: "#783dcb",
+  //   Memory: "#783dcb",
+  //   Typing: "#783dcb",
+  //   Clicker: "#783dcb",
+  //   "TZWCTR(CH)": "red",
+  // });
+  const colorForEachGame = {
+    "Aim-Trainer": "#783dcb",
+    Sequence: "green",
+    Memory: "blue",
+    Typing: "yellow",
+    Clicker: "pink",
+    "TZWCTR(CH)": "red",
+  } as { [key: string]: string };
+
   const token = sessionStorage.getItem("token");
 
   const getGraphsData = async (
@@ -87,13 +107,13 @@ export default function UserDashboardPage() {
             withCredentials: true,
           }
         );
-        console.log(gameNameBackend);
-        console.log(res.data);
+        // console.log(gameNameBackend);
+        // console.log(res.data);
         const scores: number[] = res.data.data.map(
           (item: GameData) => item[scoreName as keyof GameData]
         );
 
-        console.log(gameNameFrontend + " : " + scores);
+        // console.log(gameNameFrontend + " : " + scores);
 
         setScoresForEachGame((prevScores) => ({
           ...prevScores,
@@ -126,7 +146,8 @@ export default function UserDashboardPage() {
       {
         label: "Your Scores ",
         data: ScoresForEachGame[currentGame],
-        borderColor: "#783dcb",
+        // borderColor: "#783dcb",
+        borderColor: colorForEachGame[currentGame],
         backgroundColor: "black",
       },
     ],
@@ -164,9 +185,11 @@ export default function UserDashboardPage() {
         >
           <Line options={chartOptions} data={chartData} />
           <div>
+            Your Results In{" "}
             {currentGame === "Aim-Trainer" ? "Aim Trainer" : currentGame}
           </div>
         </motion.div>
+        {/* <TopTenRanking currentGame={currentGame} /> */}
       </div>
     </div>
   );

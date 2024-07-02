@@ -11,7 +11,7 @@ def token_required(f):
         token = None
         print(request.headers)
         if "Authorization" in request.headers:
-            # token = request.headers["Authorization"].split(" ")[1]
+            #  token = request.headers["Authorization"].split(" ")[1]
             token = request.headers["Authorization"].split(" ")[0]
 
         if not token:

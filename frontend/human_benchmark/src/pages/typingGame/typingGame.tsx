@@ -7,8 +7,6 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
-
 export default function TypingGame() {
   const typeText =
     "Rano budzę się w przyczepie, z kacem jak stąd do Kanady. Ricky leży obok, przebrany za kurczaka. Julian próbuje zrobić kawę, ale zamiast wody, wlewa piwo do ekspresu. Lahey już od szóstej rano drze się na całe osiedle. Tylko Bubbles jak zwykle w porządku, koty nakarmił, bo kto inny by o nie zadbał? Życie w barakach - dzień jak co dzień";
@@ -22,33 +20,38 @@ export default function TypingGame() {
   const [userStartedTyping, setUserStartedTyping] = useState(false);
   const [isTextProperlyRewrited, setIsTextProperlyRewrited] = useState(false);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [data, setData] = useState(null);
-
-
 
   // data from api
   useEffect(() => {
-      const fetchData = async () => {
-          const options = {
-              method: 'GET',
-              url: 'https://fake-data3.p.rapidapi.com/fk/texts',
-              params: { _characters: '500' },
-              headers: {
-                  'x-rapidapi-key': `${process.env.X_RAPIDAPI_KEY}`,
-                  'x-rapidapi-host': `${process.env.X_RAPIDAPI_HOST}`
-              }
-          };
-
-          try {
-              const response = await axios.request(options);
-              setData(response.data);
-          } catch (error) {
-              console.error(error);
-          }
+    const fetchData = async () => {
+      const options = {
+        method: "GET",
+        url: "https://fake-data3.p.rapidapi.com/fk/texts",
+        params: { _characters: "500" },
+        headers: {
+          "x-rapidapi-key": `${process.env.X_RAPIDAPI_KEY}`,
+          "x-rapidapi-host": `${process.env.X_RAPIDAPI_HOST}`,
+        },
       };
 
-      fetchData();
+      try {
+        const response = await axios.request(options);
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  const resetGame = () => {
+    setIsTextProperlyRewrited(false);
+    setUserInputText("");
+    setTimerSEC(0);
+  };
 
   useEffect(() => {
     if (userInputText.length === 1) {
@@ -99,7 +102,12 @@ export default function TypingGame() {
         className={styles.gameContainer}
       >
         {isTextProperlyRewrited ? (
-          <div className={styles.timer}>Final Time : {timerSEC}s</div>
+          <div>
+            <div className={styles.timer}>Final Time : {timerSEC}s</div>
+            <div className={styles.lostButton} onClick={resetGame}>
+              Try Again
+            </div>
+          </div>
         ) : (
           <>
             <div className={styles.textContainer}>

@@ -39,14 +39,16 @@ export default function AimTrainer() {
           "http://127.0.0.1:5000/aim-trainer",
           {
             id: JSON.stringify(userInfo._id),
-            accuracy: (((MAX_CLICKS - missedClicks) / MAX_CLICKS) * 100).toFixed(2),
+            accuracy: (
+              ((MAX_CLICKS - missedClicks) / MAX_CLICKS) *
+              100
+            ).toFixed(2),
             average_time: ((endTime - startTime) / MAX_CLICKS).toFixed(2),
             timestamp: new Date().toISOString(),
           },
           {
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `${token + "" + token}`,
               Authorization: JSON.parse(token),
             },
             withCredentials: true,
@@ -117,7 +119,7 @@ export default function AimTrainer() {
   }, [bgMusic, clicksLeft, startTime]);
 
   useEffect(() => {
-    if(endTime > 0){
+    if (endTime > 0) {
       post();
     }
   }, [endTime]);
@@ -203,8 +205,9 @@ export default function AimTrainer() {
               </div>
             </div>
             <div className={styles.buttonSection}>
-              <button className={styles.saveScoreButton}>Save score</button>
-              <button onClick={resetGame}>Try again</button>
+              <button onClick={resetGame} className={styles.lostButton}>
+                Try again
+              </button>
             </div>
           </div>
         </>
