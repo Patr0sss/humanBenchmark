@@ -117,8 +117,8 @@ export default function UserDashboardPage() {
   };
 
   useEffect(() => {
-    getGraphsData("memory-game", "Memory", "score");
-    getGraphsData("clicker", "Clicker", "clicks");
+    getGraphsData("memory-game", "Memory", "calculated_score");
+    getGraphsData("clicker", "Clicker", "calculated_score");
     getGraphsData("tzwctr", "TZWCTR(CH)", "time");
     getGraphsData("sequence-memory", "Sequence", "score");
     getGraphsData("aim-trainer", "Aim-Trainer", "average_time");
