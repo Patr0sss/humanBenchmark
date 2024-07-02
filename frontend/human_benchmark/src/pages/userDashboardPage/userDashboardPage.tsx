@@ -29,6 +29,24 @@ ChartJS.register(
 
 const chartOptions = {
   responsive: true,
+  scales: {
+    x: {
+      ticks: {
+        color: "white", // Zmienia kolor tekstu osi X
+      },
+      grid: {
+        color: "rgba(255,255,255,0.2)",
+      },
+    },
+    y: {
+      ticks: {
+        color: "white",
+      },
+      grid: {
+        color: "rgba(255,255,255,0.2)",
+      },
+    },
+  },
 };
 
 interface GameData {
@@ -121,7 +139,7 @@ export default function UserDashboardPage() {
     getGraphsData("clicker", "Clicker", "calculated_score");
     getGraphsData("tzwctr", "TZWCTR(CH)", "time");
     getGraphsData("sequence-memory", "Sequence", "score");
-    getGraphsData("aim-trainer", "Aim-Trainer", "average_time");
+    getGraphsData("aim-trainer", "Aim-Trainer", "calculated_score");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -130,9 +148,8 @@ export default function UserDashboardPage() {
 
     datasets: [
       {
-        label: "Your Scores ",
+        label: "",
         data: ScoresForEachGame[currentGame],
-        // borderColor: "#783dcb",
         borderColor: colorForEachGame[currentGame],
         backgroundColor: "black",
       },
@@ -165,12 +182,13 @@ export default function UserDashboardPage() {
       <div className={styles.dashboardRightSide}>
         <motion.div
           className={styles.graphSection}
+          style={{ border: `3px solid ${colorForEachGame[currentGame]}` }}
           variants={opacityFadeVariants3}
           initial="hidden"
           animate="visible"
         >
           <Line options={chartOptions} data={chartData} />
-          <div>
+          <div className={styles.graphDesc}>
             Your Results In{" "}
             {currentGame === "Aim-Trainer" ? "Aim Trainer" : currentGame}
           </div>

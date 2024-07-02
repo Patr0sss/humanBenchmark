@@ -2,18 +2,23 @@
 import axios from "axios";
 import styles from "./topTenRanking.module.css";
 import { useEffect, useState } from "react";
-
-// interface ScoreData {
-//   _id: string;
-//   scoreName: string;
-//   _userId: string;
-// }
+import GoldenMedal from "../../assets/goldenMedal";
+import { useUserInfo } from "../../contexts/UserContext";
 
 export default function TopTenRanking({
   currentGame,
 }: {
   currentGame: string;
 }) {
+  const { userInfo } = useUserInfo();
+  const colorForEachGame = {
+    "Aim-Trainer": "#783dcb",
+    Sequence: "green",
+    Memory: "blue",
+    Typing: "yellow",
+    Clicker: "pink",
+    "TZWCTR(CH)": "red",
+  } as { [key: string]: string };
   const token = sessionStorage.getItem("token");
 
   const [bestScoresForEachGame, setBestScoresForEachGame] = useState<{
@@ -95,18 +100,57 @@ export default function TopTenRanking({
   }, [bestScoresForEachGame]);
   return (
     <div className={styles.topTenRanking}>
-      TOP TEN RANKING in {currentGame}
-      {bestScoresForEachGame[
-        convertGameNamesFrontendToBackend[currentGame]
-      ].map((score: { [x: string]: string }, index: number) => (
-        <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-          <div> {index + 1}</div>
-          <div key={index}>
-            {score[scoreNameFrontendToBackend[currentGame]]}
-          </div>
-          <div>{score.username ? score.username : "user unknown"}</div>
-        </div>
-      ))}
+      <div
+        className={styles.tableHeading}
+        style={{
+          border: `4px solid ${colorForEachGame[currentGame]}`,
+          borderBottom: "0px solid transparent",
+        }}
+      >
+        Best Players in{" "}
+        {currentGame === "Aim-Trainer" ? "Aim Trainer" : currentGame}
+      </div>
+
+      <table
+        className={styles.top10Table}
+        style={{ backgroundColor: colorForEachGame[currentGame] }}
+      >
+        <thead>
+          <tr>
+            <th>Place</th>
+            <th>Score</th>
+            <th>Player</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bestScoresForEachGame[
+            convertGameNamesFrontendToBackend[currentGame]
+          ].map((score: { [x: string]: string }, index: number) => (
+            <tr
+              key={index}
+              style={{
+                color: userInfo.username === score.username ? "green" : "white",
+              }}
+            >
+              <td
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                #{index + 1}
+                {index + 1 === 1 ? <GoldenMedal width={45} /> : null}
+              </td>
+              <td key={index}>
+                {score[scoreNameFrontendToBackend[currentGame]]}
+              </td>
+
+              <td>{score.username ? score.username : "user unknown"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
