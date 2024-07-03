@@ -33,7 +33,9 @@ def create_app():
 
     from . import auth  # Import the "auth" blueprint module
     from . import game  # Import the "game" blueprint module
+    from . import stories_api
     app.register_blueprint(auth.auth)
     app.register_blueprint(game.game)
+    app.register_blueprint(stories_api.story)
 
     return app
