@@ -140,6 +140,7 @@ export default function UserDashboardPage() {
     getGraphsData("tzwctr", "TZWCTR(CH)", "time");
     getGraphsData("sequence-memory", "Sequence", "score");
     getGraphsData("aim-trainer", "Aim-Trainer", "calculated_score");
+    getGraphsData("typing", "Typing", "score");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
