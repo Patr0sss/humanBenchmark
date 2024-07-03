@@ -13,7 +13,7 @@ class AimTrainers:
     
     "create aim trainer"
     def create(user_id: str, accuracy: float , average_time: float, username : str):
-        calculated_score = (100 - accuracy) / 10 + average_time
+        calculated_score = (100 - accuracy)*6 + average_time
         new_aim_trainer= db.aim_trainer.insert_one({
             "user_id": user_id,
             "accuracy": accuracy,
@@ -184,13 +184,13 @@ class Clicker:
         if time == 5:
             level_n = 1
         elif time == 10:
-            level_n = 1.1
+            level_n = 1.03
         elif time == 15:
-            level_n = 1.2
+            level_n = 1.06
         elif time == 20:
-            level_n = 1.3
+            level_n = 1.09
         else:
-            level_n = 1.4
+            level_n = 1.12
         calculated_score = clicks_per_second * level_n
         new_clicker= db.clicker.insert_one({
             "user_id": user_id,
@@ -212,17 +212,20 @@ class Clicker:
     "get top ten clickers"
     def get_top_ten_clicker(user_id: str):
         clickers = list(db.clicker.find().sort("calculated_score", -1).limit(10))
-        clickers = [{**clicker, "_id": str(clicker["_id"])} for clicker in clickers]
+        clickers = [{**clicker, "_id": str(clicker["_id"]), "calculated_score": float(clicker["calculated_score"])} for clicker in clickers]
         user_in_top = any(clicker["user_id"] == user_id for clicker in clickers)
 
         if not user_in_top:
             score_of_user = db.clicker.find({"user_id": user_id}).sort("calculated_score", -1).limit(1)[0]
+            score_of_user["calculated_score"] = float(score_of_user["calculated_score"])
             place_of_user = db.clicker.count_documents({"calculated_score": {"$gt": score_of_user["calculated_score"]}}) + 1
             score_of_user["place"] = place_of_user
             score_of_user["_id"] = str(score_of_user["_id"])
             clickers.append(score_of_user)
 
+        clickers.sort(key=lambda x: x["calculated_score"], reverse=True)
         return clickers
+
 
   
 "Reaction Time Model"
