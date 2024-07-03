@@ -5,46 +5,29 @@ import {
   opacityFadeVariants,
 } from "../../assets/animationVariants";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 export default function TypingGame() {
-  const typeText =
-    "Rano budzę się w przyczepie, z kacem jak stąd do Kanady. Ricky leży obok, przebrany za kurczaka. Julian próbuje zrobić kawę, ale zamiast wody, wlewa piwo do ekspresu. Lahey już od szóstej rano drze się na całe osiedle. Tylko Bubbles jak zwykle w porządku, koty nakarmił, bo kto inny by o nie zadbał? Życie w barakach - dzień jak co dzień";
-  const slicedTypeText =
-    "Rano budzę się w przyczepie, z kacem jak stąd do Kanady. Ricky leży obok, przebrany za kurczaka. Julian próbuje zrobić kawę, ale zamiast wody, wlewa piwo do ekspresu. Lahey już od szóstej rano drze się na całe osiedle. Tylko Bubbles jak zwykle w porządku, koty nakarmił, bo kto inny by o nie zadbał? Życie w barakach - dzień jak co dzień".split(
-      ""
-    );
-
   const [userInputText, setUserInputText] = useState("");
   const [timerSEC, setTimerSEC] = useState(0);
   const [userStartedTyping, setUserStartedTyping] = useState(false);
   const [isTextProperlyRewrited, setIsTextProperlyRewrited] = useState(false);
+  const [typeText, setTypeText] = useState("static");
+  const wordsArray = typeText.split(" ");
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, setData] = useState(null);
-
-  // data from api
   useEffect(() => {
-    const fetchData = async () => {
-      const options = {
-        method: "GET",
-        url: "https://fake-data3.p.rapidapi.com/fk/texts",
-        params: { _characters: "500" },
-        headers: {
-          "x-rapidapi-key": `${process.env.X_RAPIDAPI_KEY}`,
-          "x-rapidapi-host": `${process.env.X_RAPIDAPI_HOST}`,
-        },
-      };
-
-      try {
-        const response = await axios.request(options);
-        setData(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+    fetch("http://127.0.0.1:5000/random_story")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Wrong response");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setTypeText(data.story);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
   }, []);
 
   const resetGame = () => {
@@ -68,7 +51,7 @@ export default function TypingGame() {
   }, [isTextProperlyRewrited, userInputText]);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setInterval>;
+    let timer;
 
     if (userStartedTyping) {
       timer = setInterval(() => {
@@ -78,6 +61,32 @@ export default function TypingGame() {
 
     return () => clearInterval(timer);
   }, [userStartedTyping, isTextProperlyRewrited]);
+
+  const getHighlightedWord = (word, wordIndex) => {
+    const userInputWords = userInputText.split(" ");
+    const userWord = userInputWords[wordIndex] || "";
+
+    return word.split("").map((letter, letterIndex) => {
+      
+      const isCorrect = userWord[letterIndex] === letter;
+      const isIncorrect = userWord[letterIndex] && userWord[letterIndex] !== letter;
+
+      return (
+        <span
+          key={letterIndex}
+          style={{
+            backgroundColor: isCorrect
+              ? "green"
+              : isIncorrect
+              ? "red"
+              : "",
+          }}
+        >
+          {letter}
+        </span>
+      );
+    });
+  };
 
   return (
     <div className={styles.typingGame}>
@@ -111,23 +120,10 @@ export default function TypingGame() {
         ) : (
           <>
             <div className={styles.textContainer}>
-              {slicedTypeText.map((letter, index) => (
-                <div
-                  className={styles.letter}
-                  key={index}
-                  style={{
-                    width: letter === " " ? "10px" : "",
-                    marginBottom: letter === " " ? "-11px" : "0px",
-                    backgroundColor:
-                      userInputText[index] === slicedTypeText[index]
-                        ? "green"
-                        : userInputText.length - 1 >= index
-                        ? "red"
-                        : "",
-                  }}
-                >
-                  {letter}
-                </div>
+              {wordsArray.map((word, wordIndex) => (
+                <span key={wordIndex} className={styles.word}>
+                  {getHighlightedWord(word, wordIndex)}{" "}
+                </span>
               ))}
             </div>
             <textarea
