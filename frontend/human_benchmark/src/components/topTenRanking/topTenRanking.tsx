@@ -46,7 +46,7 @@ export default function TopTenRanking({
     Sequence: "score",
     Memory: "score",
     Typing: "time",
-    Clicker: "clicks_per_second",
+    Clicker: "calculated_score",
     "TZWCTR(CH)": "time",
   } as { [key: string]: string };
   const getTopTenScoresOfCurrentGame = async (gameNameBackend: string) => {
