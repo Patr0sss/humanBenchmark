@@ -43,11 +43,11 @@ export default function TopTenRanking({
 
   const scoreNameFrontendToBackend = {
     "Aim-Trainer": "calculated_score",
-    Sequence: "score",
-    Memory: "score",
-    Typing: "time",
+    Sequence: "calculated_score",
+    Memory: "calculated_score",
+    Typing: "calculated_score",
     Clicker: "calculated_score",
-    "TZWCTR(CH)": "time",
+    "TZWCTR(CH)": "calculated_score",
   } as { [key: string]: string };
   const getTopTenScoresOfCurrentGame = async (gameNameBackend: string) => {
     if (token) {
