@@ -77,7 +77,7 @@ export default function TopTenRanking({
     getTopTenScoresOfCurrentGame("aim-trainer");
     getTopTenScoresOfCurrentGame("memory-game");
     getTopTenScoresOfCurrentGame("sequence-memory");
-    // getTopTenScoresOfCurrentGame("typing");
+    getTopTenScoresOfCurrentGame("typing");
     getTopTenScoresOfCurrentGame("clicker");
     getTopTenScoresOfCurrentGame("tzwctr");
   }, []);
