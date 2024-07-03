@@ -20,7 +20,7 @@ export default function AuthPage() {
   }
 
   const validateEmail = (email: string): boolean => {
-    const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const pattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
     return pattern.test(email) && email.length >= 6;
   };
 
@@ -30,7 +30,7 @@ export default function AuthPage() {
   };
 
   const validatePassword = (password: string): boolean => {
-    const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return pattern.test(password);
   };
 
@@ -154,10 +154,11 @@ export default function AuthPage() {
               />
               {isRegisterClicked ? (!isPasswordCorrect ?
                 <div className="text-left text-red-600">
-                  At least 8 characters<br />
-                  Contains at least one alphabetic character<br />
-                  Contains at least one digit<br />
-                  Consists of alphanumeric characters<br />
+                    At least 8 characters<br />
+                    Contains at least one lowercase letter<br />
+                    Contains at least one uppercase letter<br />
+                    Contains at least one digit<br />
+                    Contains at least one special character (@$!%*?&)<br />
                 </div>
                 :
                 null)
