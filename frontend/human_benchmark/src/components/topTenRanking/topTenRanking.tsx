@@ -42,17 +42,14 @@ export default function TopTenRanking({
   } as { [key: string]: string };
 
   const scoreNameFrontendToBackend = {
-    "Aim-Trainer": "average_time",
+    "Aim-Trainer": "calculated_score",
     Sequence: "score",
     Memory: "score",
     Typing: "time",
     Clicker: "clicks_per_second",
     "TZWCTR(CH)": "time",
   } as { [key: string]: string };
-  const getTopTenScoresOfCurrentGame = async (
-    gameNameBackend: string
-    // scoreName: string
-  ) => {
+  const getTopTenScoresOfCurrentGame = async (gameNameBackend: string) => {
     if (token) {
       try {
         const res = await axios.get(
@@ -65,21 +62,11 @@ export default function TopTenRanking({
             withCredentials: true,
           }
         );
-        // const rankingScores: ScoreData[] = res.data.data.map(
-        //   (score: ScoreData) => score[scoreName as keyof ScoreData]
-        // );
 
         setBestScoresForEachGame((prevScores) => ({
           ...prevScores,
           [gameNameBackend]: res.data.data,
         }));
-        // setBestScoresForEachGame((prevScores) => ({
-        //   ...prevScores,
-        //   [gameNameBackend]: rankingScores,
-        // }));
-        console.log(gameNameBackend);
-        console.log(res.data);
-        console.log("---------------------------------");
       } catch (err) {
         console.log(err);
       }
