@@ -5,6 +5,8 @@ import {
   opacityFadeVariants,
 } from "../../assets/animationVariants";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useUserInfo } from "../../contexts/UserContext";
 
 export default function TypingGame() {
   const [userInputText, setUserInputText] = useState("");
@@ -13,6 +15,49 @@ export default function TypingGame() {
   const [isTextProperlyRewrited, setIsTextProperlyRewrited] = useState(false);
   const [typeText, setTypeText] = useState("static");
   const wordsArray = typeText.split(" ");
+
+  const token = sessionStorage.getItem("token");
+  const { userInfo } = useUserInfo();
+
+  const post = async () => {
+    if (token) {
+      try {
+        const res = await axios.post(
+          "http://127.0.0.1:5000/typing",
+          {
+            id: JSON.stringify(userInfo._id),
+            score: timerSEC,
+            timestamp: new Date().toISOString(),
+            calculated_score: timerSEC,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `${token + "" + token}`,
+              Authorization: JSON.parse(token),
+            },
+            withCredentials: true,
+          }
+        );
+        console.log("Response received");
+        if (res.status === 200) {
+          console.log("Success");
+          console.log(res.data);
+        } else {
+          console.log(`Unexpected status code: ${res.status}`);
+        }
+      } catch (error) {
+        console.error("Error occurred while posting turns:", error);
+      }
+    }
+  };
+
+  
+  useEffect(() => {
+    if(isTextProperlyRewrited){
+      post();
+    }
+}, [isTextProperlyRewrited]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/random_story")
@@ -67,7 +112,7 @@ export default function TypingGame() {
     const userWord = userInputWords[wordIndex] || "";
 
     return word.split("").map((letter, letterIndex) => {
-      
+
       const isCorrect = userWord[letterIndex] === letter;
       const isIncorrect = userWord[letterIndex] && userWord[letterIndex] !== letter;
 
