@@ -1,7 +1,5 @@
 .topTenRanking {
   width: 70vw;
-  /* aspect-ratio: 16/9; */
-  /* background-color: red; */
   margin-left: 8%;
   display: flex;
   flex-direction: column;
@@ -54,4 +52,40 @@
   padding-bottom: 5px;
   border-bottom: none;
   transition: ease-in-out 0.25s border;
+}
+
+.playToSee {
+  font-weight: bold;
+  font-size: 35px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.outsider {
+  width: 100%;
+  background-color: #111214;
+  background: linear-gradient(
+    90deg,
+    rgba(14, 12, 12, 1) 0%,
+    rgba(26, 23, 23, 1) 100%
+  );
+  border-radius: 10px;
+}
+
+.HeadingOutsider {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+  .topTenRanking {
+    width: 100vw;
+    margin-left: 0px;
+  }
+
+  .top10Table td {
+    font-size: 15px;
+  }
 }

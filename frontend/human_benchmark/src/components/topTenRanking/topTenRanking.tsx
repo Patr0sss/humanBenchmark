@@ -85,59 +85,110 @@ export default function TopTenRanking({
   useEffect(() => {
     console.log(bestScoresForEachGame);
   }, [bestScoresForEachGame]);
+
   return (
-    <div className={styles.topTenRanking}>
-      <div
-        className={styles.tableHeading}
-        style={{
-          border: `4px solid ${colorForEachGame[currentGame]}`,
-          borderBottom: "0px solid transparent",
-        }}
-      >
-        Best Players in{" "}
-        {currentGame === "Aim-Trainer" ? "Aim Trainer" : currentGame}
+    <>
+      <div className={styles.topTenRanking}>
+        <div
+          className={styles.tableHeading}
+          style={{
+            border: `4px solid ${colorForEachGame[currentGame]}`,
+            // borderBottom: "0px solid transparent",
+          }}
+        >
+          Best Players in{" "}
+          {currentGame === "Aim-Trainer" ? "Aim Trainer" : currentGame}
+        </div>
+
+        <table
+          className={styles.top10Table}
+          style={{ backgroundColor: colorForEachGame[currentGame] }}
+        >
+          {bestScoresForEachGame[convertGameNamesFrontendToBackend[currentGame]]
+            .length > 0 ? (
+            <>
+              <thead>
+                <tr>
+                  <th>Place</th>
+                  <th>Score</th>
+                  <th>Player</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bestScoresForEachGame[
+                  convertGameNamesFrontendToBackend[currentGame]
+                ]
+                  .filter((_: any, index: number) => index <= 9)
+                  .map((score: { [x: string]: string }, index: number) => (
+                    <tr
+                      key={index}
+                      style={{
+                        color:
+                          userInfo.username === score.username
+                            ? "green"
+                            : "white",
+                      }}
+                    >
+                      <td
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        #{index + 1}
+                        {index + 1 === 1 ? <GoldenMedal width={45} /> : null}
+                      </td>
+                      <td>{score[scoreNameFrontendToBackend[currentGame]]}</td>
+
+                      <td>
+                        {score.username ? score.username : "user unknown"}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </>
+          ) : (
+            <div
+              className={styles.playToSee}
+            >{`You Need To Play ${currentGame} In Order To See  The Rankings ! `}</div>
+          )}
+        </table>
+        <div></div>
       </div>
 
-      <table
-        className={styles.top10Table}
-        style={{ backgroundColor: colorForEachGame[currentGame] }}
-      >
-        <thead>
-          <tr>
-            <th>Place</th>
-            <th>Score</th>
-            <th>Player</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bestScoresForEachGame[
-            convertGameNamesFrontendToBackend[currentGame]
-          ].map((score: { [x: string]: string }, index: number) => (
-            <tr
-              key={index}
+      {bestScoresForEachGame[convertGameNamesFrontendToBackend[currentGame]]
+        .length > 10 ? (
+        <div className={styles.topTenRanking}>
+          <div
+            style={{
+              border: `4px solid ${colorForEachGame[currentGame]}`,
+            }}
+            className={styles.outsider}
+          >
+            <div
+              className={styles.HeadingOutsider}
               style={{
-                color: userInfo.username === score.username ? "green" : "white",
+                borderBottom: `4px solid ${colorForEachGame[currentGame]}`,
               }}
             >
-              <td
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                #{index + 1}
-                {index + 1 === 1 ? <GoldenMedal width={45} /> : null}
-              </td>
-              <td key={index}>
-                {score[scoreNameFrontendToBackend[currentGame]]}
-              </td>
-
-              <td>{score.username ? score.username : "user unknown"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+              You Are Not In Top 10 Scores In {`${currentGame}`} 😥
+            </div>
+            <div>
+              {bestScoresForEachGame[
+                convertGameNamesFrontendToBackend[currentGame]
+              ]
+                .filter((_: any, index: number) => index === 10)
+                .map((score: { [x: string]: string }, index: number) => (
+                  <div key={index} className={styles.HeadingOutsider}>
+                    Your Best Attempt Ended With Score :{" "}
+                    {score[scoreNameFrontendToBackend[currentGame]]}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }
