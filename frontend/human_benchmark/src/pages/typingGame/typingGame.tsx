@@ -33,7 +33,6 @@ export default function TypingGame() {
           {
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `${token + "" + token}`,
               Authorization: JSON.parse(token),
             },
             withCredentials: true,
@@ -52,12 +51,11 @@ export default function TypingGame() {
     }
   };
 
-  
   useEffect(() => {
-    if(isTextProperlyRewrited){
+    if (isTextProperlyRewrited) {
       post();
     }
-}, [isTextProperlyRewrited]);
+  }, [isTextProperlyRewrited]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/random_story")
@@ -96,7 +94,7 @@ export default function TypingGame() {
   }, [isTextProperlyRewrited, userInputText]);
 
   useEffect(() => {
-    let timer;
+    let timer: string | number | NodeJS.Timeout | undefined;
 
     if (userStartedTyping) {
       timer = setInterval(() => {
@@ -107,24 +105,20 @@ export default function TypingGame() {
     return () => clearInterval(timer);
   }, [userStartedTyping, isTextProperlyRewrited]);
 
-  const getHighlightedWord = (word, wordIndex) => {
+  const getHighlightedWord = (word: string, wordIndex: number) => {
     const userInputWords = userInputText.split(" ");
     const userWord = userInputWords[wordIndex] || "";
 
     return word.split("").map((letter, letterIndex) => {
-
       const isCorrect = userWord[letterIndex] === letter;
-      const isIncorrect = userWord[letterIndex] && userWord[letterIndex] !== letter;
+      const isIncorrect =
+        userWord[letterIndex] && userWord[letterIndex] !== letter;
 
       return (
         <span
           key={letterIndex}
           style={{
-            backgroundColor: isCorrect
-              ? "green"
-              : isIncorrect
-              ? "red"
-              : "",
+            backgroundColor: isCorrect ? "green" : isIncorrect ? "red" : "",
           }}
         >
           {letter}
